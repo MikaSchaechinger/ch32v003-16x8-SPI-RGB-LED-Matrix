@@ -1,0 +1,60 @@
+
+
+
+
+
+
+
+
+
+
+PA1 OSCI
+PA2 OSCO
+
+PC0 MATRIX A0
+PC1 MATRIX A1
+PC2 MATRIX A2
+PC3 MATRIX STCP
+PC4 MATRIX OE#
+PC5 SPI CLK
+PC6 SPI MOSI
+PC7 -
+
+PD0 MATRIX SHCP
+PD1	SWIO
+PD2 MATRIX DS_Red_1
+PD3 MATRIX DS_Red_2
+PD4 MATRIX DS_Green_1
+PD5 MATRIX DS_Green_2
+PD6 MATRIX DS_Blue_1
+PD7 MATRIX DS_Blue_2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
