@@ -34,26 +34,26 @@ How the program works:
 
 Pinout:
 
-PA1 OSCI
-PA2 OSCO
+PA1 OSCI<br>
+PA2 OSCO<br>
 
-PC0 MATRIX A0
-PC1 MATRIX A1
-PC2 MATRIX A2
-PC3 MATRIX STCP
-PC4 MATRIX OE#
-PC5 SPI CLK
-PC6 SPI MOSI
-PC7 -
+PC0 MATRIX A0<br>
+PC1 MATRIX A1<br>
+PC2 MATRIX A2<br>
+PC3 MATRIX STCP<br>
+PC4 MATRIX OE#<br>
+PC5 SPI CLK<br>
+PC6 SPI MOSI<br>
+PC7 -<br>
 
-PD0 MATRIX SHCP
-PD1	SWIO            <- for programming and debugging
-PD2 MATRIX DS_Red_1
-PD3 MATRIX DS_Red_2
-PD4 MATRIX DS_Green_1
-PD5 MATRIX DS_Green_2
-PD6 MATRIX DS_Blue_1
-PD7 MATRIX DS_Blue_2
+PD0 MATRIX SHCP<br>
+PD1	SWIO            <- for programming and debugging<br>
+PD2 MATRIX DS_Red_1<br>
+PD3 MATRIX DS_Red_2<br>
+PD4 MATRIX DS_Green_1<br>
+PD5 MATRIX DS_Green_2<br>
+PD6 MATRIX DS_Blue_1<br>
+PD7 MATRIX DS_Blue_2<br>
 
 
 
