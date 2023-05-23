@@ -1,6 +1,6 @@
 "# ch32v003-16x8-SPI-RGB-LED-Matrix" 
 
-
+Program by Mika Schächinger
 
 This project is neither completed nor tested!
 
@@ -14,9 +14,9 @@ It can be chaned together to achieve decent image sizes.
 
 How the program works:
 
-    1. Controlled is the Panel over SPI. (Each Image is 384 Bytes)
+    1. Controlled is the Panel over SPI. (Each Image is 384 Bytes [3x8x16])
     2. The DMA-controller moves the Data from the SPI-controller to the image-array (uint8_t)(size 3x8x16).
-    3. After the image is received ready, da image is calculated to an array of the size 8x8x8 (uint8_t) and written to one of the two buffer ('inputBuffer')
+    3. After the image is received ready, the image is calculated to an array of the size 8x8x8 (uint8_t) and written to one of the two buffer ('inputBuffer')
         This format helps to write the six shiftregisters with only two assignments per Bit (all six shiftregisters are filled after 16 assignments).
     4. The pointer of the two buffers are swapped.
     5. The image from the 'outputBuffer' is output via binary code modulation.
@@ -30,6 +30,7 @@ How the program works:
             The first dimension is for the 8 brightness bits -> [COLOR_DEPTH][HEIGHT][WIDTH/2] <-> 8x8x8
             The values include the GPIOD Register which can easily assigned to the OUTDR-Register of GPIOD, to apply 6 data bits and the clock low simultaneously
 
+    To save the powerconsumption, PC7 is used as an Enable-Input.
 
 
 Pinout:
@@ -44,7 +45,7 @@ PC3 MATRIX STCP<br>
 PC4 MATRIX OE#<br>
 PC5 SPI CLK<br>
 PC6 SPI MOSI<br>
-PC7 -<br>
+PC7 MATRIX_ENABLE Input<br>
 
 PD0 MATRIX SHCP<br>
 PD1	SWIO            <- for programming and debugging<br>
