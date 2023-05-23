@@ -1,6 +1,6 @@
 "# ch32v003-16x8-SPI-RGB-LED-Matrix" 
 
-Program by Mika Schächinger
+Program and PCB by Mika Schächinger
 
 This project is neither completed nor tested!
 
@@ -57,4 +57,19 @@ PD6 MATRIX DS_Blue_1<br>
 PD7 MATRIX DS_Blue_2<br>
 
 
-![Alt text](Images/PCB_Panel_Back_20230523.jpg?raw=true "Title")
+
+The PCB:
+
+The PCB has a Size of 40x80 mm. With 8x16 RGB-LEDs there is a distance of 5mm between each LED. 
+
+
+Main panel back site:
+![Alt text](Images/PCB_Panel_Back_20230523.jpg?raw=true "Matrix Panel Back")
+
+
+The PCB is designed with EasyEDA. 
+The Parts are from LCSC.com and the PCBs from JLCPCB.com
+
+The goal is to archive a price of under 5€ per Panel.
+Higher quantities (~100 PCBs) can probably achieve a price of 3€ per piece.
+
