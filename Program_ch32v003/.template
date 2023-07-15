@@ -14,5 +14,5 @@ Description=Website: https://www.wch.cn/products/CH32V003.html?\nThe CH32V003 se
 
 PeripheralVersion=1.4
 MCU=CH32V003F4P6
-CLKSpeed=1
-Target Path=obj\Matrix_Test.hex
+CLKSpeed=3
+Target Path=obj\LED-Matrix.hex

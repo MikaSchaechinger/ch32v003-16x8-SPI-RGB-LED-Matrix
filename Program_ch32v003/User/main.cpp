@@ -20,6 +20,11 @@
 
 */
 
+
+//#define SPI_CONTROL
+
+
+
 #include "debug.h"
 #include "FastMatrix/FastMatrix.h"
 
@@ -32,17 +37,45 @@ uint8_t inputImage[COLOR][HEIGHT][WIDTH];
 #define IMAGE_SIZE (COLOR * HEIGHT * WIDTH)
 uint8_t buffer0[COLOR_DEPTH][HEIGHT][SHIFT_WIDTH];
 uint8_t buffer1[COLOR_DEPTH][HEIGHT][SHIFT_WIDTH];
+uint32_t flag = 0;
 
 
-FastMatrix matrix(&inputImage, &buffer0, &buffer1);
+FastMatrix matrix(inputImage, buffer0, buffer1);
 
 
 void SysTick_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 
 void SysTick_Handler(void)
 {
-    matrix.outputRow();
+    SysTick->SR = 0;    // Reset the Status Registers
+    flag++;
+
+    if (flag > 2){
+        flag=0;
+    }
+    //matrix.outputRow();
 }
+
+
+
+void setup_interrupt(){
+    // Setup Interrupts
+
+    NVIC_EnableIRQ(SysTicK_IRQn);
+    // SR = Status Register
+    SysTick->SR = 0; // &= ~(1 << 0);   // Reset of the LSB -> LSB is the COUNTFLAG-Bit
+    SysTick->CMP = MIN_COMP_CLOCK;   // Set Compare Register
+    SysTick->CNT = 0;   // Reset the Count Value
+    //SysTick->CTLR = 0;  // Reset System Count Control Register
+    //SysTick->CTLR |= 0b0010;    // Enabling counter interrupts
+    //SysTick->CTLR |= 0b0100;    //  1: HCLK for time base.
+                                //  0: HCLK/8 for time base.
+    //SysTick->CTLR |= 0b1000;    // Re-counting from 0 after counting up to the comparison value.
+
+    //SysTick->CTLR |= 0b0001;    // Start the system counter STK
+    //SysTick->CTLR = 0xF;
+}
+
 
 
 void GPIO_Clock_Init(void){
@@ -119,24 +152,41 @@ void SPI_Slave_Init(void){
  */
 int main(void)
 {
-    USART_Printf_Init(115200);
-    printf("Test\n");
-    printf("SystemClk1:%d\r\n",SystemCoreClock);
+    u_int32_t delay_counter = 0xFFFFFFFF;
+    //USART_Printf_Init(115200);
+    //printf("Test\n");
+    //printf("SystemClk1:%d\r\n",SystemCoreClock);
 
+    matrix.init();
+    setup_interrupt();
+
+#ifdef SPI_CONTROL
     SPI_Slave_Init();
     DMA_Rx_Init(DMA1_Channel2, (u32)&SPI1->DATAR, (u32)inputImage, IMAGE_SIZE);
     DMA_Cmd(DMA1_Channel2, ENABLE);
-
+#endif
 
     // TODO:    1. Check SPI for Errors
     //          2. DMA Timeout
+    // 3. CHeck if slave select is True (SPI_NSS_Soft)
 
     while(1){
         // Transfer completed Flag
+#ifdef SPI_CONTROL
         if( DMA_GetFlagStatus(DMA1_FLAG_TC2) ){
             DMA_ClearFlag(DMA1_FLAG_TC2);
             matrix.newImage();
         }
+#else
+
+        if( delay_counter > 0xFFFFF){
+            delay_counter = 0;
+            matrix.testImage();
+        }
+        delay_counter++;
+        matrix.outputRow();
+
+#endif
         // Transmission error
         // if( DMA_GetFlagStatus(DMA1_FLAG_TE2) ){}
         // Transmission halfway flag

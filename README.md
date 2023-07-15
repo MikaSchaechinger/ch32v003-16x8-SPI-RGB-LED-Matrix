@@ -56,6 +56,8 @@ PD5 MATRIX DS_Green_2<br>
 PD6 MATRIX DS_Blue_1<br>
 PD7 MATRIX DS_Blue_2<br>
 
+IMPORTANT: PD7 overlaps with the reset function. To disable this function and use the pin as an IO-Pin, programm with the WCH-LinkUtility and select "Disable mul-func,PD7 is used for IO function". As standard there should be selected "Enable mul-func,ignored pin status within 128us/1ms/12ms"
+
 
 
 The PCB:

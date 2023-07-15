@@ -43,19 +43,25 @@ bool MYGPIO_INIT(MYGPIO gpio, GPIOMode_TypeDef GPIO_Mode){
     GPIO_InitTypeDef GPIO_InitStructure = {0};
 
     GPIO_TypeDef* GPIOX;
+    uint32_t APB2_peripheral = 0;
 
     switch((gpio & 0b11000) >> 3){
     case 0:
         GPIOX = GPIOA;
+        APB2_peripheral = RCC_APB2Periph_GPIOA;
         if((gpio != PA1) && (gpio != PA2))
             return false;
     break;
-    case 2: GPIOX = GPIOC; break;
-    case 3: GPIOX = GPIOD; break;
+    case 2: GPIOX = GPIOC;
+            APB2_peripheral = RCC_APB2Periph_GPIOC;
+            break;
+    case 3: GPIOX = GPIOD;
+            APB2_peripheral = RCC_APB2Periph_GPIOD;
+            break;
     default: return false;
     }
 
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
+    RCC_APB2PeriphClockCmd(APB2_peripheral, ENABLE);
     GPIO_InitStructure.GPIO_Pin = ((uint16_t)0b1 << (gpio & 0b111));
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;

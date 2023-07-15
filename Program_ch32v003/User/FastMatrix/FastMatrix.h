@@ -28,26 +28,28 @@
 #define BLUE2_MASK GPIO_Pin_7
 
 // With the SysTick-Timer the Period-Time of the shortest Row cycle
-#define MIN_COMP_CLOCK 63
+#define MIN_COMP_CLOCK 0xFF
 
 
 
 class FastMatrix{
-    uint8_t (*inputImage)[COLOR][HEIGHT][WIDTH];
-    uint8_t (*inputBuffer)[COLOR_DEPTH][HEIGHT][SHIFT_WIDTH];
-    uint8_t (*outputBuffer)[COLOR_DEPTH][HEIGHT][SHIFT_WIDTH];
+    uint8_t (*inputImage)[HEIGHT][WIDTH];   //[COLOR]
+    uint8_t (*inputBuffer)[HEIGHT][SHIFT_WIDTH]; // [COLOR_DEPTH]
+    uint8_t (*outputBuffer)[HEIGHT][SHIFT_WIDTH]; // [COLOR_DEPTH]
 
 
     uint8_t brightness = 0;     // current brightness   [0...7] for 8 Bit brightness
     uint8_t row = 0;            // active row           [0...7] ( < HEIGHT)
-
+    uint32_t testImageCounter = 0;
 
 
     void calcInputBuffer();
-    void blackBuffer(uint8_t (*buffer)[COLOR_DEPTH][HEIGHT][SHIFT_WIDTH]);
+    void blackBuffer(uint8_t (*buffer)[HEIGHT][SHIFT_WIDTH]);
 
 public:
-    FastMatrix(uint8_t (*inputImage)[COLOR][HEIGHT][WIDTH], uint8_t (*buffer0)[COLOR_DEPTH][HEIGHT][SHIFT_WIDTH], uint8_t (*buffer1)[COLOR_DEPTH][HEIGHT][SHIFT_WIDTH]);
+    FastMatrix(uint8_t (*inputImage)[HEIGHT][WIDTH], uint8_t (*buffer0)[HEIGHT][SHIFT_WIDTH], uint8_t (*buffer1)[HEIGHT][SHIFT_WIDTH]);
+    void init();
+    void testImage();
     void newImage();
     void outputRow();
 

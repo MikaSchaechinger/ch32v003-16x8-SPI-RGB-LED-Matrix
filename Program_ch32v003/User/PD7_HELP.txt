@@ -1,0 +1,37 @@
+From Chinese Datasheet:
+
+(translated with deepl)
+
+16.5.3 User-Selected Word Erase
+Directly erases the entire 64-byte user-selected word area.
+(1) Check the LOCK bit of FLASH_CTLR register, if it is 1, it is necessary to perform the "Unlock Flash Memory" operation.
+(2) Check the BSY bit of FLASH_STATR register to make sure there is no programming operation in progress.
+(3) Check the OBWRE bit of FLASH_CTLR register, if it is 0, it is necessary to perform the operation of "user select word unlock".
+4) Set the OBER bit of FLASH_CTLR register to '1', and then set the STAT bit of FLASH_CTLR register to '1' to enable user select word erase.
+Set the STAT bit of the FLASH_CTLR register to '1' to start the user-selected word erase.
+(5) Wait for the BYS bit to become '0' or the EOP bit of FLASH_STATR register to be '1' to indicate the end of erase, and then clear the EOP bit to zero.
+6) Read erase address data check.
+7) End by clearing the OBER bit to 0.
+
+
+From English Datasheet:
+16.5.2 User-selected word programming
+Only the standard programming method is supported, writing half-words (2 bytes) at a time. In practice, when 
+programming the user-selected word, FPEC uses only the low byte in the half-word and automatically 
+calculatesthe high byte (the high byte isthe inverse of the low byte) and then startsthe programming operation, 
+which will ensure that the byte in the user-selected word and its inverse code are always correct.
+1) Check the LOCK bit of FLASH_CTLR register, if it is 1, you need to execute the "Unlock Flash" 
+operation.
+2) Check the BSY bit of the FLASH_STATR register to confirm that there are no other programming 
+operations in progress.
+3) Set the OBPG bit of FLASH_CTLR register to '1', after that set the STAT bit of FLASH_CTLR register 
+to '1' to turn on the user select word programming.
+4) Set the OBPG bit of FLASH_CTLR register to '1', after that set the STAT bit of FLASH_CTLR register 
+to '1' to turn on the user select word programming.
+5) Write the half word (2 bytes) to be programmed to the specified address.
+6) Wait for the BYS bit to become '0' or the EOP bit of FLASH_STATR register to be '1' to indicate the end of programming, and clear the EOP bit to 0.
+7) Read the programmed address data checksum.
+8) Continue programming you can repeat steps 5-7 and end programming to clear the OBPG bit to 0.
+Note: When "Read Protected" in the modified selection word becomes "Unprotected", a whole-slice erase of 
+the main memory will be performed automatically. If the selection other than "read protected" is modified, the 
+whole erase operation will not occur.
