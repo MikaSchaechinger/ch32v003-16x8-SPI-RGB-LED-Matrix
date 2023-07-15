@@ -129,11 +129,14 @@ void FastMatrix::calcInputBuffer(){
 
 
 
-void FastMatrix::outputRow(){
+void FastMatrix::outputRow(void){
     // Update SysTick-Time
     // SysTick->SR = 0;    // Reset the Status Registers
     // No Reset needed, auto reset configured
     // SysTick->CNT = 0;   // Reset the Count Value
+
+    
+
     SysTick->CMP = MIN_COMP_CLOCK << this->brightness;  // Update the compare-Value
 
     //auto a = *(this->outputBuffer);
@@ -159,10 +162,13 @@ void FastMatrix::outputRow(){
 
     GPIOC->BCR = STCP;                  // STCP LOW                     no effect
     GPIOC->BSHR = OE_NOT;               // OE_NOT High                  Matrix dark
+    //GPIOC->OUTDR = ;
     GPIOC->OUTDR = this->row | OE_NOT | STCP;   // A0, A1, A2 like height       Select row (Matrix still dark)
     //GPIOC->BSHR = STCP;
 
-    // update row
+    for(uint8_t i = 0; i < 0x8; i++){
+    }
+
 
     this->row++;
     if( this->row >= 8){
@@ -204,23 +210,24 @@ void FastMatrix::newImage(){
 }
 
 void FastMatrix::testImage(){
-    //uint8_t* flatArray = reinterpret_cast<uint8_t*>((*this->inputImage));
-      //int totalLength = COLOR * HEIGHT * WIDTH;
-//
-//    for (uint32_t index=0; index < totalLength; index++){
-//        flatArray[index] = 0;
-//    }
-    for (uint8_t color=0; color < COLOR; color++){
-        uint8_t a = 0;
-        if (color == testImageCounter)
-            a = 0xFF;
+    uint8_t* flatArray = reinterpret_cast<uint8_t*>((*this->inputImage));
+    int totalLength = COLOR * HEIGHT * WIDTH;
 
-        for (uint8_t height=0; height < HEIGHT; height++){
-            for(uint8_t width=0; width < WIDTH; width++){
-                this->inputImage[color][height][width] = a;
-            }
-        }
+    for (uint32_t index=0; index < totalLength; index++){
+        flatArray[index] = 0;
     }
+
+    flatArray[testImageCounter] = 0xFF;
+
+
+    // for (uint8_t color=0; color < COLOR; color++){
+    //     uint8_t a = 0;
+    //     for (uint8_t height=0; height < HEIGHT; height++){
+    //         for(uint8_t width=0; width < WIDTH; width++){
+    //             this->inputImage[color][height][width] = a;
+    //         }
+    //     }
+    // }
 
 
 //    for (uint8_t i = 0; i<testImageCounter; i++){
@@ -232,7 +239,7 @@ void FastMatrix::testImage(){
 
     //flatArray[this->testImageCounter] = 0xFF;
     testImageCounter++;
-    if (testImageCounter > COLOR){
+    if (testImageCounter >= totalLength){
         testImageCounter = 0;
     }
 

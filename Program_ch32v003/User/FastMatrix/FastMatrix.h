@@ -41,7 +41,7 @@ class FastMatrix{
     uint8_t brightness = 0;     // current brightness   [0...7] for 8 Bit brightness
     uint8_t row = 0;            // active row           [0...7] ( < HEIGHT)
     uint32_t testImageCounter = 0;
-
+    uint32_t delay_counter = 0;
 
     void calcInputBuffer();
     void blackBuffer(uint8_t (*buffer)[HEIGHT][SHIFT_WIDTH]);
@@ -51,7 +51,9 @@ public:
     void init();
     void testImage();
     void newImage();
-    void outputRow();
+
+    __attribute__((optimize("00")))
+    void outputRow(void);
 
 
 };

@@ -152,7 +152,7 @@ void SPI_Slave_Init(void){
  */
 int main(void)
 {
-    u_int32_t delay_counter = 0xFFFFFFFF;
+    uint32_t delay_counter = 0xFFFFFFFF;
     //USART_Printf_Init(115200);
     //printf("Test\n");
     //printf("SystemClk1:%d\r\n",SystemCoreClock);
@@ -179,7 +179,7 @@ int main(void)
         }
 #else
 
-        if( delay_counter > 0xFFFFF){
+        if( delay_counter > 0xFFFF){
             delay_counter = 0;
             matrix.testImage();
         }
