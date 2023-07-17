@@ -140,24 +140,32 @@ void FastMatrix::outputRow(void){
     SysTick->CMP = MIN_COMP_CLOCK << this->brightness;  // Update the compare-Value
 
     //auto a = *(this->outputBuffer);
-    // uint8_t* rowArray = reinterpret_cast<uint8_t *>(   &(*this->outputBuffer)[brightness][this->row]  );
+    uint8_t* rowArray = reinterpret_cast<uint8_t *>(  &((this->outputBuffer)[brightness][this->row][0])  );
 
     // Shift out one line
-    GPIOD->OUTDR = this->outputBuffer[brightness][this->row][0];   // clock low and all 6 DS
+    GPIOD->OUTDR = rowArray[0];
+    //GPIOD->OUTDR = this->outputBuffer[brightness][this->row][0];   // clock low and all 6 DS
     GPIOD->BSHR = CLOCK_MASK;               // clock high
-    GPIOD->OUTDR = this->outputBuffer[brightness][this->row][1];   // ...
+    GPIOD->OUTDR = rowArray[1];
+    // GPIOD->OUTDR = this->outputBuffer[brightness][this->row][1];   // ...
     GPIOD->BSHR = CLOCK_MASK;
-    GPIOD->OUTDR = this->outputBuffer[brightness][this->row][2];
+    GPIOD->OUTDR = rowArray[2];
+    // GPIOD->OUTDR = this->outputBuffer[brightness][this->row][2];
     GPIOD->BSHR = CLOCK_MASK;
-    GPIOD->OUTDR = this->outputBuffer[brightness][this->row][3];
+    GPIOD->OUTDR = rowArray[3];
+    // GPIOD->OUTDR = this->outputBuffer[brightness][this->row][3];
     GPIOD->BSHR = CLOCK_MASK;
-    GPIOD->OUTDR = this->outputBuffer[brightness][this->row][4];
+    GPIOD->OUTDR = rowArray[4];
+    // GPIOD->OUTDR = this->outputBuffer[brightness][this->row][4];
     GPIOD->BSHR = CLOCK_MASK;
-    GPIOD->OUTDR = this->outputBuffer[brightness][this->row][5];
+    GPIOD->OUTDR = rowArray[5];
+    // GPIOD->OUTDR = this->outputBuffer[brightness][this->row][5];
     GPIOD->BSHR = CLOCK_MASK;
-    GPIOD->OUTDR = this->outputBuffer[brightness][this->row][6];
+    GPIOD->OUTDR = rowArray[6];
+    // GPIOD->OUTDR = this->outputBuffer[brightness][this->row][6];
     GPIOD->BSHR = CLOCK_MASK;
-    GPIOD->OUTDR = this->outputBuffer[brightness][this->row][7];
+    GPIOD->OUTDR = rowArray[7];
+    // GPIOD->OUTDR = this->outputBuffer[brightness][this->row][7];
     GPIOD->BSHR = CLOCK_MASK;
 
     GPIOC->BCR = STCP;                  // STCP LOW                     no effect
@@ -166,7 +174,7 @@ void FastMatrix::outputRow(void){
     GPIOC->OUTDR = this->row | OE_NOT | STCP;   // A0, A1, A2 like height       Select row (Matrix still dark)
     //GPIOC->BSHR = STCP;
 
-    for(uint8_t i = 0; i < 0x8; i++){
+    for(uint8_t i = 0; i < 0xA; i++){   // Short delay to reduce ghosting
     }
 
 
@@ -194,7 +202,7 @@ void FastMatrix::blackBuffer(uint8_t (*buffer)[HEIGHT][SHIFT_WIDTH]){
     for (uint8_t depth=0; depth < COLOR_DEPTH; depth++){
         for (uint8_t height=0; height < HEIGHT; height++){
             for(uint8_t width=0; width < SHIFT_WIDTH; width++){
-                buffer[depth][height][width] = 0b11111100;
+                buffer[depth][height][width] = 0xFC;
             }
         }
     }
@@ -210,25 +218,26 @@ void FastMatrix::newImage(){
 }
 
 void FastMatrix::testImage(){
-    uint8_t* flatArray = reinterpret_cast<uint8_t*>((*this->inputImage));
-    int totalLength = COLOR * HEIGHT * WIDTH;
+    //uint8_t* flatArray = reinterpret_cast<uint8_t*>((*this->inputImage));
+    //int totalLength = COLOR * HEIGHT * WIDTH;
 
-    for (uint32_t index=0; index < totalLength; index++){
-        flatArray[index] = 0;
-    }
-
-    flatArray[testImageCounter] = 0xFF;
+    //for (uint32_t index=0; index < totalLength; index++){
+    //    flatArray[index] = (uint8_t) index;
+    //}
 
 
-    // for (uint8_t color=0; color < COLOR; color++){
-    //     uint8_t a = 0;
-    //     for (uint8_t height=0; height < HEIGHT; height++){
-    //         for(uint8_t width=0; width < WIDTH; width++){
-    //             this->inputImage[color][height][width] = a;
-    //         }
-    //     }
-    // }
-
+     for (uint8_t color=0; color < COLOR; color++){
+         for (uint8_t height=0; height < HEIGHT; height++){
+             for(uint8_t width=0; width < WIDTH; width++){
+                 this->inputImage[color][height][width] = 0;
+             }
+         }
+     }
+     for (uint8_t height=0; height < HEIGHT; height++){
+          for(uint8_t width=0; width < WIDTH; width++){
+              this->inputImage[0][height][width] = width << (height/2);
+          }
+      }
 
 //    for (uint8_t i = 0; i<testImageCounter; i++){
 //        this->inputImage[0][0][i] = 0xFF;
@@ -238,10 +247,10 @@ void FastMatrix::testImage(){
 
 
     //flatArray[this->testImageCounter] = 0xFF;
-    testImageCounter++;
-    if (testImageCounter >= totalLength){
-        testImageCounter = 0;
-    }
+//    testImageCounter++;
+//    if (testImageCounter >= (totalLength >> 8)){
+//        testImageCounter = 0;
+//    }
 
     this->newImage();
 }

@@ -2,13 +2,14 @@
 
 Program and PCB by Mika Schächinger
 
-This project is neither completed nor tested!
-
+This project is not finished!
+    Displaying works with ~100FPS
+    SPI-DMA data transmission is not testet yet. (Adapter PCBs for this are in production)
 
 
 
 The programm is for the ch32v003 microcontroller, which sits on an self-designed LED-Matrix PCB.
-The Matrix has 8x16 Pixels and should be able to display 24bit images with a framerate > 30FPS (Hopefully :D).
+The Matrix has 8x16 Pixels and should be able to display 24bit color images (8bit per color RGB) with a framerate > 30FPS (Hopefully :D).
 It can be chaned together to achieve decent image sizes.
 
 
@@ -67,6 +68,20 @@ The PCB has a Size of 40x80 mm. With 8x16 RGB-LEDs there is a distance of 5mm be
 
 Main panel back site:
 ![Alt text](Images/PCB_Panel_Back_20230523.jpg?raw=true "Matrix Panel Back")
+
+Test Image for color (depth) and grey scale:
+![Alt text](Images/TestImages_20230717.jpg?raw=true "Test Images")
+
+Both test images have an exponential brightness curve. 
+The is dependend by "MIN_COMP_CLOCK" which is 0x7F (127) to 0xFF (255), which describes the clock cycles for the shortest period of the SysTick-Timer. At 24MHz and 0xFF this results in  24MHz / (0x7F * 255 color steps * 8 rows) = 92 FPS.
+Because the outputRow() function is relative short, MIN_COMP_CLOCK could be lowered more to gain higher frame rates.
+
+
+Some interesting things:
+1. This project is based on Cpp and not like the example projects on C. This results in problems, when you try to call the SysTick_Handler interrupt. The interrupt worked with this extra line: extern "C" {    void SysTick_Handler(void); }
+2. GPIO4 (PD7) is used. This pin workes not out of the box as an ouput, because NRST (Reset) is at the same pin. To use it, you must deactivate the reset function. This can be done by programming the ch32v003 with the WCH-LinkUtility with "Disable mul-func, PD7 is used for IO function" selected.
+
+
 
 
 The PCB is designed with EasyEDA. 

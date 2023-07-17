@@ -22,7 +22,7 @@ User/main.o: ../User/main.cpp \
  C:\Users\Mika\Programmieren\MounRiver\Projects\LED-Matrix\Program_ch32v003\Peripheral\inc/ch32v00x_wwdg.h \
  C:\Users\Mika\Programmieren\MounRiver\Projects\LED-Matrix\Program_ch32v003\Peripheral\inc/ch32v00x_opa.h \
  C:\Users\Mika\Programmieren\MounRiver\Projects\LED-Matrix\Program_ch32v003\Peripheral\inc/ch32v00x.h \
- ../User/FastMatrix/FastMatrix.h
+ ../User/FastMatrix/FastMatrix.h ../User/testImage.h
 
 C:\Users\Mika\Programmieren\MounRiver\Projects\LED-Matrix\Program_ch32v003\Debug/debug.h:
 
@@ -71,3 +71,5 @@ C:\Users\Mika\Programmieren\MounRiver\Projects\LED-Matrix\Program_ch32v003\Perip
 C:\Users\Mika\Programmieren\MounRiver\Projects\LED-Matrix\Program_ch32v003\Peripheral\inc/ch32v00x.h:
 
 ../User/FastMatrix/FastMatrix.h:
+
+../User/testImage.h:

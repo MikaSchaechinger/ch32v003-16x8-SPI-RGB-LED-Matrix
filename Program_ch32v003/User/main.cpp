@@ -1,27 +1,19 @@
 /********************************** (C) COPYRIGHT *******************************
- * File Name          : main.c
- * Author             : WCH
- * Version            : V1.0.0
- * Date               : 2022/08/08
+ * File Name          : main.cpp
+ * Author             : Mika Schaechinger (based on Example from WCH)
+ * Version            : V1.1.0
+ * Date               : 2023/07/17
  * Description        : Main program body.
+ *
+ *
+ * Example had this license:
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
  * SPDX-License-Identifier: Apache-2.0
  *******************************************************************************/
 
-/*
- *@Note
- Multiprocessor communication mode routine:
- Master:USART1_Tx(PD5)\USART1_Rx(PD6).
- This routine demonstrates that USART1 receives the data sent by CH341 and inverts
- it and sends it (baud rate 115200).
-
- Hardware connection:PD5 -- Rx
-                     PD6 -- Tx
-
-*/
 
 
-//#define SPI_CONTROL
+
 
 
 
@@ -29,11 +21,18 @@
 #include "FastMatrix/FastMatrix.h"
 
 /* Global define */
+//#define SPI_DMA
+#define TEST_IMAGE
 
+#ifdef TEST_IMAGE
+#include "testImage.h"
+#endif
 
 /* Global Variable */
 
 uint8_t inputImage[COLOR][HEIGHT][WIDTH];
+
+
 #define IMAGE_SIZE (COLOR * HEIGHT * WIDTH)
 uint8_t buffer0[COLOR_DEPTH][HEIGHT][SHIFT_WIDTH];
 uint8_t buffer1[COLOR_DEPTH][HEIGHT][SHIFT_WIDTH];
@@ -43,20 +42,15 @@ uint32_t flag = 0;
 FastMatrix matrix(inputImage, buffer0, buffer1);
 
 
-void SysTick_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 
-void SysTick_Handler(void)
-{
-    SysTick->SR = 0;    // Reset the Status Registers
-    flag++;
 
-    if (flag > 2){
-        flag=0;
-    }
-    //matrix.outputRow();
+
+
+
+
+extern "C" {    // Maybe this is not needed. DMA was not tested yet.
+    void DMA1_Channel2_IRQHandler(void);
 }
-
-
 
 void setup_interrupt(){
     // Setup Interrupts
@@ -73,7 +67,7 @@ void setup_interrupt(){
     //SysTick->CTLR |= 0b1000;    // Re-counting from 0 after counting up to the comparison value.
 
     //SysTick->CTLR |= 0b0001;    // Start the system counter STK
-    //SysTick->CTLR = 0xF;
+    SysTick->CTLR = 0xF;
 }
 
 
@@ -126,7 +120,7 @@ void SPI_Slave_Init(void){
 
     SPI_InitStructure.SPI_Mode = SPI_Mode_Slave;
 
-    SPI_InitStructure.SPI_DataSize = SPI_DataSize_16b;  // maybe 8Bit ?
+    SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;  // maybe 8Bit ?
     SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;          // 0 = LOW
     SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;        // ???
     SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;               // Slave Select must be always true
@@ -152,45 +146,65 @@ void SPI_Slave_Init(void){
  */
 int main(void)
 {
-    uint32_t delay_counter = 0xFFFFFFFF;
-    //USART_Printf_Init(115200);
-    //printf("Test\n");
-    //printf("SystemClk1:%d\r\n",SystemCoreClock);
-
+    GPIO_Clock_Init();
     matrix.init();
     setup_interrupt();
 
-#ifdef SPI_CONTROL
+#ifdef SPI_DMA
+    // DMA not tested jet
     SPI_Slave_Init();
     DMA_Rx_Init(DMA1_Channel2, (u32)&SPI1->DATAR, (u32)inputImage, IMAGE_SIZE);
     DMA_Cmd(DMA1_Channel2, ENABLE);
 #endif
 
-    // TODO:    1. Check SPI for Errors
-    //          2. DMA Timeout
-    // 3. CHeck if slave select is True (SPI_NSS_Soft)
 
+    //      1. Check SPI for Errors
+    //      2. DMA Timeout
+    //      3. CHeck if slave select is True (SPI_NSS_Soft)
+
+#ifdef SPI_DMA
     while(1){
         // Transfer completed Flag
-#ifdef SPI_CONTROL
         if( DMA_GetFlagStatus(DMA1_FLAG_TC2) ){
             DMA_ClearFlag(DMA1_FLAG_TC2);
             matrix.newImage();
         }
-#else
 
-        if( delay_counter > 0xFFFF){
-            delay_counter = 0;
+        // Transmission error
+        if( DMA_GetFlagStatus(DMA1_FLAG_TE2) ){
             matrix.testImage();
         }
-        delay_counter++;
-        matrix.outputRow();
-
-#endif
-        // Transmission error
-        // if( DMA_GetFlagStatus(DMA1_FLAG_TE2) ){}
         // Transmission halfway flag
-        // if( DMA_GetFlagStatus(DMA1_FLAG_HT2) ){}
+        if( DMA_GetFlagStatus(DMA1_FLAG_HT2) ){
+            matrix.testImage();
+        }
+
+    }
+#elif defined(TEST_IMAGE)
+
+    greyTest(inputImage);
+    matrix.newImage();
+
+    while(1){
+
     }
 
+#endif
+
+
+
 }
+
+
+// essential for the timer running with cpps
+extern "C" {    void SysTick_Handler(void); }
+
+void SysTick_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));  //("WCH-Interrupt-fast")
+
+void SysTick_Handler(void)
+{
+    SysTick->SR = 0;    // Reset the Status Registers
+    //SysTick->CTLR &= ~0b0001;
+    matrix.outputRow();
+}
+

@@ -28,7 +28,7 @@
 #define BLUE2_MASK GPIO_Pin_7
 
 // With the SysTick-Timer the Period-Time of the shortest Row cycle
-#define MIN_COMP_CLOCK 0xFF
+#define MIN_COMP_CLOCK 0x7F     // 0xFF works
 
 
 

@@ -19,5 +19,7 @@ encoding//User/Pins.txt=GBK
 encoding//User/ch32v00x_it.c=GBK
 encoding//User/main.cpp=GBK
 encoding//User/system_ch32v00x.c=GBK
+encoding//User/testImage.h=GBK
+encoding//obj/makefile=GBK
 encoding/LED-Matrix.launch=GBK
 encoding/Matrix_Test.launch=GBK
