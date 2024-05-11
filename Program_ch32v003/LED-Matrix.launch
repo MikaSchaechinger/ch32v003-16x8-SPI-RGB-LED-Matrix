@@ -11,7 +11,7 @@
 <booleanAttribute key="com.mounriver.debug.gdbjtag.openocd.doStartGdbServer" value="true"/>
 <booleanAttribute key="com.mounriver.debug.gdbjtag.openocd.enableSemihosting" value="false"/>
 <stringAttribute key="com.mounriver.debug.gdbjtag.openocd.firstResetType" value="init"/>
-<stringAttribute key="com.mounriver.debug.gdbjtag.openocd.gdbClientOtherCommands" value="set mem inaccessible-by-default off&#13;&#10;set architecture riscv:rv32&#13;&#10;set remotetimeout unlimited"/>
+<stringAttribute key="com.mounriver.debug.gdbjtag.openocd.gdbClientOtherCommands" value="set mem inaccessible-by-default off&#13;&#10;set architecture riscv:rv32&#13;&#10;set remotetimeout unlimited&#13;&#10;set disassembler-options xw"/>
 <stringAttribute key="com.mounriver.debug.gdbjtag.openocd.gdbClientOtherOptions" value=""/>
 <stringAttribute key="com.mounriver.debug.gdbjtag.openocd.gdbServerConnectionAddress" value=""/>
 <stringAttribute key="com.mounriver.debug.gdbjtag.openocd.gdbServerExecutable" value="${eclipse_home}toolchain/OpenOCD/bin/${openocd_executable}"/>

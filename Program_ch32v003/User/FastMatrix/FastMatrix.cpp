@@ -5,7 +5,10 @@
 
 
 
-
+#define OE_NOT_OR_STCP 0x18   //(OE_NOT | STCP)
+// for inline assembly
+#define STR(x) #x
+#define XSTR(s) STR(s)
 
 
 
@@ -129,15 +132,19 @@ void FastMatrix::calcInputBuffer(){
 
 
 
-void FastMatrix::outputRow(void){
+void FastMatrix::oldOutputRow(void){
     // Update SysTick-Time
     // SysTick->SR = 0;    // Reset the Status Registers
     // No Reset needed, auto reset configured
     // SysTick->CNT = 0;   // Reset the Count Value
 
     
-
+    // Sys Tick TImer
     SysTick->CMP = MIN_COMP_CLOCK << this->brightness;  // Update the compare-Value
+    // Advanced TImer (Timer 1)
+    //TIM1->ATRLR = MIN_COMP_CLOCK << this->brightness;
+    // General Purpose Timer (TImer 2)
+    //TIM2->CH4CVR = MIN_COMP_CLOCK << this->brightness;
 
     //auto a = *(this->outputBuffer);
     uint8_t* rowArray = reinterpret_cast<uint8_t *>(  &((this->outputBuffer)[brightness][this->row][0])  );
@@ -174,8 +181,8 @@ void FastMatrix::outputRow(void){
     GPIOC->OUTDR = this->row | OE_NOT | STCP;   // A0, A1, A2 like height       Select row (Matrix still dark)
     //GPIOC->BSHR = STCP;
 
-    for(uint8_t i = 0; i < 0xA; i++){   // Short delay to reduce ghosting
-    }
+    //for(uint8_t i = 0; i < 0xA; i++){   // Short delay to reduce ghosting
+    //}
 
 
     this->row++;
@@ -188,6 +195,141 @@ void FastMatrix::outputRow(void){
     }
     GPIOC->BCR = OE_NOT;                // Enable Matrix
 }
+
+
+
+
+
+
+
+void FastMatrix::outputRow(void){
+    uint8_t* rowArray = reinterpret_cast<uint8_t *>(  &((this->outputBuffer)[brightness][this->row][0])  );
+
+    // Shift out one line
+    GPIOD->OUTDR = rowArray[0]; // clock low and all 6 DS
+    GPIOD->BSHR = CLOCK_MASK;               // clock high
+    GPIOD->OUTDR = rowArray[1];
+    GPIOD->BSHR = CLOCK_MASK;
+    GPIOD->OUTDR = rowArray[2];
+    GPIOD->BSHR = CLOCK_MASK;
+    GPIOD->OUTDR = rowArray[3];
+    GPIOD->BSHR = CLOCK_MASK;
+    GPIOD->OUTDR = rowArray[4];
+    GPIOD->BSHR = CLOCK_MASK;
+    GPIOD->OUTDR = rowArray[5];
+    GPIOD->BSHR = CLOCK_MASK;
+    GPIOD->OUTDR = rowArray[6];
+    GPIOD->BSHR = CLOCK_MASK;
+    GPIOD->OUTDR = rowArray[7];
+    GPIOD->BSHR = CLOCK_MASK;
+
+    GPIOC->BCR = STCP;                  // STCP LOW                     no effect, only when it is set back to high
+    GPIOC->BSHR = OE_NOT;               // OE_NOT High                  Matrix dark
+    //GPIOC->OUTDR = ;
+    GPIOC->OUTDR = this->row | OE_NOT | STCP;   // A0, A1, A2 like height       Select row (Matrix still dark)
+}
+
+void FastMatrix::outputRowASM(void){
+    uint8_t* rowArray = reinterpret_cast<uint8_t *>(&((this->outputBuffer)[brightness][this->row][0]));
+
+    asm volatile(
+            //"la t0, %[arr]"                         "\n"    // load rowArray Address in t0
+            //"sb 0(%[arr]), %[OUTDR]"                   "\n"    // load value from rowArray[0] into GPIOD->OUTDR
+            //"sb %[BSHR], " XSTR(CLOCK_MASK)       "\n"    // load CLOCK_MASK into GPIOD->BSHR
+
+            "li t0, 1"          "\n"            // 1 := CLOCK_MASK
+
+            "lb t1, 0(%[arr])"                  "\n"
+            "sb t1, %[OUTDR]"                   "\n"
+            "sb t0, %[BSHR]"                    "\n"
+
+            "lb t1, 1(%[arr])"                  "\n"
+            "sb t1, %[OUTDR]"                   "\n"
+            "sb t0, %[BSHR]"                    "\n"
+
+            "lb t1, 2(%[arr])"                  "\n"
+            "sb t1, %[OUTDR]"                   "\n"
+            "sb t0, %[BSHR]"                    "\n"
+
+            "lb t1, 3(%[arr])"                  "\n"
+            "sb t1, %[OUTDR]"                   "\n"
+            "sb t0, %[BSHR]"                    "\n"
+
+            "lb t1, 4(%[arr])"                  "\n"
+            "sb t1, %[OUTDR]"                   "\n"
+            "sb t0, %[BSHR]"                    "\n"
+
+            "lb t1, 5(%[arr])"                  "\n"
+            "sb t1, %[OUTDR]"                   "\n"
+            "sb t0, %[BSHR]"                    "\n"
+
+            "lb t1, 6(%[arr])"                  "\n"
+            "sb t1, %[OUTDR]"                   "\n"
+            "sb t0, %[BSHR]"                    "\n"
+
+            "lb t1, 7(%[arr])"                  "\n"
+            "sb t1, %[OUTDR]"                   "\n"
+            "sb t0, %[BSHR]"                    "\n"
+
+            "li t0, 8"       "\n"                   //  load 8 (STCP) in t0
+            "sb t0, %[bcr]"             "\n"        // store t0 into GPIOC->BCR  // STCP = 0x8
+            "sb t0, %0"                         "\n"        // load row into t0
+            "or t0, %[row]," XSTR(OE_NOT_OR_STCP)   "\n"        // write (this->row | OE_NOT_OR_STCP) into t1
+            "sb t0, %[outdr]"                       "\n"        // load t0 in GPIOC->OUTDR
+
+
+            :
+            : [OUTDR]"m"(GPIOD->OUTDR),    [BSHR]"m"(GPIOD->BSHR), [arr]"r"(rowArray),
+              [outdr]"m"(GPIOC->OUTDR), [bcr]"m"(GPIOC->BCR), [row]"r"(this->row)
+            : "t0", "t1", "t2"
+    );
+}
+
+void FastMatrix::showRow(void){
+    this->row++;
+    if( this->row >= 8){
+        this->row = 0;
+        this->brightness++;
+        if(this->brightness >= 8){
+            this->brightness = 0;
+        }
+    }
+    GPIOC->BCR = OE_NOT;                // Enable Matrix
+}
+
+
+void FastMatrix::applyRow(void){
+    if(this->interruptStep){    // == 1
+
+        SysTick->CMP = OUTPUT_DELAY;  // Update the compare-Value
+        //this->outputRow();
+        this->outputRowASM();
+        this->interruptStep = 0;
+    }
+    else{
+        SysTick->CMP = (MIN_COMP_CLOCK << this->brightness) - OUTPUT_DELAY;  // Update the compare-Value
+        this->showRow();
+        this->interruptStep = 1;
+    }
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

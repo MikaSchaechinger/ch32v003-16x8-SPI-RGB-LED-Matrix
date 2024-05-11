@@ -18,13 +18,9 @@
 
 #include "debug.h"
 #include "FastMatrix/FastMatrix.h"
-#include "TIme/time.h"
 
-
-/* === Testing === */
-
+/* Global define */
 #define SPI_DMA
-//#define SPI_NO_DMA
 //#define TEST_IMAGE
 
 /* Select Timer */
@@ -32,24 +28,14 @@
 //#define TIMER1
 //#define TIMER2
 
-
 #ifdef TEST_IMAGE
 #include "testImage.h"
 #endif
 
-/* === Global define === */
 #define ever ;;
+
 #define IMAGE_SIZE (COLOR * HEIGHT * WIDTH)
-
-// Must all have the same Number (here 2)
-#define SPI_DMA_CHANNEL DMA1_Channel2
-#define SPI_DMA_FLAG_TC DMA1_FLAG_TC2
-#define SPI_DMA_FLAG_TE DMA1_FLAG_TE2
-#define SPI_DMA_FLAG_HT DMA1_FLAG_HT2
-
-
-
-/* === Global Variable === */
+/* Global Variable */
 
 // SRAM 0x2000 0000 to 0x2000 0800
 uint8_t inputImage[COLOR][HEIGHT][WIDTH];           // 0x2000 0404
@@ -62,7 +48,6 @@ uint32_t data_address;
 
 FastMatrix matrix(inputImage, buffer0, buffer1);
 
-bool dma_finish_flag = false;
 
 
 
@@ -70,14 +55,16 @@ bool dma_finish_flag = false;
 
 
 
-//extern "C" {    // Maybe this is not needed. DMA was not tested yet.
-//    void DMA1_Channel2_IRQHandler(void);
-//}
+extern "C" {    // Maybe this is not needed. DMA was not tested yet.
+    void DMA1_Channel2_IRQHandler(void);
+}
 
 
 
 void setup_interrupt(){
     // Setup Interrupts
+
+#ifdef SYSTICK_TIMER
     NVIC_EnableIRQ(SysTicK_IRQn);
     // SR = Status Register
     SysTick->SR = 0; // &= ~(1 << 0);   // Reset of the LSB -> LSB is the COUNTFLAG-Bit
@@ -91,7 +78,80 @@ void setup_interrupt(){
 
     //SysTick->CTLR |= 0b0001;    // Start the system counter STK
     SysTick->CTLR = 0xF;
+#elif defined TIMER1
 
+    TIM_Cmd(TIM1, DISABLE);
+    NVIC_InitTypeDef NVIC_InitStructure;
+    TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;
+
+    // Clock f¨¹r TIM1 aktivieren
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1|RCC_APB2Periph_GPIOC|RCC_APB2Periph_GPIOD, ENABLE);
+
+    // Timer-Interrupt configure
+    NVIC_InitStructure.NVIC_IRQChannel = TIM1_UP_IRQn; // TIM1 Update Interrupt
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = NVIC_PriorityGroup_1;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
+
+    // Timer-Konfiguration
+    TIM_TimeBaseInitStructure.TIM_Period = 0x7FFF; /* Setze den Auto-Reload-Wert */
+    TIM_TimeBaseInitStructure.TIM_Prescaler = 1; /* Setze den Prescaler */
+    TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV4;
+    TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;
+    TIM_TimeBaseInitStructure.TIM_RepetitionCounter = 0;
+    TIM_TimeBaseInit(TIM1, &TIM_TimeBaseInitStructure);
+
+//
+//    TIM_OCInitTypeDef TIM_OCInitTypeStructure;
+//    TIM_OCInitTypeStructure.TIM_OCMode = TIM_OCMode_Timing;
+//    TIM_OCInitTypeStructure.TIM_OCNPolarity = 0;
+
+
+
+    // Timer-Interrupt f¨¹r Update aktivieren
+    TIM_ITConfig(TIM1, TIM_IT_Update, ENABLE);   // Works with "TIM1_UP_IRQHandler"
+    //TIM_ITConfig(TIM1, TIM_CC1IE, ENABLE);
+
+
+    TIM1->CNT = 0;
+    // Timer starten
+    TIM_Cmd(TIM1, ENABLE);
+
+#elif defined TIMER2
+    // activate Timer 2
+
+    // This two lines destroy the Mikrocontroller...
+    // RCC->CFGR0 &= ~RCC_PPRE1_0;
+    // RCC->CFGR0 |= RCC_PPRE1_DIV1;
+
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
+    //RCC_AHBPeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
+    // configure Timer interrupt
+    TIM_ITConfig(TIM2,  TIM_IT_Update, ENABLE);
+
+
+    // configure Timer
+    TIM_TimeBaseInitTypeDef TIM_TimeBaseInitStructure;
+    NVIC_InitTypeDef NVIC_InitStructure;
+
+    TIM_TimeBaseInitStructure.TIM_Period = 0xFFFF;
+    TIM_TimeBaseInitStructure.TIM_Prescaler = 0;
+    TIM_TimeBaseInitStructure.TIM_ClockDivision = TIM_CKD_DIV1;
+    TIM_TimeBaseInitStructure.TIM_CounterMode = TIM_CounterMode_Up;
+    TIM_TimeBaseInit(TIM2, &TIM_TimeBaseInitStructure);
+
+    // Timer-Interrupt configure
+    NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
+    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = NVIC_PriorityGroup_4;
+    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_Init(&NVIC_InitStructure);
+
+    // start timer
+    TIM_Cmd(TIM2, ENABLE);
+
+#endif
 }
 
 
@@ -119,21 +179,11 @@ void DMA_Rx_Init(DMA_Channel_TypeDef *DMA_CHx, u32 ppadr, u32 memadr, u16 bufsiz
     DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
     DMA_InitStructure.DMA_PeripheralDataSize = DMA_MemoryDataSize_Byte;
     DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
-    DMA_InitStructure.DMA_Mode = DMA_Mode_Normal;   // Circular
+    DMA_InitStructure.DMA_Mode = DMA_Mode_Circular;
     DMA_InitStructure.DMA_Priority = DMA_Priority_VeryHigh;
     // Peripheral to memory (MEM2MEM=0, DIR=0) Datasheet p.62
     DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;
     DMA_Init(DMA_CHx, &DMA_InitStructure);
-
-    // Interrupt
-//    NVIC_InitTypeDef NVIC_InitStructure;
-//    NVIC_InitStructure.NVIC_IRQChannel = DMA1_Channel1_IRQn;
-//    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = NVIC_PriorityGroup_1;
-//    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-//    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-//    NVIC_Init(&NVIC_InitStructure);
-
-    DMA_ITConfig(DMA_CHx, DMA_IT_TC, ENABLE);
 }
 
 void SPI_Slave_Init(void){
@@ -145,35 +195,37 @@ void SPI_Slave_Init(void){
 
     // Setup Clock Pin
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init( GPIOC, &GPIO_InitStructure );
 
     // Setup MOSI Pin
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPD;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init( GPIOC, &GPIO_InitStructure );
 
-    SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex; // SPI_Direction_1Line_Rx;
+    SPI_InitStructure.SPI_Direction = SPI_Direction_1Line_Rx;
 
     SPI_InitStructure.SPI_Mode = SPI_Mode_Slave;
 
     SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;  // maybe 8Bit ?
     SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;          // 0 = LOW
-    SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;        // Clock Phase CPHA = 0
+    SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;        // ???
     SPI_InitStructure.SPI_NSS = SPI_NSS_Soft;               // Slave Select must be always true
     SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;
-    SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_2; // Should not be needed
-    SPI_InitStructure.SPI_CRCPolynomial = 0;
+    SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_64; // Should not be needed
+    SPI_InitStructure.SPI_CRCPolynomial = 7;
     SPI_Init( SPI1, &SPI_InitStructure );
-    // SPI1->CTLR1 &= ~SPI_CTLR1_CRCEN;
 
     SPI_I2S_DMACmd(SPI1, SPI_I2S_DMAReq_Rx, ENABLE);
 
     SPI_Cmd( SPI1, ENABLE );
-}
 
+
+
+
+}
 
 /*********************************************************************
  * @fn      main
@@ -187,9 +239,8 @@ int main(void)
     GPIO_Clock_Init();
     matrix.init();
     setup_interrupt();
-    TIM2_Init();
 
-    //data_address = (uint32_t)(SPI1->DATAR);
+    data_address = (uint32_t)(SPI1->DATAR);
 
 #ifdef SPI_DMA
     // DMA not tested jet
@@ -197,97 +248,41 @@ int main(void)
 
     SPI_Slave_Init();
     //uint8_t* inputImagePointer = reinterpret_cast<uint8_t*>(inputImage);
-    DMA_Rx_Init(SPI_DMA_CHANNEL, (u32)&SPI1->DATAR, (u32)inputImage, IMAGE_SIZE); //IMAGE_SIZE
-    DMA_Cmd(SPI_DMA_CHANNEL, ENABLE);
-
-#elif defined(SPI_NO_DMA)
-    SPI_Slave_Init();
-
+    DMA_Rx_Init(DMA1_Channel2, (u32)&SPI1->DATAR, (u32)inputImage, IMAGE_SIZE); //IMAGE_SIZE
+    DMA_Cmd(DMA1_Channel2, ENABLE);
 #endif
+
+
 
     //      1. Check SPI for Errors
     //      2. DMA Timeout
 
-
 #ifdef SPI_DMA
-
-//    uint16_t newDMACounterValue = 0;
-//    uint16_t oldDMACounterValue = 0;
-//    uint16_t DMAChangeTime = 0;
-//    uint16_t MAX_DATA_SPACE = 10000; // micro second
-//
-//    uint8_t* inputDataPtr = reinterpret_cast<uint8_t*>(inputImage[0][0]);
     for(ever){
-
-
-//        oldDMACounterValue = newDMACounterValue;
-//        newDMACounterValue = SPI_DMA_CHANNEL->CNTR;   // Is IMAGE_SIZE (384) When DMA has not started
-//        if (oldDMACounterValue != newDMACounterValue){
-//            // New DMA Data received
-//            DMAChangeTime = getTIM2CounterValue();
-//        }
-//
-//        volatile uint16_t now = getTIM2CounterValue();
-//        if (DMAChangeTime - now > MAX_DATA_SPACE){
-//            // Last Data Change is long ago
-//            if(newDMACounterValue < IMAGE_SIZE){ // == DMA Has not started
-//
-//                if (newDMACounterValue == 0){
-//                    DMA_ClearFlag(SPI_DMA_FLAG_TC);
-//                    matrix.newImage();
-//                }
-//                DMA_Rx_Init(SPI_DMA_CHANNEL, (u32)&SPI1->DATAR, (u32)inputImage, IMAGE_SIZE);
-//                DMA_Cmd(SPI_DMA_CHANNEL, ENABLE);
-//
-//                continue;
-//            }
-//        }
-
-
         // Transfer completed Flag
-        FlagStatus newData = DMA_GetFlagStatus(SPI_DMA_FLAG_TC);
+
+        spi_data = SPI1->DATAR;
+
+        FlagStatus newData = DMA_GetFlagStatus(DMA1_FLAG_TC2);
 
         if(newData){
-            //uint16_t now = getTIM2CounterValue();     // Test if TIM2 is Running
-            //inputDataPtr[now % IMAGE_SIZE] = 0xFF;
-            DMA_ClearFlag(SPI_DMA_FLAG_TC);
+            DMA_ClearFlag(DMA1_FLAG_TC2);
             matrix.newImage();
-            DMA_DeInit(SPI_DMA_CHANNEL);
-            DMA_Rx_Init(SPI_DMA_CHANNEL, (u32)&SPI1->DATAR, (u32)inputImage, IMAGE_SIZE);
-            DMA_Cmd(SPI_DMA_CHANNEL, ENABLE);
+            //DMA_Rx_Init(DMA1_Channel2, (u32)&SPI1->DATAR, (u32)inputImage, IMAGE_SIZE/2);
+            //DMA_Cmd(DMA1_Channel2, ENABLE);
         }
+
         // Transmission error
-        //if( DMA_GetFlagStatus(SPI_DMA_FLAG_TE) ){
-        //    DMA_ClearFlag(SPI_DMA_FLAG_TE);
-        //    //matrix.testImage();
-        //}
+        if( DMA_GetFlagStatus(DMA1_FLAG_TE2) ){
+            DMA_ClearFlag(DMA1_FLAG_TE2);
+            //matrix.testImage();
+        }
         //Transmission halfway flag
-        //if( DMA_GetFlagStatus(SPI_DMA_FLAG_HT) ){
-        //    //matrix.testImage();
-        //}
-
-
-    }
-#elif defined(SPI_NO_DMA)
-    uint16_t dataIndex = 0;
-    uint8_t* inputDataPtr = reinterpret_cast<uint8_t*>(inputImage);
-    for(ever){
-
-        if(SPI1->STATR & SPI_STATR_RXNE){   // New Data available
-
-            inputDataPtr[dataIndex] = (uint8_t)(SPI1->DATAR);
-
-            //matrix.newImage();
-            dataIndex++;
-            if(dataIndex >= IMAGE_SIZE){
-                dataIndex = 0;
-                matrix.newImage();
-            }
-            continue;
+        if( DMA_GetFlagStatus(DMA1_FLAG_HT2) ){
+            //matrix.testImage();
         }
 
     }
-
 #elif defined(TEST_IMAGE)
 
     greyTest(inputImage);
@@ -302,27 +297,65 @@ int main(void)
     }
 
 #endif
+
+
+
 }
 
 
+
+
+
+#ifdef SYSTICK_TIMER
 // essential for the timer running with cpps
 extern "C" {    void SysTick_Handler(void); }
+
 void SysTick_Handler(void) __attribute__((interrupt("WCH-Interrupt-fast")));  //("WCH-Interrupt-fast")
+
 void SysTick_Handler(void)
 {
     SysTick->SR = 0;    // Reset the Status Registers
-    matrix.applyRow();
-    //matrix.oldOutputRow();
+    //SysTick->CTLR &= ~0b0001;
+    matrix.outputRow();
 }
 
 
-//extern "C" {    void DMA1_Channel2_IRQHandler(void); }
-//void DMA1_Channel2_IRQHandler(void) __attribute__((interrupt));  //("WCH-Interrupt-fast")
-//void DMA1_Channel2_IRQHandler(void){
-//    dma_finish_flag = true;
-//}
 
 
 
+#elif defined TIMER1
+// essential for the timer running with cpps
+extern "C" { void TIM1_UP_IRQHandler(void); }
 
+void TIM1_UP_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
+void TIM1_UP_IRQHandler(void)
+{
+    volatile uint16_t counter_value = TIM1->CNT;
+    counter_value = TIM1->CNT;
+    // Counter Value auf 0 setzen
+    //TIM1->CNT = 0;
+    //counter_value = TIM1->CNT;
+
+    // Flags zur¨¹cksetzen
+    // TIM_ClearITPendingBit(TIM1, TIM_IT_CC1);
+
+
+    //matrix.outputRow();
+}
+#elif defined TIMER2
+// essential for the timer running with cpps
+extern "C" {    void TIM2_IRQHandler(void); }
+
+void TIM2_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
+void TIM2_IRQHandler(void)
+{
+    // Counter Value to 0
+    TIM2->CNT = 0;                          // TIM_SetCounter(TIM2, 0);
+    // Reset Flags
+    TIM2->INTFR = (uint16_t)~TIM_IT_Update; // TIM_ClearITPendingBit(TIM2,  TIM_IT_Update);
+
+   matrix.outputRow();
+}
+
+#endif
 

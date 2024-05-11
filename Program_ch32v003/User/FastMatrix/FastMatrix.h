@@ -28,7 +28,9 @@
 #define BLUE2_MASK GPIO_Pin_7
 
 // With the SysTick-Timer the Period-Time of the shortest Row cycle
-#define MIN_COMP_CLOCK 0x7F     // 0xFF works
+#define MIN_COMP_CLOCK 0xFF      // 0x7F
+
+#define OUTPUT_DELAY 0x50    // Must be lower the MIN_COMP_CLOCK
 
 
 
@@ -40,20 +42,29 @@ class FastMatrix{
 
     uint8_t brightness = 0;     // current brightness   [0...7] for 8 Bit brightness
     uint8_t row = 0;            // active row           [0...7] ( < HEIGHT)
+
     uint32_t testImageCounter = 0;
     uint32_t delay_counter = 0;
+
+
 
     void calcInputBuffer();
     void blackBuffer(uint8_t (*buffer)[HEIGHT][SHIFT_WIDTH]);
 
+
+    void outputRow(void);
+    void outputRowASM(void);
+    void showRow(void);
 public:
+    uint8_t interruptStep = 0;
     FastMatrix(uint8_t (*inputImage)[HEIGHT][WIDTH], uint8_t (*buffer0)[HEIGHT][SHIFT_WIDTH], uint8_t (*buffer1)[HEIGHT][SHIFT_WIDTH]);
     void init();
     void testImage();
     void newImage();
 
-    __attribute__((optimize("00")))
-    void outputRow(void);
+    //__attribute__((optimize("00")))
+    void oldOutputRow(void);
+    void applyRow(void);
 
 
 };
