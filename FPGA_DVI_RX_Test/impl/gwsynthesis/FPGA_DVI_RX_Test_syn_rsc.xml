@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module name="top">
+    <SubModule name="Gowin_OSC_inst"/>
+    <SubModule name="EDID_PROM_inst" Register="50" Lut="143"/>
+    <SubModule name="your_instance_name" Register="277" Alu="18" Lut="599" Ssram="1"/>
+</Module>

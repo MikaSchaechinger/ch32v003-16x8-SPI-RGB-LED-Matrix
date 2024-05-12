@@ -4,7 +4,7 @@
 //Tool Version: V1.9.9 (64-bit)
 //Part Number: GW1NR-LV9QN88PC6/I5
 //Device: GW1NR-9
-//Created Time: Sun May 12 10:33:16 2024
+//Created Time: Sun May 12 17:18:59 2024
 
 module Gowin_OSC (oscout);
 

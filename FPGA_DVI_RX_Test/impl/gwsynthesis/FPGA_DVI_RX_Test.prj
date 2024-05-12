@@ -7,6 +7,7 @@
         <File path="C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\src\dvi_rx\dvi_rx.v" type="verilog"/>
         <File path="C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\src\top.sv" type="verilog"/>
         <File path="C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\src\edid_prom\edid_prom.v" type="verilog"/>
+        <File path="C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\src\gowin_osc\gowin_osc.v" type="verilog"/>
     </FileList>
     <OptionList>
         <Option type="disable_insert_pad" value="0"/>

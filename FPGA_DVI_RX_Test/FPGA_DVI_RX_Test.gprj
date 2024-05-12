@@ -7,6 +7,7 @@
     <FileList>
         <File path="src/dvi_rx/dvi_rx.v" type="file.verilog" enable="1"/>
         <File path="src/edid_prom/edid_prom.v" type="file.verilog" enable="1"/>
+        <File path="src/gowin_osc/gowin_osc.v" type="file.verilog" enable="1"/>
         <File path="src/top.sv" type="file.verilog" enable="1"/>
     </FileList>
 </Project>

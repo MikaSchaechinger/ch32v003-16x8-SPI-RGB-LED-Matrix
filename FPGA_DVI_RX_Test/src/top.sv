@@ -30,8 +30,8 @@ module top(
 
 	// Clock generation of 250 MHz / 4 = 62.5 MHz
 
-    Gowin_OSC osc_inst(
-        .ocsout(fast_clk)
+    Gowin_OSC Gowin_OSC_inst(
+        .oscout(fast_clk) //output oscout
     );
 	
 	assign slow_clk = clk;
@@ -54,7 +54,7 @@ module top(
 	wire [7:0] O_rgb_b_o;
     
 
-	DVI_RX_Top your_instance_name(
+	DVI_RX your_instance_name(
 		.I_rst_n(1'b1), //input I_rst_n
 		.I_tmds_clk_p(I_tmds_clk_p_i), //input I_tmds_clk_p
 		.I_tmds_clk_n(I_tmds_clk_n_i), //input I_tmds_clk_n
@@ -72,4 +72,4 @@ module top(
 		.O_rgb_b(O_rgb_b_o) //output [7:0] O_rgb_b
 	);
 
-endmodule;
+endmodule
