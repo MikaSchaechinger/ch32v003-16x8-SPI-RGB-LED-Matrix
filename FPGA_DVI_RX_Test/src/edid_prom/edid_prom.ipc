@@ -1,0 +1,14 @@
+[General]
+ipc_version=4
+file=edid_prom
+module=EDID_PROM
+target_device=gw1nr9-012
+type=edid_prom
+version=1.0
+
+[Config]
+DISABLE_IO_INSERTION=true
+LANG=0
+Memory_Ini_File=../EDID.mi
+Memory_Type=ROM
+Synthesis_tool=GowinSynthesis

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE gowin-synthesis-project>
+<Project>
+    <Version>beta</Version>
+    <Device id="GW1NR-9" package="QFN88P" speed="6" partNumber="GW1NR-LV9QN88PC6/I5"/>
+    <FileList>
+        <File path="C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\src\dvi_rx\dvi_rx.v" type="verilog"/>
+        <File path="C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\src\top.sv" type="verilog"/>
+        <File path="C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\src\edid_prom\edid_prom.v" type="verilog"/>
+    </FileList>
+    <OptionList>
+        <Option type="disable_insert_pad" value="0"/>
+        <Option type="looplimit" value="2000"/>
+        <Option type="output_file" value="C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\impl\gwsynthesis\FPGA_DVI_RX_Test.vg"/>
+        <Option type="print_all_synthesis_warning" value="0"/>
+        <Option type="ram_rw_check" value="0"/>
+        <Option type="verilog_language" value="sysv-2017"/>
+        <Option type="vhdl_language" value="vhdl-1993"/>
+    </OptionList>
+</Project>

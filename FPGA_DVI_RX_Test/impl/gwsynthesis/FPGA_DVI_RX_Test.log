@@ -1,0 +1,10 @@
+GowinSynthesis start
+Running parser ...
+Analyzing Verilog file 'C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\src\dvi_rx\dvi_rx.v'
+Analyzing Verilog file 'C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\src\top.sv'
+WARN  (EX2810) : Extra semicolon in $unit (global) scope("C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\src\top.sv":75)
+Analyzing Verilog file 'C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\src\edid_prom\edid_prom.v'
+Compiling module 'top'("C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\src\top.sv":5)
+ERROR (EX3937) : Instantiating unknown module 'Gowin_OSC'("C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\src\top.sv":35)
+Module 'top' remains a black box due to errors in its contents("C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\src\top.sv":5)
+GowinSynthesis finish

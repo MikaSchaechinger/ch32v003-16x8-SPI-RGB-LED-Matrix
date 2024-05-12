@@ -1,0 +1,25 @@
+{
+ "Device" : "GW1NR-9",
+ "Files" : [
+  {
+   "Path" : "C:/Users/Mika/Programmieren/Projects/LED-Matrix/FPGA_DVI_RX_Test/src/dvi_rx/dvi_rx.v",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "C:/Users/Mika/Programmieren/Projects/LED-Matrix/FPGA_DVI_RX_Test/src/top.sv",
+   "Type" : "verilog"
+  },
+  {
+   "Path" : "C:/Users/Mika/Programmieren/Projects/LED-Matrix/FPGA_DVI_RX_Test/src/edid_prom/edid_prom.v",
+   "Type" : "verilog"
+  }
+ ],
+ "IncludePath" : [
+
+ ],
+ "LoopLimit" : 2000,
+ "ResultFile" : "C:/Users/Mika/Programmieren/Projects/LED-Matrix/FPGA_DVI_RX_Test/impl/temp/rtl_parser.result",
+ "Top" : "",
+ "VerilogStd" : "sysv",
+ "VhdlStd" : "vhdl_93"
+}

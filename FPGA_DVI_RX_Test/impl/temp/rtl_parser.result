@@ -1,0 +1,20 @@
+[
+ {
+  "InstFile" : "C:/Users/Mika/Programmieren/Projects/LED-Matrix/FPGA_DVI_RX_Test/src/dvi_rx/dvi_rx.v",
+  "InstLine" : 1853,
+  "InstName" : "DVI_RX_Top",
+  "ModuleFile" : "C:/Users/Mika/Programmieren/Projects/LED-Matrix/FPGA_DVI_RX_Test/src/dvi_rx/dvi_rx.v",
+  "ModuleLine" : 1853,
+  "ModuleName" : "DVI_RX_Top",
+  "SubInsts" : [
+   {
+    "InstFile" : "C:/Users/Mika/Programmieren/Projects/LED-Matrix/FPGA_DVI_RX_Test/src/dvi_rx/dvi_rx.v",
+    "InstLine" : 1886,
+    "InstName" : "dvi2rgb_inst",
+    "ModuleFile" : "C:/Users/Mika/Programmieren/Projects/LED-Matrix/FPGA_DVI_RX_Test/src/dvi_rx/dvi_rx.v",
+    "ModuleLine" : 1,
+    "ModuleName" : "~dvi2rgb.DVI_RX_Top"
+   }
+  ]
+ }
+]

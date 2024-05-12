@@ -1,0 +1,1649 @@
+//Copyright (C)2014-2023 Gowin Semiconductor Corporation.
+//All rights reserved.
+//File Title: Post-PnR Simulation Model file
+//Tool Version: V1.9.9 (64-bit)
+//Created Time: Sun May 12 17:00:25 2024
+
+`timescale 100 ps/100 ps
+module EDID_PROM(
+	I_clk,
+	I_rst_n,
+	I_scl,
+	IO_sda
+);
+input I_clk;
+input I_rst_n;
+input I_scl;
+inout IO_sda;
+wire GND;
+wire IO_sda;
+wire IO_sda_in;
+wire I_clk;
+wire I_rst_n;
+wire I_scl;
+wire VCC;
+wire sda_5;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n119_4 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n120_3 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n128_3 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n135_3 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n640_7 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n641_6 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n642_6 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n643_6 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n644_6 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n645_6 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n646_6 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n647_6 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n650_5 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n651_5 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n652_5 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n653_5 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n654_5 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n655_5 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n656_5 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n657_5 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1258_4 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n2063_3 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n2167_3 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1118_23 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/sda_out_en_7 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_8 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_8 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1097_11 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1099_11 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1101_11 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1118_25 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1095_25 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1104_26 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1106_47 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1108_38 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1110_38 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1112_38 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1102_13 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/word_address_7_9 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_7_8 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n608_9 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n640_8 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n640_9 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n641_7 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n642_7 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n644_7 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n645_7 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n650_6 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n650_9 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n651_6 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n651_7 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n652_6 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n652_7 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n653_6 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n653_7 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n654_6 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n654_7 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n655_6 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n655_7 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n656_6 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n656_7 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n657_6 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n2063_4 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n2063_5 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n2063_6 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n2167_4 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n2167_5 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n2167_6 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/sda_6 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/sda_out_en_8 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_9 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_10 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_11 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_9 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_10 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_11 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_12 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/word_add_flag_10 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1099_12 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1099_13 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1101_13 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1116_14 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1118_26 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1118_27 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1118_28 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1095_27 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1095_28 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1104_27 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1104_28 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1106_48 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1106_49 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1106_50 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1108_39 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1102_14 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1102_15 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1102_16 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1102_17 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n608_10 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n640_10 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n650_10 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n650_11 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n650_12 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n651_8 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n2063_7 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n2063_8 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n2063_9 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_12 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_13 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_13 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_14 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_15 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_16 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_17 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_19 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1097_13 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1099_14 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1101_14 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1101_15 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1118_29 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1118_30 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1095_29 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1104_29 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1102_18 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1102_19 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1102_20 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1102_21 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/word_address_7_11 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n650_13 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_20 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1102_22 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1097_15 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n643_9 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n650_15 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/word_address_7_13 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/word_add_flag_12 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_22 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_16 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1101_17 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n650_17 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1116_16 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/n1095_31 ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/sda_reg_dly ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/scl_reg ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/scl_reg_dly ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/start_condition ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/stop_condition ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/scl_posedge ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/scl_negedge ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/w_r_flag ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/sda_out_en ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/sda_reg ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/word_add_flag ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/ack_flag ;
+wire \i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ;
+wire [7:0] \i2c_slave_wrapper_inst/u_i2c_slave/in_reg ;
+wire [3:0] \i2c_slave_wrapper_inst/u_i2c_slave/cstate ;
+wire [7:0] \i2c_slave_wrapper_inst/u_i2c_slave/word_address ;
+wire [8:0] \i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg ;
+wire [3:0] \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter ;
+wire [3:0] \i2c_slave_wrapper_inst/u_i2c_slave/nstate ;
+VCC VCC_cZ (
+  .V(VCC)
+);
+GND GND_cZ (
+  .G(GND)
+);
+GSR GSR (
+	.GSRI(VCC)
+);
+IOBUF IO_sda_iobuf (
+	.I(GND),
+	.OEN(sda_5),
+	.IO(IO_sda),
+	.O(IO_sda_in)
+);
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n119_s0  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/sda_reg ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/sda_reg_dly ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/scl_reg ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n119_4 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n119_s0 .INIT=8'h40;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n120_s0  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/sda_reg_dly ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/sda_reg ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/scl_reg ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n120_3 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n120_s0 .INIT=8'h40;
+LUT2 \i2c_slave_wrapper_inst/u_i2c_slave/n128_s0  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/scl_reg_dly ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/scl_reg ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n128_3 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n128_s0 .INIT=4'h4;
+LUT2 \i2c_slave_wrapper_inst/u_i2c_slave/n135_s0  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/scl_reg ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/scl_reg_dly ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n135_3 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n135_s0 .INIT=4'h4;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n640_s4  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [7]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [7]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n640_8 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n640_9 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n640_7 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n640_s4 .INIT=16'hAA3C;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n641_s3  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n641_7 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [6]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n640_9 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n641_6 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n641_s3 .INIT=8'hCA;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n642_s3  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n642_7 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [5]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n640_9 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n642_6 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n642_s3 .INIT=8'hCA;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n643_s3  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [4]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [4]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n643_9 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n640_9 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n643_6 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n643_s3 .INIT=16'hAA3C;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n644_s3  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n644_7 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [3]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n640_9 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n644_6 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n644_s3 .INIT=8'hCA;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n645_s3  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [2]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [2]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n645_7 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n640_9 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n645_6 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n645_s3 .INIT=16'hAA3C;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n646_s3  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [1]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [1]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [0]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n640_9 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n646_6 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n646_s3 .INIT=16'hAA3C;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n647_s3  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [0]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [0]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n640_9 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n647_6 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n647_s3 .INIT=8'hC5;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n650_s2  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n650_6 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n650_17 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n650_15 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n650_9 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n650_5 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n650_s2 .INIT=16'h0B00;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n651_s2  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n651_6 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n650_17 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n650_15 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n651_7 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n651_5 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n651_s2 .INIT=16'h0B00;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n652_s2  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n652_6 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n650_17 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n650_15 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n652_7 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n652_5 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n652_s2 .INIT=16'h0B00;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n653_s2  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n653_6 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n650_17 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n650_15 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n653_7 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n653_5 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n653_s2 .INIT=16'h0B00;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n654_s2  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n654_6 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n650_17 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n650_15 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n654_7 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n654_5 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n654_s2 .INIT=16'h0B00;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n655_s2  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n655_6 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n650_17 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n650_15 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n655_7 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n655_5 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n655_s2 .INIT=16'h0B00;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n656_s2  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n656_6 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n650_17 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n650_15 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n656_7 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n656_5 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n656_s2 .INIT=16'h0B00;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n657_s2  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n650_17 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [0]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n650_15 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n657_6 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n657_5 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n657_s2 .INIT=16'h0700;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n1258_s1  (
+	.I0(IO_sda_in),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/nstate [2]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_3 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1258_4 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1258_s1 .INIT=8'h5C;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n2063_s0  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_4 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_5 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_6 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_3 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n2063_s0 .INIT=8'h80;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n2167_s0  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_4 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_5 ),
+	.I2(I_rst_n),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_6 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_3 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n2167_s0 .INIT=16'h4000;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/sda_s2  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_5 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/sda_6 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/ack_flag ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/sda_out_en ),
+	.F(sda_5)
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/sda_s2 .INIT=16'h001F;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1118_s19  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [0]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [1]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [3]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [2]),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1118_23 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1118_s19 .INIT=16'h030E;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/sda_out_en_s3  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [3]),
+	.I1(I_rst_n),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/sda_out_en_8 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/sda_out_en_7 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/sda_out_en_s3 .INIT=8'h04;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_s4  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_9 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_4 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_10 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_11 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_8 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_s4 .INIT=16'hA300;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s4  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_9 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_10 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_11 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_12 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_8 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s4 .INIT=16'h0100;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n1097_s7  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_4 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/nstate [3]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n1097_15 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1097_11 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1097_s7 .INIT=8'h40;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1099_s7  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/sda_6 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n1099_12 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n1099_13 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_4 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1099_11 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1099_s7 .INIT=16'h008F;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1101_s7  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_4 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n1101_17 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_4 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n1101_13 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1101_11 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1101_s7 .INIT=16'hFF10;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n1118_s20  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n1118_26 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n1118_27 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n1118_28 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1118_25 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1118_s20 .INIT=8'hEF;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1095_s21  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n1095_31 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/sda_out_en ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n1095_27 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n1095_28 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1095_25 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1095_s21 .INIT=16'hFF0E;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1104_s22  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n1104_27 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n1104_28 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_4 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/scl_posedge ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1104_26 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1104_s22 .INIT=16'h0B00;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1106_s43  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n1106_48 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n1106_49 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [3]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n1106_50 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1106_47 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1106_s43 .INIT=16'h0EE0;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1108_s34  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [0]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [1]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n1108_39 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [2]),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1108_38 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1108_s34 .INIT=16'h0708;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n1110_s34  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n1108_39 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [0]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [1]),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1110_38 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1110_s34 .INIT=8'h14;
+LUT2 \i2c_slave_wrapper_inst/u_i2c_slave/n1112_s34  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [0]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n1108_39 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1112_38 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1112_s34 .INIT=4'h1;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1102_s9  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n1102_14 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n1102_15 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n1102_16 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n1102_17 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1102_13 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1102_s9 .INIT=16'hFFF4;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/word_address_7_s5  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/word_address_7_13 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n640_9 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n1116_14 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/word_address_7_9 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/word_address_7_s5 .INIT=8'hE0;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_8_s5  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/word_address_7_13 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n650_17 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n1116_14 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_7_8 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_8_s5 .INIT=8'hB0;
+LUT2 \i2c_slave_wrapper_inst/u_i2c_slave/n608_s5  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n608_10 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n650_17 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n608_9 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n608_s5 .INIT=4'h8;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n640_s5  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [6]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [5]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [4]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n643_9 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n640_8 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n640_s5 .INIT=16'h8000;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n640_s6  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/w_r_flag ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/word_add_flag ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n640_10 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n640_9 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n640_s6 .INIT=8'h10;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n641_s4  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [5]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [4]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n643_9 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [6]),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n641_7 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n641_s4 .INIT=16'h7F80;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n642_s4  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [4]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n643_9 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [5]),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n642_7 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n642_s4 .INIT=8'h78;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n644_s4  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [2]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [1]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [0]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [3]),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n644_7 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n644_s4 .INIT=16'h7F80;
+LUT2 \i2c_slave_wrapper_inst/u_i2c_slave/n645_s4  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [1]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [0]),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n645_7 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n645_s4 .INIT=4'h8;
+LUT2 \i2c_slave_wrapper_inst/u_i2c_slave/n650_s3  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [7]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n650_10 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n650_6 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n650_s3 .INIT=4'h6;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n650_s6  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [7]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n650_11 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [7]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n640_9 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n650_9 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n650_s6 .INIT=16'hB0BB;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n651_s3  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [4]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [5]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n651_8 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [6]),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n651_6 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n651_s3 .INIT=16'h7F80;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n651_s4  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [6]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n650_11 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [6]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n640_9 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n651_7 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n651_s4 .INIT=16'hB0BB;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n652_s3  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [4]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n651_8 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [5]),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n652_6 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n652_s3 .INIT=8'h78;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n652_s4  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [5]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n650_11 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [5]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n640_9 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n652_7 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n652_s4 .INIT=16'hB0BB;
+LUT2 \i2c_slave_wrapper_inst/u_i2c_slave/n653_s3  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [4]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n651_8 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n653_6 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n653_s3 .INIT=4'h6;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n653_s4  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [4]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n650_11 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [4]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n640_9 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n653_7 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n653_s4 .INIT=16'hB0BB;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n654_s3  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [0]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [1]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [2]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [3]),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n654_6 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n654_s3 .INIT=16'h7F80;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n654_s4  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [3]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n650_11 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [3]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n640_9 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n654_7 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n654_s4 .INIT=16'hB0BB;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n655_s3  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [0]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [1]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [2]),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n655_6 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n655_s3 .INIT=8'h78;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n655_s4  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [2]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n650_11 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [2]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n640_9 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n655_7 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n655_s4 .INIT=16'hB0BB;
+LUT2 \i2c_slave_wrapper_inst/u_i2c_slave/n656_s3  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [0]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [1]),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n656_6 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n656_s3 .INIT=4'h6;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n656_s4  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [1]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n650_11 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [1]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n640_9 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n656_7 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n656_s4 .INIT=16'hB0BB;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n657_s3  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [0]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n650_11 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [0]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n640_9 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n657_6 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n657_s3 .INIT=16'hB0BB;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n2063_s1  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [0]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [2]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [3]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [1]),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_4 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n2063_s1 .INIT=16'h0100;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n2063_s2  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n640_10 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_7 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_8 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_5 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n2063_s2 .INIT=8'h80;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n2063_s3  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_4 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_9 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_6 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n2063_s3 .INIT=8'h01;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n2167_s1  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/stop_condition ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/start_condition ),
+	.I2(I_scl),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_4 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n2167_s1 .INIT=8'hE0;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n2167_s2  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [1]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [3]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [2]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [0]),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_5 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n2167_s2 .INIT=16'h1000;
+LUT2 \i2c_slave_wrapper_inst/u_i2c_slave/n2167_s3  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/scl_posedge ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/w_r_flag ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_6 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n2167_s3 .INIT=4'h8;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/sda_s3  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [2]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [3]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [0]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [1]),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/sda_6 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/sda_s3 .INIT=16'h1000;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/sda_out_en_s4  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [2]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [0]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [1]),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/sda_out_en_8 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/sda_out_en_s4 .INIT=8'hB4;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_s5  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [1]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [2]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [3]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n1102_17 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_9 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_s5 .INIT=16'h0001;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_s6  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_4 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_12 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_13 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_10 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_s6 .INIT=8'h01;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_s7  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n650_12 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_16 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_12 ),
+	.I3(I_rst_n),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_11 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_s7 .INIT=16'hEF00;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s5  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_13 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_14 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_12 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_9 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s5 .INIT=8'hD0;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s6  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_9 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_15 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_16 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_4 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_10 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s6 .INIT=16'hEF00;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s7  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_4 ),
+	.I1(IO_sda_in),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_6 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_17 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_11 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s7 .INIT=16'hEF00;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s8  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_22 ),
+	.I1(I_rst_n),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_19 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_12 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s8 .INIT=8'h40;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/word_add_flag_s5  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/scl_posedge ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_13 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_16 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/word_add_flag_10 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/word_add_flag_s5 .INIT=8'h40;
+LUT2 \i2c_slave_wrapper_inst/u_i2c_slave/n1099_s8  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/ack_flag ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/scl_negedge ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1099_12 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1099_s8 .INIT=4'h8;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1099_s9  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n650_11 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [8]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_12 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n1099_14 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1099_13 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1099_s9 .INIT=16'h008F;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1101_s9  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/word_add_flag_10 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n1097_15 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_22 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n1101_15 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1101_13 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1101_s9 .INIT=16'hFE00;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1116_s10  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n1101_14 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/w_r_flag ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_4 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_12 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1116_14 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1116_s10 .INIT=16'h0E00;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1118_s21  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_6 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_5 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/ack_flag ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_4 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1118_26 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1118_s21 .INIT=16'h7000;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n1118_s22  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n1118_29 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/ack_flag ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_17 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1118_27 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1118_s22 .INIT=8'hE0;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1118_s23  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/word_add_flag_10 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_13 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/ack_flag ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n1118_30 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1118_28 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1118_s23 .INIT=16'h00BF;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1095_s23  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/sda_out_en ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/w_r_flag ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_17 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_22 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1095_27 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1095_s23 .INIT=16'h004F;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1095_s24  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_4 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n650_11 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n1095_29 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_12 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1095_28 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1095_s24 .INIT=16'hF400;
+LUT2 \i2c_slave_wrapper_inst/u_i2c_slave/n1104_s23  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n1104_29 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_4 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1104_27 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1104_s23 .INIT=4'h4;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1104_s24  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/w_r_flag ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n1104_29 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_12 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_13 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1104_28 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1104_s24 .INIT=16'h00EF;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1106_s44  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_9 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_15 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_4 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_16 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1106_48 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1106_s44 .INIT=16'h1000;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n1106_s45  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/scl_posedge ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n1104_28 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_16 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1106_49 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1106_s45 .INIT=8'h10;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n1106_s46  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [0]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [1]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [2]),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1106_50 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1106_s46 .INIT=8'h80;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1108_s35  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_13 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_14 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/word_add_flag_10 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n1106_48 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1108_39 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1108_s35 .INIT=16'h000D;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n1102_s10  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n1102_18 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n1102_19 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n1102_20 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1102_14 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1102_s10 .INIT=8'h10;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n1102_s11  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_5 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_4 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_4 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1102_15 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1102_s11 .INIT=8'h0B;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1102_s12  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_4 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_16 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n1102_21 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_12 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1102_16 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1102_s12 .INIT=16'h0100;
+LUT2 \i2c_slave_wrapper_inst/u_i2c_slave/n1102_s13  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/start_condition ),
+	.I1(I_scl),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1102_17 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1102_s13 .INIT=4'h8;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n608_s6  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [8]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/word_address_7_11 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [7]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n650_10 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n608_10 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n608_s6 .INIT=16'h5CCC;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n640_s7  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [0]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [1]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [2]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [3]),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n640_10 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n640_s7 .INIT=16'h0100;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n650_s7  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [4]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [5]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [6]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n651_8 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n650_10 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n650_s7 .INIT=16'h8000;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n650_s8  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [3]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/scl_negedge ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/w_r_flag ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n650_13 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n650_11 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n650_s8 .INIT=16'h1000;
+LUT2 \i2c_slave_wrapper_inst/u_i2c_slave/n650_s9  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/w_r_flag ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n640_10 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n650_12 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n650_s9 .INIT=4'h4;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n651_s5  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [0]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [1]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [2]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [3]),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n651_8 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n651_s5 .INIT=16'h8000;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n2063_s4  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [6]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [5]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [7]),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_7 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n2063_s4 .INIT=8'h40;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n2063_s5  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [1]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [2]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [3]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [4]),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_8 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n2063_s5 .INIT=16'h0001;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n2063_s6  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [0]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [1]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [2]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/scl_posedge ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_9 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n2063_s6 .INIT=16'h0100;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_s8  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [0]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [1]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [3]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [2]),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_12 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_s8 .INIT=16'h0100;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_s9  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [1]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [2]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [3]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [0]),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_13 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_s9 .INIT=16'h0100;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s9  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_4 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n1104_29 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_12 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_13 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s9 .INIT=8'h10;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s10  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/scl_posedge ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/w_r_flag ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_20 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_14 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s10 .INIT=16'h00EF;
+LUT2 \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s11  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [3]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/scl_posedge ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_15 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s11 .INIT=4'h4;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s12  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/start_condition ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/stop_condition ),
+	.I2(I_scl),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_16 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s12 .INIT=16'h1F00;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s13  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/w_r_flag ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_4 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n1099_12 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_5 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_17 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s13 .INIT=16'hEF00;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s15  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_4 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n1101_14 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_13 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n1118_23 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_19 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s15 .INIT=16'h1F00;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n1097_s9  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/scl_posedge ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/scl_negedge ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/w_r_flag ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1097_13 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1097_s9 .INIT=8'h40;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n1099_s10  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n1097_13 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/nstate [2]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_5 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1099_14 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1099_s10 .INIT=8'hD0;
+LUT2 \i2c_slave_wrapper_inst/u_i2c_slave/n1101_s10  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/scl_posedge ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1101_14 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1101_s10 .INIT=4'h1;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n1101_s11  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/nstate [1]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_5 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_4 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1101_15 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1101_s11 .INIT=8'h0B;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1118_s24  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/w_r_flag ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/scl_negedge ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_6 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_4 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1118_29 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1118_s24 .INIT=16'h00F4;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1118_s25  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_4 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/scl_negedge ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/ack_flag ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/sda_6 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1118_30 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1118_s25 .INIT=16'hF400;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1095_s25  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_4 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_20 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n1106_50 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/sda_out_en ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1095_29 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1095_s25 .INIT=16'hBF00;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1104_s25  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [1]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [2]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [0]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [3]),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1104_29 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1104_s25 .INIT=16'hFE00;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1102_s14  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n1099_12 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/w_r_flag ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n1102_22 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_5 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1102_18 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1102_s14 .INIT=16'h0D00;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n1102_s15  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/scl_posedge ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_13 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1102_19 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1102_s15 .INIT=8'hB0;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1102_s16  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n1099_12 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/sda_6 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_4 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n1101_14 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1102_20 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1102_s16 .INIT=16'h0BBB;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1102_s17  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_20 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n1106_50 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/w_r_flag ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n640_10 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1102_21 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1102_s17 .INIT=16'h7077;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/word_address_7_s7  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/w_r_flag ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [8]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n640_10 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/word_address_7_11 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/word_address_7_s7 .INIT=8'h40;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/n650_s10  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [0]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [1]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [2]),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n650_13 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n650_s10 .INIT=8'h01;
+LUT3 \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s16  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [3]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/scl_negedge ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/w_r_flag ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_20 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s16 .INIT=8'h40;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1102_s18  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/scl_posedge ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/nstate [0]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/w_r_flag ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/scl_negedge ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1102_22 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1102_s18 .INIT=16'h1000;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1097_s10  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_5 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/scl_posedge ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/scl_negedge ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/w_r_flag ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1097_15 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1097_s10 .INIT=16'h2000;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n643_s5  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [3]),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [2]),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [1]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [0]),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n643_9 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n643_s5 .INIT=16'h8000;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n650_s11  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n650_11 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/w_r_flag ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n640_10 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [8]),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n650_15 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n650_s11 .INIT=16'h4500;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/word_address_7_s8  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n1102_21 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/w_r_flag ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [8]),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n640_10 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/word_address_7_13 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/word_address_7_s8 .INIT=16'h4555;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/word_add_flag_s6  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/scl_posedge ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_13 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_16 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n1116_16 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/word_add_flag_12 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/word_add_flag_s6 .INIT=16'hFF40;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s17  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/ack_flag ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/scl_negedge ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_4 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/sda_6 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_22 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s17 .INIT=16'hF700;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_s11  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/w_r_flag ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n1104_29 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/scl_posedge ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_16 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_s11 .INIT=16'h1110;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1101_s12  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_5 ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/n640_10 ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/scl_posedge ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1101_17 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1101_s12 .INIT=16'h0004;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n650_s12  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/w_r_flag ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/word_add_flag ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n640_10 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n650_11 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n650_17 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n650_s12 .INIT=16'h00EF;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1116_s11  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/w_r_flag ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/word_add_flag ),
+	.I2(\i2c_slave_wrapper_inst/u_i2c_slave/n640_10 ),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/n1116_14 ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1116_16 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1116_s11 .INIT=16'h1000;
+LUT4 \i2c_slave_wrapper_inst/u_i2c_slave/n1095_s26  (
+	.I0(\i2c_slave_wrapper_inst/u_i2c_slave/stop_condition ),
+	.I1(\i2c_slave_wrapper_inst/u_i2c_slave/start_condition ),
+	.I2(I_scl),
+	.I3(\i2c_slave_wrapper_inst/u_i2c_slave/scl_negedge ),
+	.F(\i2c_slave_wrapper_inst/u_i2c_slave/n1095_31 )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/n1095_s26 .INIT=16'h1F00;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_7_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [6]),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [7])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_7_s0 .INIT=1'b0;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_6_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [5]),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [6])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_6_s0 .INIT=1'b0;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_5_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [4]),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [5])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_5_s0 .INIT=1'b0;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_4_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [3]),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [4])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_4_s0 .INIT=1'b0;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_3_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [2]),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [3])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_3_s0 .INIT=1'b0;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_2_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [1]),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [2])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_2_s0 .INIT=1'b0;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_1_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [0]),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [1])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_1_s0 .INIT=1'b0;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_0_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/sda_reg_dly ),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [0])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_0_s0 .INIT=1'b0;
+DFFP \i2c_slave_wrapper_inst/u_i2c_slave/sda_reg_dly_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/sda_reg ),
+	.CLK(I_clk),
+	.PRESET(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/sda_reg_dly )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/sda_reg_dly_s0 .INIT=1'b1;
+DFFP \i2c_slave_wrapper_inst/u_i2c_slave/scl_reg_s0  (
+	.D(I_scl),
+	.CLK(I_clk),
+	.PRESET(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/scl_reg )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/scl_reg_s0 .INIT=1'b1;
+DFFP \i2c_slave_wrapper_inst/u_i2c_slave/scl_reg_dly_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/scl_reg ),
+	.CLK(I_clk),
+	.PRESET(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/scl_reg_dly )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/scl_reg_dly_s0 .INIT=1'b1;
+DFFC \i2c_slave_wrapper_inst/u_i2c_slave/start_condition_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n119_4 ),
+	.CLK(I_clk),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/start_condition )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/start_condition_s0 .INIT=1'b0;
+DFFC \i2c_slave_wrapper_inst/u_i2c_slave/stop_condition_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n120_3 ),
+	.CLK(I_clk),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/stop_condition )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/stop_condition_s0 .INIT=1'b0;
+DFFC \i2c_slave_wrapper_inst/u_i2c_slave/scl_posedge_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n128_3 ),
+	.CLK(I_clk),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/scl_posedge )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/scl_posedge_s0 .INIT=1'b0;
+DFFC \i2c_slave_wrapper_inst/u_i2c_slave/scl_negedge_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n135_3 ),
+	.CLK(I_clk),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/scl_negedge )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/scl_negedge_s0 .INIT=1'b0;
+DFFC \i2c_slave_wrapper_inst/u_i2c_slave/cstate_3_s1  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n1097_11 ),
+	.CLK(I_clk),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [3])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/cstate_3_s1 .INIT=1'b0;
+DFFC \i2c_slave_wrapper_inst/u_i2c_slave/cstate_2_s1  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n1099_11 ),
+	.CLK(I_clk),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [2])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/cstate_2_s1 .INIT=1'b0;
+DFFC \i2c_slave_wrapper_inst/u_i2c_slave/cstate_1_s1  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n1101_11 ),
+	.CLK(I_clk),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [1])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/cstate_1_s1 .INIT=1'b0;
+DFFC \i2c_slave_wrapper_inst/u_i2c_slave/cstate_0_s1  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n1102_13 ),
+	.CLK(I_clk),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/cstate [0])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/cstate_0_s1 .INIT=1'b0;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/w_r_flag_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg [0]),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/n2063_3 ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/w_r_flag )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/w_r_flag_s0 .INIT=1'b0;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/word_address_7_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n640_7 ),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/word_address_7_9 ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [7])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/word_address_7_s0 .INIT=1'b0;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/word_address_6_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n641_6 ),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/word_address_7_9 ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [6])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/word_address_6_s0 .INIT=1'b0;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/word_address_5_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n642_6 ),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/word_address_7_9 ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [5])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/word_address_5_s0 .INIT=1'b0;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/word_address_4_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n643_6 ),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/word_address_7_9 ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [4])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/word_address_4_s0 .INIT=1'b0;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/word_address_3_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n644_6 ),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/word_address_7_9 ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [3])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/word_address_3_s0 .INIT=1'b0;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/word_address_2_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n645_6 ),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/word_address_7_9 ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [2])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/word_address_2_s0 .INIT=1'b0;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/word_address_1_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n646_6 ),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/word_address_7_9 ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [1])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/word_address_1_s0 .INIT=1'b0;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/word_address_0_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n647_6 ),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/word_address_7_9 ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/word_address [0])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/word_address_0_s0 .INIT=1'b0;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_8_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n608_9 ),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_7_8 ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [8])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_8_s0 .INIT=1'b0;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_7_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n650_5 ),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_7_8 ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [7])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_7_s0 .INIT=1'b0;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_6_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n651_5 ),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_7_8 ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [6])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_6_s0 .INIT=1'b0;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_5_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n652_5 ),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_7_8 ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [5])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_5_s0 .INIT=1'b0;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_4_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n653_5 ),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_7_8 ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [4])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_4_s0 .INIT=1'b0;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_3_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n654_5 ),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_7_8 ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [3])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_3_s0 .INIT=1'b0;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_2_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n655_5 ),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_7_8 ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [2])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_2_s0 .INIT=1'b0;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_1_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n656_5 ),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_7_8 ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [1])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_1_s0 .INIT=1'b0;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_0_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n657_5 ),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_7_8 ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg [0])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/addr_len_reg_0_s0 .INIT=1'b0;
+DFFE \i2c_slave_wrapper_inst/u_i2c_slave/sda_out_en_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n1095_25 ),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/sda_out_en_7 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/sda_out_en )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/sda_out_en_s0 .INIT=1'b0;
+DFFE \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n1104_26 ),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_8 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/in_reg_enable_s0 .INIT=1'b0;
+DFFE \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n1106_47 ),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_8 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [3])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_s0 .INIT=1'b0;
+DFFE \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_2_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n1108_38 ),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_8 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [2])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_2_s0 .INIT=1'b0;
+DFFE \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_1_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n1110_38 ),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_8 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [1])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_1_s0 .INIT=1'b0;
+DFFE \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_0_s0  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n1112_38 ),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_3_8 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/bit_counter [0])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/bit_counter_0_s0 .INIT=1'b0;
+DFFR \i2c_slave_wrapper_inst/u_i2c_slave/nstate_3_s1  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/nstate [3]),
+	.CLK(I_clk),
+	.RESET(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_3 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/nstate [3])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/nstate_3_s1 .INIT=1'b0;
+DFF \i2c_slave_wrapper_inst/u_i2c_slave/nstate_2_s1  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n1258_4 ),
+	.CLK(I_clk),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/nstate [2])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/nstate_2_s1 .INIT=1'b0;
+DFFR \i2c_slave_wrapper_inst/u_i2c_slave/nstate_1_s1  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/nstate [1]),
+	.CLK(I_clk),
+	.RESET(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_3 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/nstate [1])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/nstate_1_s1 .INIT=1'b0;
+DFFR \i2c_slave_wrapper_inst/u_i2c_slave/nstate_0_s1  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/nstate [0]),
+	.CLK(I_clk),
+	.RESET(\i2c_slave_wrapper_inst/u_i2c_slave/n2167_3 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/nstate [0])
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/nstate_0_s1 .INIT=1'b0;
+DFFP \i2c_slave_wrapper_inst/u_i2c_slave/sda_reg_s0  (
+	.D(IO_sda_in),
+	.CLK(I_clk),
+	.PRESET(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/sda_reg )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/sda_reg_s0 .INIT=1'b1;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/word_add_flag_s2  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n1116_16 ),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/word_add_flag_12 ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/word_add_flag )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/word_add_flag_s2 .INIT=1'b0;
+DFFCE \i2c_slave_wrapper_inst/u_i2c_slave/ack_flag_s2  (
+	.D(\i2c_slave_wrapper_inst/u_i2c_slave/n1118_25 ),
+	.CLK(I_clk),
+	.CE(\i2c_slave_wrapper_inst/u_i2c_slave/n1118_23 ),
+	.CLEAR(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 ),
+	.Q(\i2c_slave_wrapper_inst/u_i2c_slave/ack_flag )
+);
+defparam \i2c_slave_wrapper_inst/u_i2c_slave/ack_flag_s2 .INIT=1'b0;
+INV \i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_s0  (
+	.I(I_rst_n),
+	.O(\i2c_slave_wrapper_inst/u_i2c_slave/mem_rst_4 )
+);
+endmodule

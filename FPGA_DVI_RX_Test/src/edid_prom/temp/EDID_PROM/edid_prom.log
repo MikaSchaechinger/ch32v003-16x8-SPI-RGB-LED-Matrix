@@ -1,0 +1,43 @@
+GowinSynthesis start
+Running parser ...
+Analyzing Verilog file 'C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\edid_prom_top.v'
+Analyzing included file 'top_define.v'("C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\edid_prom_top.v":26)
+Back to file 'C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\edid_prom_top.v'("C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\edid_prom_top.v":26)
+Analyzing included file 'C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\static_macro_define.v'("C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\edid_prom_top.v":27)
+Back to file 'C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\edid_prom_top.v'("C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\edid_prom_top.v":27)
+Analyzing included file 'edid_prom_defines.v'("C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\edid_prom_top.v":28)
+Back to file 'C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\edid_prom_top.v'("C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\edid_prom_top.v":28)
+Analyzing Verilog file 'C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\i2c_slave_wrapper.v'
+Analyzing included file 'top_define.v'("C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\i2c_slave_wrapper.v":463)
+Back to file 'C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\i2c_slave_wrapper.v'("C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\i2c_slave_wrapper.v":463)
+Analyzing included file 'C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\static_macro_define.v'("C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\i2c_slave_wrapper.v":463)
+Back to file 'C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\i2c_slave_wrapper.v'("C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\i2c_slave_wrapper.v":463)
+Analyzing included file 'edid_prom_defines.v'("C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\i2c_slave_wrapper.v":463)
+Back to file 'C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\i2c_slave_wrapper.v'("C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\i2c_slave_wrapper.v":463)
+Compiling module 'EDID_PROM'("C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\edid_prom_top.v":30)
+Compiling module '**'("C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\i2c_slave_wrapper.v":0)
+Compiling module '**'("C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\i2c_slave_wrapper.v":0)
+Compiling module '**'("C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\i2c_slave_wrapper.v":0)
+Extracting RAM for identifier '**'("C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\i2c_slave_wrapper.v":0)
+NOTE  (EX0101) : Current top module is "EDID_PROM"
+[5%] Running netlist conversion ...
+Running device independent optimization ...
+[10%] Optimizing Phase 0 completed
+[15%] Optimizing Phase 1 completed
+[25%] Optimizing Phase 2 completed
+Running inference ...
+[30%] Inferring Phase 0 completed
+[40%] Inferring Phase 1 completed
+[50%] Inferring Phase 2 completed
+[55%] Inferring Phase 3 completed
+Running technical mapping ...
+[60%] Tech-Mapping Phase 0 completed
+[65%] Tech-Mapping Phase 1 completed
+[75%] Tech-Mapping Phase 2 completed
+[80%] Tech-Mapping Phase 3 completed
+[90%] Tech-Mapping Phase 4 completed
+WARN  (NL0002) : The module "~edid_ram.EDID_PROM" instantiated to "edid_ram_inst" is swept in optimizing("C:\Users\Mika\Programmieren\FPGA\Gowin\Gowin_V1.9.9_x64\IDE\ipcore\EDID_PROM\data\i2c_slave_wrapper.v":0)
+[95%] Generate netlist file "C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\src\edid_prom\temp\EDID_PROM\edid_prom.vg" completed
+Generate template file "C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\src\edid_prom\temp\EDID_PROM\edid_prom_tmp.v" completed
+[100%] Generate report file "C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\src\edid_prom\temp\EDID_PROM\edid_prom_syn.rpt.html" completed
+GowinSynthesis finish
