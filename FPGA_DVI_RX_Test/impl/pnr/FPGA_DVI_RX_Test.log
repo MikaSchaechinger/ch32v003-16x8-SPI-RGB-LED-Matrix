@@ -1,0 +1,23 @@
+Reading netlist file: "C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\impl\gwsynthesis\FPGA_DVI_RX_Test.vg"
+Parsing netlist file "C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\impl\gwsynthesis\FPGA_DVI_RX_Test.vg" completed
+Processing netlist completed
+Reading constraint file: "C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\src\top.cst"
+Physical Constraint parsed completed
+Running placement......
+ERROR  (PR2074) : Bank 2 vccio(3.3) is locked by other constraint or embedded port, conflicting BANK_VCCIO(1.8) set by 'O_rgb_de_o_obuf' : IO_TYPE = LVCMOS18 in the same bank
+ERROR  (CT1094) : 'O_rgb_de_o' can't be placed according to constraint
+ERROR  (PR2074) : Bank 2 vccio(3.3) is locked by other constraint or embedded port, conflicting BANK_VCCIO(1.8) set by 'O_rgb_hs_o_obuf' : IO_TYPE = LVCMOS18 in the same bank
+ERROR  (CT1094) : 'O_rgb_hs_o' can't be placed according to constraint
+ERROR  (PR2074) : Bank 2 vccio(3.3) is locked by other constraint or embedded port, conflicting BANK_VCCIO(1.8) set by 'O_rgb_vs_o_obuf' : IO_TYPE = LVCMOS18 in the same bank
+ERROR  (CT1094) : 'O_rgb_vs_o' can't be placed according to constraint
+ERROR  (PR2074) : Bank 2 vccio(3.3) is locked by other constraint or embedded port, conflicting BANK_VCCIO(1.8) set by 'O_rgb_clk_o_obuf' : IO_TYPE = LVCMOS18 in the same bank
+ERROR  (CT1094) : 'O_rgb_clk_o' can't be placed according to constraint
+ERROR  (PR2074) : Bank 2 vccio(3.3) is locked by other constraint or embedded port, conflicting BANK_VCCIO(1.8) set by 'fast_clk_obuf' : IO_TYPE = LVCMOS18 in the same bank
+ERROR  (CT1094) : 'fast_clk' can't be placed according to constraint
+ERROR  (PR2074) : Bank 2 vccio(3.3) is locked by other constraint or embedded port, conflicting BANK_VCCIO(1.8) set by 'slow_clk_obuf' : IO_TYPE = LVCMOS18 in the same bank
+ERROR  (CT1094) : 'slow_clk' can't be placed according to constraint
+Generate file "C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\impl\pnr\FPGA_DVI_RX_Test.pin.html" completed
+Generate file "C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\impl\pnr\FPGA_DVI_RX_Test.rpt.html" completed
+Generate file "C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\impl\pnr\FPGA_DVI_RX_Test.rpt.txt" completed
+Sun May 12 18:22:26 2024
+

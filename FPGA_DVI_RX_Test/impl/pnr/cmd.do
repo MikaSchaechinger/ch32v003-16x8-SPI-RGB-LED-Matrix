@@ -1,0 +1,12 @@
+-d C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\impl\gwsynthesis\FPGA_DVI_RX_Test.vg
+-p GW1NR-9-QFN88P-6
+-pn GW1NR-LV9QN88PC6/I5
+-cst C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\src\top.cst
+-cfg C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\impl\pnr\device.cfg
+-bit
+-tr
+-ph
+-timing
+-cst_error
+-correct_hold 1
+-route_maxfan 23

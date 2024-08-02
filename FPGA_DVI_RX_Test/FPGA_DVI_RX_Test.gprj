@@ -9,5 +9,7 @@
         <File path="src/edid_prom/edid_prom.v" type="file.verilog" enable="1"/>
         <File path="src/gowin_osc/gowin_osc.v" type="file.verilog" enable="1"/>
         <File path="src/top.sv" type="file.verilog" enable="1"/>
+        <File path="src/top.cst" type="file.cst" enable="1"/>
+        <File path="src/EDID.mi" type="file.other" enable="1"/>
     </FileList>
 </Project>
