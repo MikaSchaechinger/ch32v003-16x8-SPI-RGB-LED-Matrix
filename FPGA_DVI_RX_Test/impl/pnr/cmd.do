@@ -1,12 +1,14 @@
--d C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\impl\gwsynthesis\FPGA_DVI_RX_Test.vg
+-d C:\Users\phili\workspace\ch32v003-16x8-SPI-RGB-LED-Matrix\FPGA_DVI_RX_Test\impl\gwsynthesis\FPGA_DVI_RX_Test.vg
 -p GW1NR-9-QFN88P-6
 -pn GW1NR-LV9QN88PC6/I5
--cst C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\src\top.cst
--cfg C:\Users\Mika\Programmieren\Projects\LED-Matrix\FPGA_DVI_RX_Test\impl\pnr\device.cfg
+-cst C:\Users\phili\workspace\ch32v003-16x8-SPI-RGB-LED-Matrix\FPGA_DVI_RX_Test\src\top.cst
+-cfg C:\Users\phili\workspace\ch32v003-16x8-SPI-RGB-LED-Matrix\FPGA_DVI_RX_Test\impl\pnr\device.cfg
 -bit
 -tr
 -ph
 -timing
 -cst_error
+-convert_sdp32_36_to_sdp16_18
 -correct_hold 1
 -route_maxfan 23
+-global_freq 50.000

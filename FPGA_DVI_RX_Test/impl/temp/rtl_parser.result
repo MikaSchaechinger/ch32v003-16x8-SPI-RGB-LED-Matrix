@@ -1,55 +1,19 @@
 [
  {
-  "InstFile" : "C:/Users/Mika/Programmieren/Projects/LED-Matrix/FPGA_DVI_RX_Test/src/top.sv",
-  "InstLine" : 5,
-  "InstName" : "top",
-  "ModuleFile" : "C:/Users/Mika/Programmieren/Projects/LED-Matrix/FPGA_DVI_RX_Test/src/top.sv",
-  "ModuleLine" : 5,
-  "ModuleName" : "top",
+  "InstFile" : "C:/Users/phili/workspace/ch32v003-16x8-SPI-RGB-LED-Matrix/FPGA_DVI_RX_Test/src/edid_prom/edid_prom.v",
+  "InstLine" : 599,
+  "InstName" : "EDID_PROM_Top",
+  "ModuleFile" : "C:/Users/phili/workspace/ch32v003-16x8-SPI-RGB-LED-Matrix/FPGA_DVI_RX_Test/src/edid_prom/edid_prom.v",
+  "ModuleLine" : 599,
+  "ModuleName" : "EDID_PROM_Top",
   "SubInsts" : [
    {
-    "InstFile" : "C:/Users/Mika/Programmieren/Projects/LED-Matrix/FPGA_DVI_RX_Test/src/top.sv",
-    "InstLine" : 33,
-    "InstName" : "Gowin_OSC_inst",
-    "ModuleFile" : "C:/Users/Mika/Programmieren/Projects/LED-Matrix/FPGA_DVI_RX_Test/src/gowin_osc/gowin_osc.v",
-    "ModuleLine" : 9,
-    "ModuleName" : "Gowin_OSC"
-   },
-   {
-    "InstFile" : "C:/Users/Mika/Programmieren/Projects/LED-Matrix/FPGA_DVI_RX_Test/src/top.sv",
-    "InstLine" : 41,
-    "InstName" : "EDID_PROM_inst",
-    "ModuleFile" : "C:/Users/Mika/Programmieren/Projects/LED-Matrix/FPGA_DVI_RX_Test/src/edid_prom/edid_prom.v",
-    "ModuleLine" : 599,
-    "ModuleName" : "EDID_PROM",
-    "SubInsts" : [
-     {
-      "InstFile" : "C:/Users/Mika/Programmieren/Projects/LED-Matrix/FPGA_DVI_RX_Test/src/edid_prom/edid_prom.v",
-      "InstLine" : 620,
-      "InstName" : "i2c_slave_wrapper_inst",
-      "ModuleFile" : "C:/Users/Mika/Programmieren/Projects/LED-Matrix/FPGA_DVI_RX_Test/src/edid_prom/edid_prom.v",
-      "ModuleLine" : 1,
-      "ModuleName" : "~i2c_slave_wrapper.EDID_PROM"
-     }
-    ]
-   },
-   {
-    "InstFile" : "C:/Users/Mika/Programmieren/Projects/LED-Matrix/FPGA_DVI_RX_Test/src/top.sv",
-    "InstLine" : 57,
-    "InstName" : "your_instance_name",
-    "ModuleFile" : "C:/Users/Mika/Programmieren/Projects/LED-Matrix/FPGA_DVI_RX_Test/src/dvi_rx/dvi_rx.v",
-    "ModuleLine" : 2867,
-    "ModuleName" : "DVI_RX",
-    "SubInsts" : [
-     {
-      "InstFile" : "C:/Users/Mika/Programmieren/Projects/LED-Matrix/FPGA_DVI_RX_Test/src/dvi_rx/dvi_rx.v",
-      "InstLine" : 2900,
-      "InstName" : "dvi2rgb_inst",
-      "ModuleFile" : "C:/Users/Mika/Programmieren/Projects/LED-Matrix/FPGA_DVI_RX_Test/src/dvi_rx/dvi_rx.v",
-      "ModuleLine" : 1,
-      "ModuleName" : "~dvi2rgb.DVI_RX"
-     }
-    ]
+    "InstFile" : "C:/Users/phili/workspace/ch32v003-16x8-SPI-RGB-LED-Matrix/FPGA_DVI_RX_Test/src/edid_prom/edid_prom.v",
+    "InstLine" : 620,
+    "InstName" : "i2c_slave_wrapper_inst",
+    "ModuleFile" : "C:/Users/phili/workspace/ch32v003-16x8-SPI-RGB-LED-Matrix/FPGA_DVI_RX_Test/src/edid_prom/edid_prom.v",
+    "ModuleLine" : 10,
+    "ModuleName" : "~i2c_slave_wrapper.EDID_PROM_Top"
    }
   ]
  }
