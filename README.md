@@ -1,4 +1,4 @@
-"# ch32v003-16x8-SPI-RGB-LED-Matrix" 
+# ch32v003-16x8-SPI-RGB-LED-Matrix
 
 Program and PCBs by Mika Schächinger
 
@@ -14,14 +14,14 @@ It consists of multiple Sub-Parts:
         4.3. HDMI-EDID-Emulator Connector. (Currently in Development)
 
 
-"# RGB MAtrix Panal"
+## RGB MAtrix Panal
 
 The main panal is finished and works. It receives images over SPI which are displayed with 24 bit colors. The Internal Framerate is near 100 FPS. Later on a big Matrix, the small 16x8 Panals are chained to multiple rows. The resulting Framerate the depends on teh SPI speed, which must feed one panal after another in the row. With a 480 Pixel wide row I expect a Framerate higher than 30FPS. The Framerate later will depend on the FPGA speed and the internal implementation.
 Each matrix panal has its own microcontroller (ch32v003). So below in "Matrix-Panel Program" how the code works.
 
 
 
-"# HDMI to Matrix"
+## HDMI to Matrix
 
 The goal is to control the LED-Matrix over HDMI. To drive the Matrix Panals, multiple parallel SPI Streams are needed. 
 To convert a HDMI/DVI Video Stream to the SPI stream, the Tang Nano 9k should convert the Signal with its FPGA. An FPGA (Field Programmable Gate Array) has internal connections, lookuptables and more, which can be programmed, so every imaginal logic can be implemented (as long space, ressources and timing constraints are met). 
@@ -35,7 +35,7 @@ The EDID (Extended Display Identification Data) is saved on the screen side. If 
 
 
 
-"# Matrix-Panel Program"
+## Matrix-Panel Program
 
 The programm is for the ch32v003 microcontroller, which sits on an self-designed LED-Matrix PCB.
 The Matrix has 8x16 Pixels and should be able to display 24bit color images (8bit per color RGB) with a framerate near 100FPS.
@@ -90,7 +90,7 @@ IMPORTANT: PD7 overlaps with the reset function. To disable this function and us
 
 
 
-The PCB:
+##The PCB:
 
 The PCB has a Size of 40x80 mm. With 8x16 RGB-LEDs there is a distance of 5mm between each LED. 
 
