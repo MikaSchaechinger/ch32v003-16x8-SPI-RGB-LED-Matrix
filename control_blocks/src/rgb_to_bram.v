@@ -3,6 +3,7 @@ module rgb_to_bram(
     input wire [7:0] rgb_r_o,
     input wire [7:0] rgb_g_o,
     input wire [7:0] rgb_b_o,
+    // control logic input
     // maybe de input
 
     // interface to bram: data, addr, write

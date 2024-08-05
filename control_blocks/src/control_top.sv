@@ -10,10 +10,12 @@ module top(
     output wire slow_clk,
     output wire fast_clk,
 
+	/*
     output wire O_rgb_clk_o,
-    output wire O_rgb_vs_o,
+    output wire O_rgb_vs_o,							// ????
     output wire O_rgb_hs_o,
     output wire O_rgb_de_o,
+	*/
 );
 
 
@@ -42,6 +44,11 @@ module top(
     )
 */
 
+	wire O_rgb_clk_o;
+    wire O_rgb_vs_o;
+    wire O_rgb_hs_o;
+    wire O_rgb_de_o;
+
 	wire [3:0] O_pll_phase_o;
 	wire O_pll_phase_lock_o;
 	wire [7:0] O_rgb_r_o;
@@ -49,7 +56,7 @@ module top(
 	wire [7:0] O_rgb_b_o;
     
 
-	DVI_RX your_instance_name(
+	DVI_RX DVI_RX_inst(
 		.I_rst_n(1'b1), //input I_rst_n
 		.I_tmds_clk_p(I_tmds_clk_p_i), //input I_tmds_clk_p
 		.I_tmds_clk_n(I_tmds_clk_n_i), //input I_tmds_clk_n
