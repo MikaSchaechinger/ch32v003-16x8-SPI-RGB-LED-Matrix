@@ -7,7 +7,6 @@ module top(
     input wire [2:0] I_tmds_data_p_i,
     input wire [2:0] I_tmds_data_n_i, 
 
-
     output wire slow_clk,
     output wire fast_clk,
 
@@ -15,17 +14,10 @@ module top(
     output wire O_rgb_vs_o,
     output wire O_rgb_hs_o,
     output wire O_rgb_de_o,
-
-
-    // EDID communication
-    input wire I_scl_i,
-    inout wire IO_sda_io
-
 );
 
 
 	// Clock generation of 250 MHz / 4 = 62.5 MHz
-
     Gowin_OSC Gowin_OSC_inst(
         .oscout(fast_clk) //output oscout
     );
@@ -33,15 +25,22 @@ module top(
 	assign slow_clk = clk;
 
 
-
+/*
 	EDID_PROM EDID_PROM_inst(
 		.I_clk(clk), //input I_clk
 		.I_rst_n(1'b1), //input I_rst_n
 		.I_scl(I_scl_i), //input I_scl
 		.IO_sda(IO_sda_io) //inout IO_sda
 	);
+*/
 
-
+/*
+    spi_tx_n_mosi spi_tx_n_mosi_inst(
+        .clk(),
+        .rst(),
+        .
+    )
+*/
 
 	wire [3:0] O_pll_phase_o;
 	wire O_pll_phase_lock_o;
