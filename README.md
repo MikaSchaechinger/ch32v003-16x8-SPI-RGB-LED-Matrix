@@ -1,15 +1,44 @@
 "# ch32v003-16x8-SPI-RGB-LED-Matrix" 
 
-Program and PCB by Mika Schächinger
+Program and PCBs by Mika Schächinger
 
 This project is not finished!
-    Displaying works with ~100FPS
-    SPI-DMA data transmission is not testet yet. (Adapter PCBs for this are in production)
+
+It consists of multiple Sub-Parts:
+    1. 16x8 24bit RGB Matrix    (finished, but can be changed in the future)
+    2. Connector PCBs: connect the them to one big Matrix    (finished, but can be changed in the future)
+    3. Adapter PCB: Like the Connector PCB, but Connectors for Input Cables (finished, but can be changed in the future)
+    4. HDMI/DVI Matrix Controler    (Currently in Development)
+        4.1. Tang Nano 9k (low cost FPGA)    
+        4.2. Mainboard which holds the Tang Nano 9k, Level-Shifters and Connectors to the MAtrix Adapters (Not started)
+        4.3. HDMI-EDID-Emulator Connector. (Currently in Development)
 
 
+"# RGB MAtrix Panal"
+
+The main panal is finished and works. It receives images over SPI which are displayed with 24 bit colors. The Internal Framerate is near 100 FPS. Later on a big Matrix, the small 16x8 Panals are chained to multiple rows. The resulting Framerate the depends on teh SPI speed, which must feed one panal after another in the row. With a 480 Pixel wide row I expect a Framerate higher than 30FPS. The Framerate later will depend on the FPGA speed and the internal implementation.
+Each matrix panal has its own microcontroller (ch32v003). So below in "Matrix-Panel Program" how the code works.
+
+
+
+"# HDMI to Matrix"
+
+The goal is to control the LED-Matrix over HDMI. To drive the Matrix Panals, multiple parallel SPI Streams are needed. 
+To convert a HDMI/DVI Video Stream to the SPI stream, the Tang Nano 9k should convert the Signal with its FPGA. An FPGA (Field Programmable Gate Array) has internal connections, lookuptables and more, which can be programmed, so every imaginal logic can be implemented (as long space, ressources and timing constraints are met). 
+The FPGA should receive the Videostream and save parts of the Frame in a double buffer (internal BRAM). In the Buffer, one Matrix Column should be saved. This is neccassary, so the output part can send the 384 byte stream (3x16x8 byte) as a whole packet over one SPI Stream to one Matrix panal. Because the FPGA can implement real parallel logic, multiple SPI streams will be send to each panel in a column. Then the buffer access switches and the next column is outputted.
+The reason the Tang Nano 9k is selected is, that it costs only about 15€, which is extreamly cheap for a FPGA. The downside is, that it lacks on ressources, however they should be enough to drive a 480x640 Pixel Matrix. 
+
+A current Problem is, that the HDMI Port on the Tang Nano 9k is intended to be an output. But in this case it should work as an input.  
+The current approach is to create a EDID-Emulator-Connector which managed the EDID and Hotplug detect. Those HDMI Pins are not Connected on the Tang Nano 9k.
+The EDID (Extended Display Identification Data) is saved on the screen side. If a Source connects to the screen, this is detected by Hotplug detect. Then the source asks for the EDID over the I2C Bud in the HDMI Cable. Based on the EDID the source knows shich resolution, Framerate and Colors it has to send. To receive a image, we first have to send the EDID to the video source. Its possible that the Tang Nano 9k Dev Board needs to be modified for receiving...
+
+
+
+
+"# Matrix-Panel Program"
 
 The programm is for the ch32v003 microcontroller, which sits on an self-designed LED-Matrix PCB.
-The Matrix has 8x16 Pixels and should be able to display 24bit color images (8bit per color RGB) with a framerate > 30FPS (Hopefully :D).
+The Matrix has 8x16 Pixels and should be able to display 24bit color images (8bit per color RGB) with a framerate near 100FPS.
 It can be chaned together to achieve decent image sizes.
 
 
