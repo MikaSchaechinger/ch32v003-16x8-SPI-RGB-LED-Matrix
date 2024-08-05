@@ -5,10 +5,10 @@ module top(
     input wire I_tmds_clk_p_i,
     input wire I_tmds_clk_n_i,
     input wire [2:0] I_tmds_data_p_i,
-    input wire [2:0] I_tmds_data_n_i, 
+    input wire [2:0] I_tmds_data_n_i,
 
     output wire slow_clk,
-    output wire fast_clk,
+    output wire fast_clk
 
 	/*
     output wire O_rgb_clk_o,

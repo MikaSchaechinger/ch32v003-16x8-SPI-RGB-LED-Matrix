@@ -9,5 +9,5 @@ module rgb_to_bram(
     // interface to bram: data, addr, write
     output wire write,
     output wire [7:0] addr,     // width needs to be checked
-    output [7:0] bram_data      // width needs to be checked
+    output wire [7:0] bram_data      // width needs to be checked
 );
