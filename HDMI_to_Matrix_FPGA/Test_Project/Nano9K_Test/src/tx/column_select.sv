@@ -1,180 +1,147 @@
-module column_select #(
-    parameter COLUMN_NUMBER = 3
-) (
+module column_select (
     input wire clk,
     input wire rst,
     
-    input wire select_next, // Selects the next column
+    input wire select_first,    // Selects the first column, must be high until ready is low
+    input wire select_next,     // Selects the next column,  must be high until ready is low
     input wire extra_bit,
 
     output reg ready,      // High when the next column can be selected
 
     output wire ser_clk,
-    output wire ser,
-    output reg stcp,
-    output reg enable
+    output wire ser_data,
+    output reg ser_stcp = 0,
+    output reg ser_n_enable = 0
 );
 
     //============== Type Definitions ===============
 
-    typedef enum logic [1:0] { 
-        STARTUP,    // After reset.
-        IDLE,       // Ready to select the next column.
-        SENDING_FIRST,    // Sending the column data. Select Bit is active
-        SENDING_OTHER     // Sending the column data. Select bit is inactive
+    typedef enum logic [2:0] { 
+        S0_STARTUP,             // After reset, initialize ser_n_enable and counter
+        S1_WAIT_FOR_TX_FINISH,  // Wait for the Column Data to be sent
+        S2_STCP,                // Send the STCP signal
+        S3_WAIT_FOR_SELECT,     // Wait for select_first or select_next
+        S40_SELECT_FIRST,       // Select the first column
+        S41_SELECT_NEXT,        // Select the next column
+        S5_SEND_DATA            // Send the data to the column
     } state_t;
 
 
-    //============== Internal Signals ===============
-    reg select_next_internal = 0;
-    state_t state = STARTUP;
-    state_t next_state = STARTUP;
-    reg [7:0] column_data;          // Data to be sent to the column.
-
-    localparam int COLUMN_COUNTER_WIDTH = $clog2(COLUMN_NUMBER+1);
-    reg [COLUMN_COUNTER_WIDTH-1:0] column_counter = 0;
-
-    reg [3:0] stcp_delay = 0;
-
-    reg [7:0] send_data = 8'hFF;
+    //============== Internal Signals =================
+    state_t state = S0_STARTUP;
+    state_t next_state = S0_STARTUP;
+    reg [7:0] column_data = 8'h00;          // Data to be sent to the column.
+    reg [1:0] counter = 0;          // Counts the number of select_first, to enable the matrix after 2 iterations
 
     reg start_tx = 0;
     wire tx_finish;
 
-    reg select_lock = 0;    // Reset: stcp was written.  Set: When data was send
     //=============== Code Logic ===============
 
-    always @(posedge select_next or negedge select_lock) begin
-        if (select_lock == 0) begin
-            select_next_internal <= 0;
-        end else if (select_next) begin
-            if (state == IDLE) begin
-                select_next_internal <= 1;
-            end
-        end
-    end
 
 
-    always @(posedge rst or posedge select_next_internal or posedge clk) begin
-        if (rst) begin
-            stcp_delay <= 0;
-        end else if (select_next_internal) begin
-            stcp_delay[0] <= 1;
-        end else if (clk) begin
-            if (stcp_delay) begin
-                stcp_delay[0] <= 0;
-                stcp_delay[1] <= stcp_delay[0];
-                stcp_delay[2] <= stcp_delay[1];
-                stcp <= 1;
-            end else  begin
-                stcp <= 0;
-            end
-
-            if (stcp_delay[2]) begin
-                select_lock <= 0;   // stcp was written, release the lock
-            end
-        end
-    end
-
-
-
-    // send_datta control
-    always @(posedge clk or posedge rst) begin
-        if (rst) begin
-            send_data <= 8'hFF;
-        end else if (clk) begin
-            send_data[1] <= extra_bit;
-
-            // select panel bit control
-            if (state == SENDING_FIRST) begin
-                send_data[0] <= 0;
-            end else if (state == SENDING_OTHER) begin
-                send_data[0] <= 1;
-            end
-        end
-    end
 
 
 
     // State Machine Logic
     always_ff @(posedge clk or posedge rst) begin
         if (rst) begin
-            state <= STARTUP;
-        end else begin
+            state <= S0_STARTUP;
+            ser_n_enable = 1;
+        end else if (clk) begin
             state <= next_state;
+            column_data[1] = extra_bit;     // Extra bit to be sent to the column
+
+            // spcial logic for S40 and S41
+            if (next_state == S40_SELECT_FIRST) begin
+                if (counter == 2) begin
+                    ser_n_enable = 0;
+                end else begin
+                    counter = counter + 1;
+                end
+                column_data[0] = 0;     // Active Low. Select the first column
+            end else if (next_state == S41_SELECT_NEXT) begin
+                column_data[0] = 1;     // Active Low. Select the next column
+            end
         end
     end
+
+
 
     // State Machine Logic
     always_comb begin
         case (state)
-            STARTUP: begin
+            S0_STARTUP: begin
+                next_state = S1_WAIT_FOR_TX_FINISH;
+                counter = 0;
+                ser_stcp = 0;
                 ready = 0;
-                // Initialize the column data
-                if (column_counter == COLUMN_NUMBER - 1) begin
-                    next_state = SENDING_FIRST;
-                end else begin
-                    next_state = STARTUP;
-                end
+                start_tx = 0;
             end
-            IDLE: begin
-                // Shift-Register Data is ready and waiting for the next column to be selected (STCP)
+            S1_WAIT_FOR_TX_FINISH: begin
+                start_tx = 0;
+                if (tx_finish) begin
+                    next_state = S2_STCP;
+                end else begin
+                    next_state = S1_WAIT_FOR_TX_FINISH;
+                end
+                // Should not change
+                ser_stcp = 0;
+                ready = 0;
+            end
+            S2_STCP: begin
+                ser_stcp = 1;
+                next_state = S3_WAIT_FOR_SELECT;
+                // Should not change
+                ready = 0;
+                start_tx = 0;
+            end
+            S3_WAIT_FOR_SELECT: begin
+                ser_stcp = 0;
                 ready = 1;
-            end
-            SENDING_FIRST: begin
-                // Shift-Register Data is being sent to the column
-                ready = 0;  
-                if (start_tx) begin
-                    next_state = IDLE;
+                if (select_first) begin
+                    next_state = S40_SELECT_FIRST;
+                end else if (select_next) begin
+                    next_state = S41_SELECT_NEXT;
                 end else begin
-                    next_state = SENDING_FIRST;
+                    next_state = S3_WAIT_FOR_SELECT;
                 end
+                // Should not change
+                start_tx = 0;
             end
-            SENDING_OTHER: begin
-                // Shift-Register Data is being sent to the column
+            S40_SELECT_FIRST: begin
                 ready = 0;
-                if (start_tx) begin
-                    next_state = IDLE;
-                end else begin
-                    next_state = SENDING_OTHER;
-                end
+                next_state = S5_SEND_DATA;
+
+                // Should not change
+                ser_stcp = 0;
+                start_tx = 0;
+            end
+            S41_SELECT_NEXT: begin
+                ready = 0;
+                next_state = S5_SEND_DATA;
+
+                // Should not change
+                ser_stcp = 0;
+                start_tx = 0;
+            end
+            S5_SEND_DATA: begin
+                start_tx = 1;
+                next_state = S1_WAIT_FOR_TX_FINISH;
+                // Shoud not change
+                ready = 0;
+                ser_stcp = 0;
+            end
+            default: begin
+                next_state = S0_STARTUP;
+                ser_stcp = 0;
+                ready = 0;
+                start_tx = 0;
             end
         endcase
     end
 
 
-
-    // 
-    always @(posedge clk or posedge rst) begin
-        if (rst) begin
-            column_counter <= 0;
-        end else if (state == STARTUP) begin
-            if (tx_finish) begin
-                start_tx <= 1;
-                column_counter <= column_counter + 1;
-            end else begin
-                start_tx <= 0;
-            end
-        end else if (state == SENDING_FIRST) begin
-            if (select_lock == 0) begin
-                if (tx_finish) begin
-                    start_tx <= 1;
-                    column_counter <= 0;
-                    select_lock <= 1;
-                end 
-            end
-        end else if (state == SENDING_OTHER) begin
-            if (select_lock == 0) begin
-                if (tx_finish) begin
-                    start_tx <= 1;
-                    column_counter <= column_counter + 1;
-                    select_lock <= 1;
-                end 
-            end
-        end else if (state == IDLE) begin
-            start_tx <= 0;
-        end
-    end
 
 
 
@@ -184,27 +151,16 @@ module column_select #(
         .CHANNEL_NUMBER(1),
         .SPI_SIZE(8),
         .MSB_FIRST(1)
-    ) dut (
+    ) shift_reg (
         .clk(clk),
         .rst(rst),
         .start_tx(start_tx),
         .tx_finish(tx_finish),
-        .data_in(send_data),
+        .data_in(column_data),
         .spi_clk(ser_clk),
-        .spi_mosi(ser)
+        .spi_mosi(ser_data)
     );
 
-
-    always @(posedge clk) begin
-        if (rst) begin
-            enable <= 1;
-        end else if (clk) begin
-            if (state == IDLE) begin
-                enable <= 0;
-            end
-        end
-    end
-            
 
 
 endmodule

@@ -30,8 +30,8 @@ module nspi_tx_tb;
     // Clock generation
     initial begin
         clk = 0;
-        for (int i = 0; i < 1000; i++) begin
-            #10 clk = ~clk;
+        for (int i = 0; i < 10000; i++) begin
+            #1 clk = ~clk;
         end
     end
 

@@ -6,7 +6,7 @@ module nspi_tx #(
     input wire clk,
     input wire rst,
     input wire start_tx, // Start transmission at rising edge
-    output wire tx_finish, // Low during transmission
+    output reg tx_finish = 0, // Low during transmission
 
     input wire [SPI_SIZE-1:0] data_in [CHANNEL_NUMBER-1:0],
     output reg spi_clk,
@@ -56,7 +56,14 @@ module nspi_tx #(
 
 
     
-    assign tx_finish = ~start_tx_internal;
+    // assign tx_finish = ~start_tx_internal;
+    always @(posedge start_tx_internal or posedge clk) begin
+        if (start_tx_internal) begin
+            tx_finish <= 0;
+        end else if (state == IDLE) begin
+            tx_finish <= 1;
+        end
+    end
 
 
     // State Machine Logic

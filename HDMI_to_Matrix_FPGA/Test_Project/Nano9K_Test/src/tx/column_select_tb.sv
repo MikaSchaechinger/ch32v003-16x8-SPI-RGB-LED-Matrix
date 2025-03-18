@@ -5,8 +5,9 @@ module column_select_tb;
     // Signals
     reg clk;
     reg rst;
-    reg select_next;
-    reg extra_bit;
+    reg select_first=0;
+    reg select_next=0;
+    reg extra_bit = 0;
 
     wire ready;
     wire stcp;
@@ -15,25 +16,24 @@ module column_select_tb;
     wire enable;
 
     // Instantiate the module
-    column_select #(
-        .COLUMN_NUMBER(3)
-    ) dut (
+    column_select cs (
         .clk(clk),
         .rst(rst),
+        .select_first(select_first),
         .select_next(select_next),
         .extra_bit(extra_bit),
         .ready(ready),
-        .stcp(stcp),
-        .ser(ser),
+        .ser_stcp(stcp),
+        .ser_data(ser),
         .ser_clk(ser_clk),
-        .enable(enable)
+        .ser_n_enable(enable)
     );
 
     // Clock generation
     initial begin
         clk = 0;
         for (int i = 0; i < 1000; i++) begin
-            #10 clk = ~clk;
+            #5 clk = ~clk;
         end
     end
 
@@ -43,7 +43,33 @@ module column_select_tb;
         rst = 1;
         #20 rst = 0;
 
-        // After Reser, the startup sequence is running
+        #10;
+
+        for (int i = 0; i < 3; i++) begin
+
+            for (int j=0; j < 1000; ++j) begin
+                #10;
+                if (ready) begin
+                    break;
+                end
+            end
+
+            select_first = 1;
+            #10 select_first = 0;
+            
+
+
+            for (int j=0; j < 1000; ++j) begin
+                #10;
+                if (ready) begin
+                    break;
+                end
+            end
+            
+            select_next = 1;
+            #10 select_next = 0;
+        end
+
 
 
     end
