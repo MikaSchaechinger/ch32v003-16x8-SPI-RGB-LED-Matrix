@@ -6,7 +6,7 @@ module nspi_tx #(
     input wire clk,
     input wire rst,
     input wire start_tx, // Start transmission at rising edge
-    output reg tx_finish = 0, // Low during transmission
+    output reg tx_finish, // Low during transmission
 
     input wire [SPI_SIZE-1:0] data_in [CHANNEL_NUMBER-1:0],
     output reg spi_clk,
@@ -31,14 +31,20 @@ module nspi_tx #(
 
     //=============== Code Logic ===============
 
-    always @(posedge start_tx or posedge overflow_finish) begin
-        if (overflow_finish) begin
+
+    always @(posedge rst or posedge clk) begin
+        if (rst) begin
             start_tx_internal <= 0;
-        end else if (start_tx) begin
-            //counter <= 0;
-            start_tx_internal <= 1;
+        end else begin
+            if (overflow_finish) begin
+                start_tx_internal <= 0;
+            end else if (start_tx) begin
+                start_tx_internal <= 1;
+            end
         end
     end
+
+    
 
     always @(posedge start_tx_internal) begin
         if (MSB_FIRST) begin
@@ -66,15 +72,36 @@ module nspi_tx #(
     end
 
 
-    // State Machine Logic
+
+
+
+    // counter control
+    always_ff @(posedge spi_clk or posedge start_tx_internal) begin
+        if (spi_clk) begin
+            counter <= COUNTER_WIDTH'(counter + 1);
+        end else begin
+            counter <= 0;
+        end
+    end
+
+        // State Machine Logic
     always_ff @(posedge clk or posedge rst) begin
         if (rst) begin
             state <= IDLE;
         end else begin
             state <= next_state;
-
+            if (next_state == IDLE) begin
+                overflow_finish = 0;
+            end else if (next_state == STARTING) begin
+                overflow_finish = 0;
+            end else if (next_state == TRANSMIT) begin
+                if (counter == SPI_SIZE) begin
+                    overflow_finish = 1;
+                end
+            end
         end
     end
+
 
     always_comb begin
         case (state)
@@ -84,20 +111,15 @@ module nspi_tx #(
                 end else begin
                     next_state = IDLE;
                 end
-
-                overflow_finish = 0;
             end
             STARTING: begin
                 next_state = TRANSMIT;
-                overflow_finish = 0;
             end
             TRANSMIT: begin
                 if (counter == SPI_SIZE) begin
                     next_state = IDLE;
-                    overflow_finish = 1;
                 end else begin
                     next_state = TRANSMIT;
-                    overflow_finish = overflow_finish;
                 end
 
             end
@@ -141,10 +163,15 @@ module nspi_tx #(
             end
             else if (clk == 0) begin
                 // set SPI_CLK = 1
+                // counter = counter + 1;
                 spi_clk <= 1;
-                counter <= counter + 1;
+                spi_mosi <= spi_mosi;
             end
+        end else begin
+            spi_clk <= 0;
+            spi_mosi <= 0;
         end
+
     end
 
 

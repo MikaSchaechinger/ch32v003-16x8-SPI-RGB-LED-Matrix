@@ -43,9 +43,9 @@ module LED_Matrix_top(
     reg [SPI_SIZE-1:0] data = 0;
     reg [SPI_SIZE-1:0] data_in [CHANNEL_NUMBER-1:0];
 
-    reg new_image = 0;
-    reg new_column = 0;
-    reg next_data = 0;
+    reg new_image;
+    reg new_column;
+    reg next_data;
     
     state_t state = S0_STARTUP;
     state_t next_state = S0_STARTUP;
@@ -70,22 +70,21 @@ module LED_Matrix_top(
     end
 
     always_ff @(posedge clk) begin
-        if (clk) begin
-            state <= next_state;
+        state <= next_state;
+        new_column = 0;
 
-            if (next_state == S1_NEW_IMAGE) begin
-                counter <= 0;
-                new_image = 1;
-            end else if (next_state == S2_START_OUTPUT) begin
-                new_image = 0;
-                if (tx_finish) begin
-                    if (!next_data) begin
-                        next_data = 1;
-                        counter <= counter + 1;
-                    end
-                end else begin
-                    next_data = 0;
+        if (next_state == S1_NEW_IMAGE) begin
+            counter <= 0;
+            new_image = 1;
+        end else if (next_state == S2_START_OUTPUT) begin
+            new_image = 0;
+            if (tx_finish) begin
+                if (!next_data) begin
+                    next_data = 1;
+                    counter <= 8'(counter + 1);
                 end
+            end else begin
+                next_data = 0;
             end
         end
     end
@@ -100,6 +99,8 @@ module LED_Matrix_top(
                 rst = 0;
                 if (tx_finish==0)begin
                     next_state = S2_START_OUTPUT;
+                end else begin
+                    next_state = S1_NEW_IMAGE;
                 end
             end
             S2_START_OUTPUT: begin
@@ -109,6 +110,10 @@ module LED_Matrix_top(
                 end else begin
                     next_state = S2_START_OUTPUT;
                 end
+            end
+            default: begin
+                rst = 1;
+                next_state = S0_STARTUP;
             end
         endcase
     end

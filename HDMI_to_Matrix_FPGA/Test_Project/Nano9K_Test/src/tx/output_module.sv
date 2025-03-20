@@ -50,7 +50,7 @@ module output_module #(
     always_ff @(posedge clk or posedge rst) begin
         if (rst) begin
             state <= S0_IDLE;
-        end else if (clk) begin
+        end else begin
             state <= next_state;
         end
     end

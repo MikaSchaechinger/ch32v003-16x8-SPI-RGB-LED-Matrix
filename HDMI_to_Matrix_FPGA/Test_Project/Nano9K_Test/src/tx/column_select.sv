@@ -10,8 +10,8 @@ module column_select (
 
     output wire ser_clk,
     output wire ser_data,
-    output reg ser_stcp = 0,
-    output reg ser_n_enable = 0
+    output reg ser_stcp,
+    output reg ser_n_enable
 );
 
     //============== Type Definitions ===============
@@ -31,6 +31,7 @@ module column_select (
     state_t state = S0_STARTUP;
     state_t next_state = S0_STARTUP;
     reg [7:0] column_data = 8'h00;          // Data to be sent to the column.
+    reg [7:0] spi_data_in [0:0];            // Data to be sent to the SPI
     reg [1:0] counter = 0;          // Counts the number of select_first, to enable the matrix after 2 iterations
 
     reg start_tx = 0;
@@ -39,7 +40,7 @@ module column_select (
     //=============== Code Logic ===============
 
 
-
+    assign spi_data_in[0] = column_data;
 
 
 
@@ -48,7 +49,9 @@ module column_select (
         if (rst) begin
             state <= S0_STARTUP;
             ser_n_enable = 1;
-        end else if (clk) begin
+            counter = 0;
+            column_data = 8'h00;
+        end else begin
             state <= next_state;
             column_data[1] = extra_bit;     // Extra bit to be sent to the column
 
@@ -57,7 +60,7 @@ module column_select (
                 if (counter == 2) begin
                     ser_n_enable = 0;
                 end else begin
-                    counter = counter + 1;
+                    counter = 2'(counter + 1);
                 end
                 column_data[0] = 0;     // Active Low. Select the first column
             end else if (next_state == S41_SELECT_NEXT) begin
@@ -73,7 +76,6 @@ module column_select (
         case (state)
             S0_STARTUP: begin
                 next_state = S1_WAIT_FOR_TX_FINISH;
-                counter = 0;
                 ser_stcp = 0;
                 ready = 0;
                 start_tx = 0;
@@ -156,7 +158,7 @@ module column_select (
         .rst(rst),
         .start_tx(start_tx),
         .tx_finish(tx_finish),
-        .data_in(column_data),
+        .data_in(spi_data_in),  // column_data
         .spi_clk(ser_clk),
         .spi_mosi(ser_data)
     );
