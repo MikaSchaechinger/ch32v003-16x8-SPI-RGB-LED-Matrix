@@ -74,13 +74,13 @@ module column_select (
     // State Machine Logic
     always_comb begin
         case (state)
-            S0_STARTUP: begin
+            S0_STARTUP: begin   // 0
                 next_state = S1_WAIT_FOR_TX_FINISH;
                 ser_stcp = 0;
                 ready = 0;
                 start_tx = 0;
             end
-            S1_WAIT_FOR_TX_FINISH: begin
+            S1_WAIT_FOR_TX_FINISH: begin    // 1
                 start_tx = 0;
                 if (tx_finish) begin
                     next_state = S2_STCP;
@@ -91,14 +91,14 @@ module column_select (
                 ser_stcp = 0;
                 ready = 0;
             end
-            S2_STCP: begin
+            S2_STCP: begin      // 2
                 ser_stcp = 1;
                 next_state = S3_WAIT_FOR_SELECT;
                 // Should not change
                 ready = 0;
                 start_tx = 0;
             end
-            S3_WAIT_FOR_SELECT: begin
+            S3_WAIT_FOR_SELECT: begin   // 3
                 ser_stcp = 0;
                 ready = 1;
                 if (select_first) begin
@@ -111,7 +111,7 @@ module column_select (
                 // Should not change
                 start_tx = 0;
             end
-            S40_SELECT_FIRST: begin
+            S40_SELECT_FIRST: begin // 4
                 ready = 0;
                 next_state = S5_SEND_DATA;
 
@@ -119,7 +119,7 @@ module column_select (
                 ser_stcp = 0;
                 start_tx = 0;
             end
-            S41_SELECT_NEXT: begin
+            S41_SELECT_NEXT: begin  // 5
                 ready = 0;
                 next_state = S5_SEND_DATA;
 
@@ -127,9 +127,13 @@ module column_select (
                 ser_stcp = 0;
                 start_tx = 0;
             end
-            S5_SEND_DATA: begin
+            S5_SEND_DATA: begin    // 6
                 start_tx = 1;
-                next_state = S1_WAIT_FOR_TX_FINISH;
+                if (!tx_finish) begin
+                    next_state = S1_WAIT_FOR_TX_FINISH;
+                end else begin
+                    next_state = S5_SEND_DATA;
+                end
                 // Shoud not change
                 ready = 0;
                 ser_stcp = 0;

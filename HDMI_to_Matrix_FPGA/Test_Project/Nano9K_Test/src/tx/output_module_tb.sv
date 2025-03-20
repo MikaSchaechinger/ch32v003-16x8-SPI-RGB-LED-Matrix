@@ -12,8 +12,8 @@ module output_module_tb;
     buffer_t data_in;
     buffer_t data_buffer [0:TEST_SIZE-1];
 
-    reg start_first_column = 0;
-    reg start_next_column = 0;
+    reg new_image = 0;
+    reg new_column = 0;
     reg next_data = 0;
     reg extra_bit;
 
@@ -32,12 +32,12 @@ module output_module_tb;
         .CHANNEL_NUMBER(CHANNEL_NUMBER),
         .SPI_SIZE(SPI_SIZE),
         .MSB_FIRST(1)
-    ) dut (
+    ) ouput_module_inst (
         .clk(clk),
         .rst(rst),
         .data_in(data_in),
-        .start_first_column(start_first_column),
-        .start_next_column(start_next_column),
+        .new_image(new_image),
+        .new_column(new_column),
         .next_data(next_data),
         .extra_bit(extra_bit),
         .tx_finish(tx_finish),
@@ -97,11 +97,11 @@ module output_module_tb;
                 end
                 if (k == 0) begin
                     if (i == 0) begin
-                        start_first_column = 1;
-                        #10 start_first_column = 0;
+                        new_image = 1;
+                        #10 new_image = 0;
                     end else begin
-                        start_next_column = 1;
-                        #10 start_next_column = 0;
+                        new_column = 1;
+                        #10 new_column = 0;
                     end
                 end else begin
                     next_data = 1;

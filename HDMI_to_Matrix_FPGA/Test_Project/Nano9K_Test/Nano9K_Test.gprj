@@ -10,6 +10,5 @@
         <File path="src/tx/nspi_tx.sv" type="file.verilog" enable="1"/>
         <File path="src/tx/output_module.sv" type="file.verilog" enable="1"/>
         <File path="src/LED_Matrix_top.cst" type="file.cst" enable="1"/>
-        <File path="src/Nano9K_Test.rao" type="file.gao" enable="1"/>
     </FileList>
 </Project>

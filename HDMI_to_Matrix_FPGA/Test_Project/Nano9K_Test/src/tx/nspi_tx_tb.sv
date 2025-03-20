@@ -17,7 +17,7 @@ module nspi_tx_tb;
         .CHANNEL_NUMBER(CHANNEL_NUMBER),
         .SPI_SIZE(SPI_SIZE),
         .MSB_FIRST(1)
-    ) dut (
+    ) spi_tx (
         .clk(clk),
         .rst(rst),
         .start_tx(start_tx),

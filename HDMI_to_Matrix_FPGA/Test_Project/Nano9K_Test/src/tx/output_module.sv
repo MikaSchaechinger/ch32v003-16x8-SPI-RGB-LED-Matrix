@@ -7,8 +7,8 @@ module output_module #(
     input wire rst,
 
     input wire [SPI_SIZE-1:0] data_in [CHANNEL_NUMBER-1:0],
-    input wire start_first_column,
-    input wire start_next_column,
+    input wire new_image,
+    input wire new_column,
     input wire next_data,
     input wire extra_bit,
 
@@ -57,10 +57,10 @@ module output_module #(
 
     always_comb begin
         case (state)
-            S0_IDLE: begin
-                if (start_first_column) begin
+            S0_IDLE: begin  // 0
+                if (new_image) begin
                     next_state = S10_SEL_FIRST;
-                end else if (start_next_column) begin
+                end else if (new_column) begin
                     next_state = S11_SEL_NEXT;
                 end else if (next_data) begin
                     next_state = S3_START_SPI_TX;
@@ -72,7 +72,7 @@ module output_module #(
                 select_next = 0;
                 spi_start_tx = 0;
             end
-            S10_SEL_FIRST: begin
+            S10_SEL_FIRST: begin    // 1
                 if (column_select_ready == 0) begin
                     next_state = S2_WAIT_FOR_READY;
                 end else begin
@@ -83,7 +83,7 @@ module output_module #(
                 select_next = 0;
                 spi_start_tx = 0;
             end
-            S11_SEL_NEXT: begin
+            S11_SEL_NEXT: begin     // 2
                 if (column_select_ready == 0) begin
                     next_state = S2_WAIT_FOR_READY;
                 end else begin
@@ -94,7 +94,7 @@ module output_module #(
                 select_next = 1;
                 spi_start_tx = 0;
             end
-            S2_WAIT_FOR_READY: begin
+            S2_WAIT_FOR_READY: begin    // 3
                 if (column_select_ready==1) begin
                     next_state = S3_START_SPI_TX;
                 end else begin
@@ -105,7 +105,7 @@ module output_module #(
                 select_next = 0;
                 spi_start_tx = 0;
             end
-            S3_START_SPI_TX: begin
+            S3_START_SPI_TX: begin  // 4
                 if (spi_tx_finish == 0) begin
                     next_state = S4_WAIT_FOR_SPI_TX_FINISH;
                 end else begin
@@ -116,7 +116,7 @@ module output_module #(
                 select_next = 0;
                 spi_start_tx = 1;
             end
-            S4_WAIT_FOR_SPI_TX_FINISH: begin
+            S4_WAIT_FOR_SPI_TX_FINISH: begin    // 5
                 if (spi_tx_finish) begin
                     next_state = S0_IDLE;
                 end else begin

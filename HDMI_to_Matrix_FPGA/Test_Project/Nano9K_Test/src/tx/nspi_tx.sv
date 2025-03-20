@@ -26,8 +26,8 @@ module nspi_tx #(
     state_t next_state = IDLE;
     localparam int COUNTER_WIDTH = $clog2(SPI_SIZE+1);
     reg [COUNTER_WIDTH-1:0] counter = 0;
-    reg overflow_finish = 0;
 
+    reg counter_overflow_flag = 0;
 
     //=============== Code Logic ===============
 
@@ -36,7 +36,7 @@ module nspi_tx #(
         if (rst) begin
             start_tx_internal <= 0;
         end else begin
-            if (overflow_finish) begin
+            if (counter_overflow_flag) begin
                 start_tx_internal <= 0;
             end else if (start_tx) begin
                 start_tx_internal <= 1;
@@ -63,11 +63,15 @@ module nspi_tx #(
 
     
     // assign tx_finish = ~start_tx_internal;
-    always @(posedge start_tx_internal or posedge clk) begin
-        if (start_tx_internal) begin
+    always @(posedge rst or posedge clk) begin
+        if (rst) begin
             tx_finish <= 0;
-        end else if (state == IDLE) begin
-            tx_finish <= 1;
+        end else begin
+            if (next_state == IDLE) begin
+                tx_finish <= 1;
+            end else begin
+                tx_finish <= 0;
+            end
         end
     end
 
@@ -76,13 +80,38 @@ module nspi_tx #(
 
 
     // counter control
-    always_ff @(posedge spi_clk or posedge start_tx_internal) begin
-        if (spi_clk) begin
-            counter <= COUNTER_WIDTH'(counter + 1);
-        end else begin
+    always_ff @(posedge rst or posedge clk) begin
+        if (rst) begin
             counter <= 0;
+            counter_overflow_flag <= 0;
+        end else begin
+            if (next_state == TRANSMIT) begin
+                counter <= COUNTER_WIDTH'(counter + 1);
+                if (counter + 1 == SPI_SIZE) begin
+                    counter_overflow_flag <= 1;
+                end else begin
+                    counter_overflow_flag <= 0;
+                end
+            end else begin
+                counter <= 0;
+                counter_overflow_flag <= 0;
+            end
+
+            // if (spi_clk) begin
+            //     if (counter + 1 == SPI_SIZE) begin
+            //         counter <= 0;
+            //         counter_overflow_flag <= 1;
+            //     end else begin
+            //         counter <= counter + 1;
+            //     end
+            // end else begin
+            //     if (tx_finish) begin
+            //         counter_overflow_flag <= 0;
+            //     end
+            // end
         end
     end
+
 
         // State Machine Logic
     always_ff @(posedge clk or posedge rst) begin
@@ -90,33 +119,24 @@ module nspi_tx #(
             state <= IDLE;
         end else begin
             state <= next_state;
-            if (next_state == IDLE) begin
-                overflow_finish = 0;
-            end else if (next_state == STARTING) begin
-                overflow_finish = 0;
-            end else if (next_state == TRANSMIT) begin
-                if (counter == SPI_SIZE) begin
-                    overflow_finish = 1;
-                end
-            end
         end
     end
 
 
     always_comb begin
         case (state)
-            IDLE: begin
+            IDLE: begin     // 0
                 if (start_tx_internal) begin
                     next_state = STARTING;
                 end else begin
                     next_state = IDLE;
                 end
             end
-            STARTING: begin
+            STARTING: begin     // 1
                 next_state = TRANSMIT;
             end
-            TRANSMIT: begin
-                if (counter == SPI_SIZE) begin
+            TRANSMIT: begin     // 2
+                if (counter_overflow_flag) begin
                     next_state = IDLE;
                 end else begin
                     next_state = TRANSMIT;
