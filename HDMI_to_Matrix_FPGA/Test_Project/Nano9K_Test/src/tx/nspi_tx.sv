@@ -35,7 +35,7 @@ module nspi_tx #(
         if (overflow_finish) begin
             start_tx_internal <= 0;
         end else if (start_tx) begin
-            counter <= 0;
+            //counter <= 0;
             start_tx_internal <= 1;
         end
     end
@@ -110,7 +110,13 @@ module nspi_tx #(
 
 
     // SPI Logic
-    always_ff @(posedge clk or negedge clk) begin
+    
+    reg r_clk = 0;
+    wire w_xor_clk = (r_clk ^ clk);
+
+    always @(posedge w_xor_clk) begin   // Event by posedge and negedge of clk
+        r_clk <= ~r_clk;
+    //always_ff @(posedge clk or negedge clk) begin
 
         if (state == IDLE) begin
             spi_clk <= 0;
