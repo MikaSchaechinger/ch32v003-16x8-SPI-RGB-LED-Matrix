@@ -16,7 +16,7 @@ module nspi_tx #(
     //============== Type Definitions ===============
 
     typedef enum logic [1:0] { IDLE, STARTING, TRANSMIT } state_t;
-
+    typedef enum logic {CLK_NEXT, MOSI_NEXT} next_t;
 
     //============== Internal Signals ===============
 
@@ -28,6 +28,8 @@ module nspi_tx #(
     reg [COUNTER_WIDTH-1:0] counter = 0;
 
     reg counter_overflow_flag = 0;
+
+    next_t next = MOSI_NEXT;
 
     //=============== Code Logic ===============
 
@@ -86,7 +88,9 @@ module nspi_tx #(
             counter_overflow_flag <= 0;
         end else begin
             if (next_state == TRANSMIT) begin
-                counter <= COUNTER_WIDTH'(counter + 1);
+                if (next == CLK_NEXT) begin
+                    counter <= COUNTER_WIDTH'(counter + 1);
+                end
                 if (counter + 1 == SPI_SIZE) begin
                     counter_overflow_flag <= 1;
                 end else begin
@@ -96,19 +100,6 @@ module nspi_tx #(
                 counter <= 0;
                 counter_overflow_flag <= 0;
             end
-
-            // if (spi_clk) begin
-            //     if (counter + 1 == SPI_SIZE) begin
-            //         counter <= 0;
-            //         counter_overflow_flag <= 1;
-            //     end else begin
-            //         counter <= counter + 1;
-            //     end
-            // end else begin
-            //     if (tx_finish) begin
-            //         counter_overflow_flag <= 0;
-            //     end
-            // end
         end
     end
 
@@ -153,45 +144,46 @@ module nspi_tx #(
 
     // SPI Logic
     
-    reg r_clk = 0;
-    wire w_xor_clk = (r_clk ^ clk);
 
-    always @(posedge w_xor_clk) begin   // Event by posedge and negedge of clk
-        r_clk <= ~r_clk;
-    //always_ff @(posedge clk or negedge clk) begin
 
-        if (state == IDLE) begin
+    always_ff @(posedge clk or posedge rst) begin
+        if (rst) begin
             spi_clk <= 0;
             spi_mosi <= 0;
-        end else if (state == STARTING) begin
-            spi_clk <= 0;
-            for (int i = 0; i < CHANNEL_NUMBER; i++) begin
-                spi_mosi[i] <= data_in_reg[i][counter];
-            end
-        end else if (state == TRANSMIT) begin
-            if(clk == 1) begin
-                // update MOSI and reset SPI_CLK
-                spi_clk <= 0;
-                if (counter < SPI_SIZE) begin
-                    for (int i = 0; i < CHANNEL_NUMBER; i++) begin
-                        spi_mosi[i] <= data_in_reg[i][counter];
-                    end
-                end else begin
-                    spi_mosi <= 0;
-                end
-
-            end
-            else if (clk == 0) begin
-                // set SPI_CLK = 1
-                // counter = counter + 1;
-                spi_clk <= 1;
-                spi_mosi <= spi_mosi;
-            end
+            next <= MOSI_NEXT;
         end else begin
-            spi_clk <= 0;
-            spi_mosi <= 0;
-        end
+            if (state == IDLE) begin
+                spi_clk <= 0;
+                spi_mosi <= 0;
+            end else if (state == STARTING) begin
+                spi_clk <= 0;
+                for (int i = 0; i < CHANNEL_NUMBER; i++) begin
+                    spi_mosi[i] <= data_in_reg[i][counter];
+                end
+            end else if (state == TRANSMIT) begin
+                if(next == MOSI_NEXT) begin
+                    // update MOSI and reset SPI_CLK
+                    next <= CLK_NEXT;
+                    spi_clk <= 0;
+                    if (counter < SPI_SIZE) begin
+                        for (int i = 0; i < CHANNEL_NUMBER; i++) begin
+                            spi_mosi[i] <= data_in_reg[i][counter];
+                        end
+                    end else begin
+                        spi_mosi <= 0;
+                    end
 
+                end
+                else if (next == CLK_NEXT) begin
+                    next <= MOSI_NEXT;
+                    spi_clk <= 1;
+                    spi_mosi <= spi_mosi;
+                end
+            end else begin
+                spi_clk <= 0;
+                spi_mosi <= 0;
+            end
+        end
     end
 
 

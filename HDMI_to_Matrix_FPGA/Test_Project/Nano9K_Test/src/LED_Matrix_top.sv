@@ -184,7 +184,6 @@ module LED_Matrix_top #(
         end
     end
 
-    wire foo;
 
     output_module #(
         .CHANNEL_NUMBER(CHANNEL_NUMBER),
@@ -212,7 +211,7 @@ module LED_Matrix_top #(
     assign led[1] = !new_column;
     assign led[2] = !next_data;
     assign led[3] = !tx_finish;
-    assign led[4] = !foo;
+    //assign led[4] = !foo;
     assign led[5] = !spi_clk;
     assign rst = !btn[0];
 

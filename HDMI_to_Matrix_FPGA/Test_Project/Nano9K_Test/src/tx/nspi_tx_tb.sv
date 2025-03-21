@@ -46,8 +46,8 @@ module nspi_tx_tb;
         rst = 1;
         #20 rst = 0;
 
-        data_in[0] = 8'h0F;
-        data_in[1] = 8'hF0;
+        data_in[0] = 8'h01;
+        data_in[1] = 8'h00;
 
         #10;
 
