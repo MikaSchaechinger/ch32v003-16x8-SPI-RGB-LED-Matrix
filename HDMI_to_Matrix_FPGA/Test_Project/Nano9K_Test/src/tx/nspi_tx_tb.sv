@@ -43,35 +43,39 @@ module nspi_tx_tb;
 
     // Test sequence
     initial begin
-        start_tx = 0;
+        rst = 1;
+        #20 rst = 0;
+
         data_in[0] = 8'h0F;
         data_in[1] = 8'hF0;
 
-        // Test case 1: Start transmission
-        #100 start_tx = 1;
-        #10 start_tx = 0;
-        #100;
+        #10;
 
-        // Test case 2: Check transmission
-        #100;
-        //assert(spi_clk == 1);
-        //(spi_mosi[0] == 1);
+        for (int i = 0; i < 4; i++) begin
+            // Warten, bis tx_finish == 1
+            for (int j = 0; j < 1000; j++) begin
+                #10;
+                if (tx_finish) begin
+                    break;
+                end
+            end
 
-        // Test case 3: Check transmission finish
-        #100;
-        //assert(tx_finish == 1);
+            // start_tx setzen
+            start_tx = 1;
+            #10 start_tx = 0;
 
-        // Test case 4: Multiple transmissions
-        #100 start_tx = 1;
-        #10 start_tx = 0;
-        #100;
-        data_in[0] = 8'hBB;
-        #100 start_tx = 1;
-        #10 start_tx = 0;
-        #100;
+            // Warten, bis tx_finish == 0
+            for (int j = 0; j < 1000; j++) begin
+                #10;
+                if (!tx_finish) begin
+                    break;
+                end
+            end
+        end
 
         $finish;
     end
+
 
     initial begin
         $dumpfile("nspi_tx_tb.vcd");

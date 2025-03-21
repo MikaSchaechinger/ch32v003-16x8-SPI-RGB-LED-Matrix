@@ -69,9 +69,6 @@ module column_select_tb;
             select_next = 1;
             #10 select_next = 0;
         end
-
-
-
     end
 
     initial begin

@@ -2,7 +2,11 @@
 // Raspberry Pi custom Resolution: https://stackoverflow.com/questions/52335356/custom-resolution-on-raspberry-pi
 
 
-module LED_Matrix_top(
+module LED_Matrix_top #(
+    parameter CHANNEL_NUMBER = 3,
+    parameter BYTES_PER_MATRIX = 8*16*3,
+    parameter DIV_FACTOR = 100 // Slow Clock Divider
+)(
     input wire clk,
     input wire [1:0] btn,
     
@@ -19,10 +23,8 @@ module LED_Matrix_top(
     output wire shift_en,
     output reg [5:0] led
 ); 
-    localparam CHANNEL_NUMBER = 3;
     localparam SPI_SIZE = 8;
 
-    localparam DIV_FACTOR = 100; // Slow Clock Divider
 
     //============== Slow Clock ==============
     reg [31:0] slow_counter = 0;
@@ -42,11 +44,12 @@ module LED_Matrix_top(
     typedef enum logic [1:0] { 
         S0_STARTUP,
         S1_NEW_IMAGE,
-        S2_START_OUTPUT
+        S2_NEXT_DATA,
+        S3_START_OUTPUT
     } state_t;
 
     //============== Local Signals ===============
-    reg rst = 0;
+    wire rst;
     wire tx_finish;
 
     reg [SPI_SIZE-1:0] data = 0;
@@ -59,7 +62,9 @@ module LED_Matrix_top(
     state_t state = S0_STARTUP;
     state_t next_state = S0_STARTUP;
 
-    reg [8:0] counter = 0;
+    
+    localparam int COUNTER_WIDTH = $clog2(BYTES_PER_MATRIX+1);
+    reg [COUNTER_WIDTH-1:0] counter = 0;
 
 
     // ============= Logic =============
@@ -70,14 +75,6 @@ module LED_Matrix_top(
     //     end
     // end
 
-    // // Button controls data
-    // always @(posedge slow_clk) begin
-    //     if (btn[1]) begin
-    //         data <= 8'h00;
-    //     end else begin
-    //         data <= 8'hFF;
-    //     end
-    // end
 
     always_ff @(posedge rst or posedge slow_clk) begin
         if (rst) begin
@@ -85,6 +82,9 @@ module LED_Matrix_top(
             new_column = 0;
             new_image = 0;
             next_data = 0;
+            data_in[0] = 8'h01;
+            data_in[1] = 8'h00;
+            data_in[2] = 8'h00;
         end else begin
             state <= next_state;
             new_column = 0;
@@ -92,16 +92,41 @@ module LED_Matrix_top(
             if (next_state == S1_NEW_IMAGE) begin
                 counter <= 0;
                 new_image = 1;
-            end else if (next_state == S2_START_OUTPUT) begin
+            end else if (next_state == S2_NEXT_DATA) begin
                 new_image = 0;
                 if (tx_finish) begin
-                    if (!next_data) begin
-                        next_data = 1;
-                        counter <= 8'(counter + 1);
+                    if (next_data == 0) begin
+                        counter <= COUNTER_WIDTH'(counter + 1);
+                        if (counter == BYTES_PER_MATRIX-1) begin
+                            next_data = 0;
+                        end else begin
+                            next_data = 1;
+                            if (counter < 8*16) begin
+                                data_in[0] <= 8'hFF;
+                                data_in[1] <= 8'h00;
+                                data_in[2] <= 8'h00;
+                            end else begin
+                                data_in[0] <= 8'h00;
+                                data_in[1] <= 8'hFF;
+                                data_in[2] <= 8'h00;
+                            end
+                        end
                     end
-                end else begin
-                    next_data = 0;
                 end
+            end else if (next_state == S3_START_OUTPUT) begin
+                new_image = 0;
+                next_data = 0;
+
+
+                // new_image = 0;
+                // if (tx_finish) begin
+                //     if (!next_data) begin
+                //         next_data = 1;
+                //         counter <= 8'(counter + 1);
+                //     end
+                // end else begin
+                //     next_data = 0;
+                // end
             end
         end
     end
@@ -113,19 +138,43 @@ module LED_Matrix_top(
             case (state)
                 S0_STARTUP: begin
                     next_state = S1_NEW_IMAGE;
+                    if (tx_finish) begin
+                        next_state = S1_NEW_IMAGE;
+                    end else begin
+                        next_state = S0_STARTUP;
+                    end
                 end
                 S1_NEW_IMAGE: begin
                     if (tx_finish==0)begin
-                        next_state = S2_START_OUTPUT;
+                        next_state = S3_START_OUTPUT;
                     end else begin
                         next_state = S1_NEW_IMAGE;
                     end
                 end
-                S2_START_OUTPUT: begin
-                    if (counter == 383) begin
+                S2_NEXT_DATA: begin
+                    if (tx_finish==0)begin
+                        if (counter == BYTES_PER_MATRIX) begin
+                            next_state = S1_NEW_IMAGE;
+                        end else begin
+                            next_state = S3_START_OUTPUT;
+                        end
+                    end else begin
+                        next_state = S2_NEXT_DATA;
+                    end
+                end
+                S3_START_OUTPUT: begin
+                    if (counter == BYTES_PER_MATRIX) begin
                         next_state = S1_NEW_IMAGE;
                     end else begin
-                        next_state = S2_START_OUTPUT;
+                        if (tx_finish) begin
+                            if (counter == BYTES_PER_MATRIX-1) begin
+                                next_state = S1_NEW_IMAGE;
+                            end else begin
+                                next_state = S2_NEXT_DATA;
+                            end
+                        end else begin
+                            next_state = S3_START_OUTPUT;
+                        end
                     end
                 end
                 default: begin
@@ -135,7 +184,7 @@ module LED_Matrix_top(
         end
     end
 
-
+    wire foo;
 
     output_module #(
         .CHANNEL_NUMBER(CHANNEL_NUMBER),
@@ -148,7 +197,7 @@ module LED_Matrix_top(
         .new_image(new_image),
         .new_column(new_column),
         .next_data(next_data),
-        .extra_bit(1'b0),
+        .extra_bit(1'b1),
         .tx_finish(tx_finish),
         .spi_clk(spi_clk),
         .spi_mosi(spi_mosi),
@@ -159,40 +208,14 @@ module LED_Matrix_top(
     );
 
 
-    assign led[0] = !shift_clk;
-    assign led[1] = !shift_ser;
-    assign led[2] = !shift_stcp;
-    assign led[3] = !shift_en;
-    assign led[4] = !spi_clk;
-    assign led[5] = !tx_finish;
+    assign led[0] = !new_image;
+    assign led[1] = !new_column;
+    assign led[2] = !next_data;
+    assign led[3] = !tx_finish;
+    assign led[4] = !foo;
+    assign led[5] = !spi_clk;
+    assign rst = !btn[0];
 
-    // LED control for debug informations
-    always @(posedge slow_clk) begin
-        // Standardwert: LEDs aus
-        //led <= 6'b000000;
-        
-        // Nimm die obersten 6 Bits von counter für die LEDs
-        //led <= (counter[8:3]); // MSBs nehmen (8 Bits -> höchste 6 Bits)
-
-        
-
-
-        rst <= !btn[0];
-        //led[5] <= btn[0];
-
-        if (!btn[1]) begin
-            // Set data_in to 0xFF
-            for (int i = 0; i < CHANNEL_NUMBER; i++) begin
-                data_in[i] <= 8'hFF;
-            end
-        end else begin
-            // Set data_in to 0x00
-            for (int i = 0; i < CHANNEL_NUMBER; i++) begin
-                data_in[i] <= 8'h00;
-            end
-        end       
-
-    end
 
 
 

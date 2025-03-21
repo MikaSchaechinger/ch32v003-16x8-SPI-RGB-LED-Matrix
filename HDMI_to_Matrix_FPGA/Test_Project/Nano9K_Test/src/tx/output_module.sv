@@ -26,19 +26,20 @@ module output_module #(
 
     //============== Type Definitions ===============
     typedef enum logic [2:0] { 
-        S0_IDLE, 
-        S10_SEL_FIRST, 
-        S11_SEL_NEXT, 
-        S2_WAIT_FOR_READY,
-        S3_START_SPI_TX,
-        S4_WAIT_FOR_SPI_TX_FINISH
+        S0_RST,
+        S1_IDLE, 
+        S20_SEL_FIRST, 
+        S21_SEL_NEXT, 
+        S3_WAIT_FOR_READY,
+        S4_START_SPI_TX,
+        S5_WAIT_FOR_SPI_TX_FINISH
     } state_t;
 
     //============== Internal Signals =================
     // Connection to Moduls
 
-    state_t state = S0_IDLE;
-    state_t next_state = S0_IDLE;
+    state_t state = S0_RST;
+    state_t next_state = S0_RST;
     wire column_select_ready;
     wire spi_tx_finish;
     reg spi_start_tx = 0;
@@ -49,7 +50,7 @@ module output_module #(
 
     always_ff @(posedge clk or posedge rst) begin
         if (rst) begin
-            state <= S0_IDLE;
+            state <= S0_RST;
         end else begin
             state <= next_state;
         end
@@ -57,70 +58,81 @@ module output_module #(
 
     always_comb begin
         case (state)
-            S0_IDLE: begin  // 0
-                if (new_image) begin
-                    next_state = S10_SEL_FIRST;
-                end else if (new_column) begin
-                    next_state = S11_SEL_NEXT;
-                end else if (next_data) begin
-                    next_state = S3_START_SPI_TX;
+            S0_RST: begin   // 0
+                if (column_select_ready) begin
+                    next_state = S1_IDLE;
                 end else begin
-                    next_state = S0_IDLE;
+                    next_state = S0_RST;
+                end
+                tx_finish = 0;
+                select_first = 0;
+                select_next = 0;
+                spi_start_tx = 0;
+            end
+            S1_IDLE: begin  // 0
+                if (new_image) begin
+                    next_state = S20_SEL_FIRST;
+                end else if (new_column) begin
+                    next_state = S21_SEL_NEXT;
+                end else if (next_data) begin
+                    next_state = S4_START_SPI_TX;
+                end else begin
+                    next_state = S1_IDLE;
                 end
                 tx_finish = 1;
                 select_first = 0;
                 select_next = 0;
                 spi_start_tx = 0;
             end
-            S10_SEL_FIRST: begin    // 1
+            S20_SEL_FIRST: begin    // 1
                 if (column_select_ready == 0) begin
-                    next_state = S2_WAIT_FOR_READY;
+                    next_state = S3_WAIT_FOR_READY;
                 end else begin
-                    next_state = S10_SEL_FIRST;
+                    next_state = S20_SEL_FIRST;
                 end
                 tx_finish = 0;
                 select_first = 1;
                 select_next = 0;
                 spi_start_tx = 0;
             end
-            S11_SEL_NEXT: begin     // 2
+            S21_SEL_NEXT: begin     // 2
                 if (column_select_ready == 0) begin
-                    next_state = S2_WAIT_FOR_READY;
+                    next_state = S3_WAIT_FOR_READY;
                 end else begin
-                    next_state = S11_SEL_NEXT;
+                    next_state = S21_SEL_NEXT;
                 end
                 tx_finish = 0;
                 select_first = 0;
                 select_next = 1;
                 spi_start_tx = 0;
             end
-            S2_WAIT_FOR_READY: begin    // 3
+            S3_WAIT_FOR_READY: begin    // 3
                 if (column_select_ready==1) begin
-                    next_state = S3_START_SPI_TX;
+                    next_state = S4_START_SPI_TX;
                 end else begin
-                    next_state = S2_WAIT_FOR_READY;
+                    next_state = S3_WAIT_FOR_READY;
                 end
                 tx_finish = 0;
                 select_first = 0;
                 select_next = 0;
                 spi_start_tx = 0;
             end
-            S3_START_SPI_TX: begin  // 4
+            S4_START_SPI_TX: begin  // 4
                 if (spi_tx_finish == 0) begin
-                    next_state = S4_WAIT_FOR_SPI_TX_FINISH;
+                    next_state = S5_WAIT_FOR_SPI_TX_FINISH;
                 end else begin
-                    next_state = S3_START_SPI_TX;
+                    next_state = S4_START_SPI_TX;
                 end
                 tx_finish = 0;
                 select_first = 0;
                 select_next = 0;
                 spi_start_tx = 1;
             end
-            S4_WAIT_FOR_SPI_TX_FINISH: begin    // 5
+            S5_WAIT_FOR_SPI_TX_FINISH: begin    // 5
                 if (spi_tx_finish) begin
-                    next_state = S0_IDLE;
+                    next_state = S1_IDLE;
                 end else begin
-                    next_state = S4_WAIT_FOR_SPI_TX_FINISH;
+                    next_state = S5_WAIT_FOR_SPI_TX_FINISH;
                 end
                 tx_finish = 0;
                 select_first = 0;
@@ -128,7 +140,7 @@ module output_module #(
                 spi_start_tx = 0;
             end
             default: begin
-                next_state = S0_IDLE;
+                next_state = S1_IDLE;
                 tx_finish = 0;
                 select_first = 0;
                 select_next = 0;

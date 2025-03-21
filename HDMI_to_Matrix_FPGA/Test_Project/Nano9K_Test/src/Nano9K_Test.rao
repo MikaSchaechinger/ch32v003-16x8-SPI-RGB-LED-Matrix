@@ -2,22 +2,25 @@
 <GAO_CONFIG>
     <Version>3.0</Version>
     <Mode>Standard</Mode>
-    <AoCore index="0" sample_clock="dut/clk" trig_type="0" storage_depth="1024" window_num="1" capture_amount="1024" implementation="0" trigger_pos="0" module_name="nspi_tx_tb" force_trigger_by_falling_edge="false" capture_init_data_enabled="false">
+    <AoCore index="0" sample_clock="clk" trig_type="0" storage_depth="1024" window_num="1" capture_amount="1024" implementation="0" trigger_pos="0" module_name="LED_Matrix_top" force_trigger_by_falling_edge="false">
         <SignalList>
-            <Signal capture_enable="true">dut/start_tx</Signal>
-            <Signal capture_enable="true">tx_finish</Signal>
-            <Bus capture_enable="true" name="dut/counter[3:0]">
-                <Signal>dut/counter[3]</Signal>
-                <Signal>dut/counter[2]</Signal>
-                <Signal>dut/counter[1]</Signal>
-                <Signal>dut/counter[0]</Signal>
+            <Signal capture_enable="true">shift_clk</Signal>
+            <Signal capture_enable="true">shift_ser</Signal>
+            <Signal capture_enable="true">shift_stcp</Signal>
+            <Signal capture_enable="true">shift_en</Signal>
+            <Bus capture_enable="true" name="spi_mosi[2:0]">
+                <Signal>spi_mosi[2]</Signal>
+                <Signal>spi_mosi[1]</Signal>
+                <Signal>spi_mosi[0]</Signal>
             </Bus>
             <Signal capture_enable="true">spi_clk</Signal>
+            <Signal capture_enable="true">new_image</Signal>
+            <Signal capture_enable="true">next_data</Signal>
         </SignalList>
         <Triggers>
             <Trigger index="0">
                 <SignalList>
-                    <Signal>dut/start_tx</Signal>
+                    <Signal>new_image</Signal>
                 </SignalList>
             </Trigger>
             <Trigger index="1"/>
@@ -37,7 +40,7 @@
             <Trigger index="15"/>
         </Triggers>
         <MatchUnits>
-            <MatchUnit index="0" enabled="1" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="0" value1="0" trigger="0"/>
+            <MatchUnit index="0" enabled="1" match_type="1" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="R" value1="0" trigger="0"/>
             <MatchUnit index="1" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
             <MatchUnit index="2" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
             <MatchUnit index="3" enabled="0" match_type="0" counter_enable="0" counter_width="2" counter="2" countinuous="0" func="0" value0="" value1=""/>
@@ -58,5 +61,5 @@
             <Expression>M0</Expression>
         </Expressions>
     </AoCore>
-    <GAO_ID>1100011110000011</GAO_ID>
+    <GAO_ID>1001101101010001</GAO_ID>
 </GAO_CONFIG>

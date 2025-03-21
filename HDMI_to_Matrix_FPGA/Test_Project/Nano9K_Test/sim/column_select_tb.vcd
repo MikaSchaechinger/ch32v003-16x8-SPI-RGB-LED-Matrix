@@ -1,5 +1,5 @@
 $date
-	Thu Mar 20 18:03:29 2025
+	Fri Mar 21 17:31:18 2025
 $end
 $version
 	Icarus Verilog
@@ -54,31 +54,31 @@ $var reg 1 # spi_mosi $end
 $var reg 1 ; start_tx_internal $end
 $var reg 2 < state [1:0] $end
 $var reg 1 , tx_finish $end
-$scope begin $ivl_for_loop5 $end
+$scope begin $ivl_for_loop4 $end
 $var integer 32 = i [31:0] $end
-$scope begin $ivl_for_loop6 $end
+$scope begin $ivl_for_loop5 $end
 $var integer 32 > j [31:0] $end
 $upscope $end
 $upscope $end
-$scope begin $ivl_for_loop7 $end
+$scope begin $ivl_for_loop6 $end
 $upscope $end
-$scope begin $ivl_for_loop8 $end
+$scope begin $ivl_for_loop7 $end
 $var integer 32 ? i [31:0] $end
 $upscope $end
-$scope begin $ivl_for_loop9 $end
+$scope begin $ivl_for_loop8 $end
 $var integer 32 @ i [31:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
-$scope begin $ivl_for_loop1 $end
+$scope begin $ivl_for_loop0 $end
 $var integer 32 A i [31:0] $end
 $upscope $end
-$scope begin $ivl_for_loop2 $end
+$scope begin $ivl_for_loop1 $end
 $var integer 32 B i [31:0] $end
-$scope begin $ivl_for_loop3 $end
+$scope begin $ivl_for_loop2 $end
 $var integer 32 C j [31:0] $end
 $upscope $end
-$scope begin $ivl_for_loop4 $end
+$scope begin $ivl_for_loop3 $end
 $var integer 32 D j [31:0] $end
 $upscope $end
 $upscope $end
