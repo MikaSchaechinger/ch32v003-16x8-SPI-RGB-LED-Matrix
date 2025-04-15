@@ -1,5 +1,5 @@
 ################################################################################
-# MRS Version: 1.9.0
+# MRS Version: 1.9.2
 # Automatically-generated file. Do not edit!
 ################################################################################
 
@@ -16,6 +16,6 @@ S_UPPER_DEPS += \
 
 # Each subdirectory must supply rules for building sources it contributes
 Startup/%.o: ../Startup/%.S
-	@	@	riscv-none-embed-gcc -march=rv32ecxw -mabi=ilp32e -msmall-data-limit=0 -msave-restore -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -Wunused -Wuninitialized  -g -x assembler-with-cpp -I"C:\Users\Mika\Programmieren\Projects\LED-Matrix\Program_ch32v003\Startup" -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -c -o "$@" "$<"
+	@	@	riscv-none-embed-gcc -march=rv32ecxw -mabi=ilp32e -msmall-data-limit=0 -msave-restore -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -Wunused -Wuninitialized  -g -x assembler-with-cpp -I"C:\Users\Mika\Programmieren\Projects\ch32v003-16x8-SPI-RGB-LED-Matrix\Program_ch32v003\Startup" -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -c -o "$@" "$<"
 	@	@
 
