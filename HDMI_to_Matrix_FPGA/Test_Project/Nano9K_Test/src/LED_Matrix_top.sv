@@ -5,7 +5,7 @@
 module LED_Matrix_top #(
     parameter CHANNEL_NUMBER = 3,
     parameter BYTES_PER_MATRIX = 8*16*3,
-    parameter DIV_FACTOR = 100 // Slow Clock Divider
+    parameter DIV_FACTOR = 1000 // Slow Clock Divider
 )(
     input wire clk,
     input wire [1:0] btn,
@@ -101,14 +101,24 @@ module LED_Matrix_top #(
                             next_data = 0;
                         end else begin
                             next_data = 1;
-                            if (counter < 8*16) begin
-                                data_in[0] <= 8'hFF;
-                                data_in[1] <= 8'h00;
-                                data_in[2] <= 8'h00;
+                            if (btn[1]) begin
+                                if (counter < 8*16)begin
+                                    data_in[0] <= 8'hFF;
+                                    data_in[1] <= 0;
+                                    data_in[2] <= 0;
+                                end else if (counter >= 8*6 && counter < 2*8*6) begin
+                                    data_in[0] <= 0;
+                                    data_in[1] <= 0;
+                                    data_in[2] <= 0;
+                                end else begin
+                                    data_in[0] <= 0;
+                                    data_in[1] <= 0;
+                                    data_in[2] <= 0;
+                                end
                             end else begin
-                                data_in[0] <= 8'h00;
+                                data_in[0] <= 8'h01;
                                 data_in[1] <= 8'hFF;
-                                data_in[2] <= 8'h00;
+                                data_in[2] <= 8'h0F;
                             end
                         end
                     end
