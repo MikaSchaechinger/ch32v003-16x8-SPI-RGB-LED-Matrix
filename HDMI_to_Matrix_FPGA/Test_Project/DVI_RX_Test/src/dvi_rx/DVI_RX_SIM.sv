@@ -70,20 +70,27 @@ module DVI_RX_SIM #(
     end
 
     // Farb-Generator (einfaches Testmuster)
-    always_comb begin
+    logic [3:0] hcount_region;
+
+    always @(*) begin
+        logic [3:0] region;
+        region = hcount[9:6];
+
         if (O_rgb_de) begin
-            unique case (hcount[9:6])
-                4'h0:   {O_rgb_r, O_rgb_g, O_rgb_b} = {8'hFF, 8'h00, 8'h00}; // Rot
-                4'h1:   {O_rgb_r, O_rgb_g, O_rgb_b} = {8'h00, 8'hFF, 8'h00}; // Grün
-                4'h2:   {O_rgb_r, O_rgb_g, O_rgb_b} = {8'h00, 8'h00, 8'hFF}; // Blau
-                4'h3:   {O_rgb_r, O_rgb_g, O_rgb_b} = {8'hFF, 8'hFF, 8'h00}; // Gelb
-                4'h4:   {O_rgb_r, O_rgb_g, O_rgb_b} = {8'h00, 8'hFF, 8'hFF}; // Cyan
-                4'h5:   {O_rgb_r, O_rgb_g, O_rgb_b} = {8'hFF, 8'h00, 8'hFF}; // Magenta
-                4'h6:   {O_rgb_r, O_rgb_g, O_rgb_b} = {8'h80, 8'h80, 8'h80}; // Grau
-                default:{O_rgb_r, O_rgb_g, O_rgb_b} = {8'h00, 8'h00, 8'h00}; // Schwarz
+            case (region)
+                4'h0: begin O_rgb_r = 8'hFF; O_rgb_g = 8'h00; O_rgb_b = 8'h00; end
+                4'h1: begin O_rgb_r = 8'h00; O_rgb_g = 8'hFF; O_rgb_b = 8'h00; end
+                4'h2: begin O_rgb_r = 8'h00; O_rgb_g = 8'h00; O_rgb_b = 8'hFF; end
+                4'h3: begin O_rgb_r = 8'hFF; O_rgb_g = 8'hFF; O_rgb_b = 8'h00; end
+                4'h4: begin O_rgb_r = 8'h00; O_rgb_g = 8'hFF; O_rgb_b = 8'hFF; end
+                4'h5: begin O_rgb_r = 8'hFF; O_rgb_g = 8'h00; O_rgb_b = 8'hFF; end
+                4'h6: begin O_rgb_r = 8'h80; O_rgb_g = 8'h80; O_rgb_b = 8'h80; end
+                default: begin O_rgb_r = 8'h00; O_rgb_g = 8'h00; O_rgb_b = 8'h00; end
             endcase
         end else begin
-            {O_rgb_r, O_rgb_g, O_rgb_b} = 24'h000000;
+            O_rgb_r = 8'h00;
+            O_rgb_g = 8'h00;
+            O_rgb_b = 8'h00;
         end
     end
 
