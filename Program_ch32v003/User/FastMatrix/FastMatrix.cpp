@@ -12,7 +12,7 @@
 
 
 
-FastMatrix::FastMatrix(uint8_t (*inputImage)[HEIGHT][WIDTH], uint8_t (*buffer0)[HEIGHT][SHIFT_WIDTH], uint8_t (*buffer1)[HEIGHT][SHIFT_WIDTH]  ){
+FastMatrix::FastMatrix(uint8_t (*inputImage)[WIDTH][HEIGHT], uint8_t (*buffer0)[HEIGHT][SHIFT_WIDTH], uint8_t (*buffer1)[HEIGHT][SHIFT_WIDTH]  ){
 
     this->inputImage = inputImage;
     this->inputBuffer = buffer0;
@@ -96,33 +96,20 @@ void FastMatrix::calcInputBuffer(){
         brightnessMask = 0b1 << depth;
         for(uint8_t height = 0; height < HEIGHT; height++){
 
-            //uint8_t* registerArray = reinterpret_cast<uint8_t *>(&outRegisterArray[brightness][row]);
-
-//            uint8_t (*redRow) = reinterpret_cast<uint8_t (*)>(&(*this->inputImage)[0][height]);
-//            uint8_t (*greenRow) = reinterpret_cast<uint8_t (*)>(&(*this->inputImage)[1][height]);
-//            uint8_t (*blueRow) = reinterpret_cast<uint8_t (*)>(&(*this->inputImage)[2][height]);
-
             for(uint8_t width = 0; width < SHIFT_WIDTH; width++){
                 output = 0;
                 offsetWidth = width + 8;
 
-//                output |= (redRow[width] & brightnessMask)? RED1_MASK : 0;
-//                output |= (redRow[offsetWidth] & brightnessMask)? 0 : RED2_MASK;
-//
-//                output |= (greenRow[width] & brightnessMask)? GREEN1_MASK : 0; //GREEN1_MASK
-//                output |= (greenRow[offsetWidth] & brightnessMask)? 0 : GREEN2_MASK;
-//
-//                output |= (blueRow[width] & brightnessMask)? 0 : BLUE1_MASK; // BLUE1_MASK
-//                output |= (blueRow[offsetWidth] & brightnessMask)? 0 : BLUE2_MASK;
 
-                output |= (this->inputImage[0][height][width] & brightnessMask)? 0 : RED2_MASK;
-                output |= (this->inputImage[0][height][offsetWidth] & brightnessMask)? 0 : RED1_MASK;
-
-                output |= (this->inputImage[1][height][width] & brightnessMask)? 0 : GREEN2_MASK; //GREEN1_MASK
-                output |= (this->inputImage[1][height][offsetWidth] & brightnessMask)? 0 : GREEN1_MASK;
-
-                output |= (this->inputImage[2][height][width] & brightnessMask)? 0 : BLUE2_MASK; // BLUE1_MASK
-                output |= (this->inputImage[2][height][offsetWidth] & brightnessMask)? 0 : BLUE1_MASK;
+                output |= (this->inputImage[0][width][height]        & brightnessMask)? 0 : RED2_MASK;
+                output |= (this->inputImage[0][offsetWidth][height]  & brightnessMask)? 0 : RED1_MASK;
+                
+                output |= (this->inputImage[1][width][height]        & brightnessMask)? 0 : GREEN2_MASK;
+                output |= (this->inputImage[1][offsetWidth][height]  & brightnessMask)? 0 : GREEN1_MASK;
+                
+                output |= (this->inputImage[2][width][height]        & brightnessMask)? 0 : BLUE2_MASK;
+                output |= (this->inputImage[2][offsetWidth][height]  & brightnessMask)? 0 : BLUE1_MASK;
+                
 
                 this->inputBuffer[depth][height][width] = output;
             }

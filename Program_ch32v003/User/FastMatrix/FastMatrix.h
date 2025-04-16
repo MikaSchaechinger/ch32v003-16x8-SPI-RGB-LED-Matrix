@@ -35,7 +35,7 @@
 
 
 class FastMatrix{
-    uint8_t (*inputImage)[HEIGHT][WIDTH];   //[COLOR]
+    uint8_t (*inputImage)[WIDTH][HEIGHT];   //[COLOR]
     uint8_t (*inputBuffer)[HEIGHT][SHIFT_WIDTH]; // [COLOR_DEPTH]
     uint8_t (*outputBuffer)[HEIGHT][SHIFT_WIDTH]; // [COLOR_DEPTH]
 
@@ -57,7 +57,7 @@ class FastMatrix{
     void showRow(void);
 public:
     uint8_t interruptStep = 0;
-    FastMatrix(uint8_t (*inputImage)[HEIGHT][WIDTH], uint8_t (*buffer0)[HEIGHT][SHIFT_WIDTH], uint8_t (*buffer1)[HEIGHT][SHIFT_WIDTH]);
+    FastMatrix(uint8_t (*inputImage)[WIDTH][HEIGHT], uint8_t (*buffer0)[HEIGHT][SHIFT_WIDTH], uint8_t (*buffer1)[HEIGHT][SHIFT_WIDTH]);
     void init();
     void testImage();
     void newImage();

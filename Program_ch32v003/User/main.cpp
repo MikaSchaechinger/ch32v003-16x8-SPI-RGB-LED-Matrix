@@ -52,7 +52,7 @@
 /* === Global Variable === */
 
 // SRAM 0x2000 0000 to 0x2000 0800
-uint8_t inputImage[COLOR][HEIGHT][WIDTH];           // 0x2000 0404
+uint8_t inputImage[COLOR][WIDTH][HEIGHT];           // 0x2000 0404
 uint8_t buffer0[COLOR_DEPTH][HEIGHT][SHIFT_WIDTH];  // 0x2000 0004
 uint8_t buffer1[COLOR_DEPTH][HEIGHT][SHIFT_WIDTH];  // 0x2000 0204
 //uint32_t flag = 0;
