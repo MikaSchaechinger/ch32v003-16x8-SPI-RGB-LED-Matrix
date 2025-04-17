@@ -4,5 +4,9 @@
     <Template>FPGA</Template>
     <Version>5</Version>
     <Device name="GW1NR-9C" pn="GW1NR-LV9QN88PC6/I5">gw1nr9c-004</Device>
-    <FileList/>
+    <FileList>
+        <File path="src/HDMI_to_Matrix_top.sv" type="file.verilog" enable="1"/>
+        <File path="src/dvi_rx/dvi_rx.v" type="file.verilog" enable="1"/>
+        <File path="src/HDMI_to_Matrix.cst" type="file.cst" enable="1"/>
+    </FileList>
 </Project>
