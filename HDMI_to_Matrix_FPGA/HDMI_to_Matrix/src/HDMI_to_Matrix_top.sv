@@ -40,22 +40,31 @@ module LED_Matrix_top #(
     logic [7:0] rgb_color [COLOR_COUNT-1:0]; // RGB color data
 
 
-	DVI_RX DVI_RX_inst(
-		.I_rst_n(btn[0]), //input I_rst_n
-		.I_tmds_clk_p(I_tmds_clk_p), //input I_tmds_clk_p
-		.I_tmds_clk_n(I_tmds_clk_n), //input I_tmds_clk_n
-		.I_tmds_data_p(I_tmds_data_p), //input [2:0] I_tmds_data_p
-		.I_tmds_data_n(I_tmds_data_n), //input [2:0] I_tmds_data_n
-		.O_pll_phase(pll_phase), //output [3:0] O_pll_phase
-		.O_pll_phase_lock(pll_phase_lock), //output O_pll_phase_lock
-		.O_rgb_clk(rgb_clk), //output O_rgb_clk
-		.O_rgb_vs(rgb_vs), //output O_rgb_vs
-		.O_rgb_hs(rgb_hs), //output O_rgb_hs
-		.O_rgb_de(rgb_de), //output O_rgb_de
-		.O_rgb_r(rgb_color[0]), //output [7:0] O_rgb_r
-		.O_rgb_g(rgb_color[1]), //output [7:0] O_rgb_g
-		.O_rgb_b(rgb_color[2]) //output [7:0] O_rgb_b
-	);
+    DVI_RX_Wrapper #(
+        .SIMULATION(0),                 // set to 1 for simulation, 0 for real hardware
+        .H_ACTIVE(128),                 // oder tatsächliche Werte für dein Testbild
+        .H_TOTAL(144),
+        .V_ACTIVE(32),
+        .V_TOTAL(40)
+    ) DVI_RX_inst (
+        .I_rst_n(btn[0]),
+        .I_tmds_clk_p(I_tmds_clk_p),
+        .I_tmds_clk_n(I_tmds_clk_n),
+        .I_tmds_data_p(I_tmds_data_p),
+        .I_tmds_data_n(I_tmds_data_n),
+        .clk(clk),                      // only relevant for simulation
+
+        .O_pll_phase(pll_phase),
+        .O_pll_phase_lock(pll_phase_lock),
+        .O_rgb_clk(rgb_clk),
+        .O_rgb_vs(rgb_vs),
+        .O_rgb_hs(rgb_hs),
+        .O_rgb_de(rgb_de),
+        .O_rgb_r(rgb_color[0]),
+        .O_rgb_g(rgb_color[1]),
+        .O_rgb_b(rgb_color[2])
+    );
+
 
 
     // signals for next stage
