@@ -14,8 +14,9 @@ module Color_Batch_Buffer_tb;
     logic       I_color_valid;
 
     // Outputs
-    logic       O_batch_ready;
-    logic [8*BATCH_SIZE-1:0] O_batch_color;
+    logic       batch_ready;
+    logic       batch_clk_out;
+    logic [8*BATCH_SIZE-1:0] batch_color;
 
     // Clock Generator (e.g. 50 MHz)
     always #10 rgb_clk = ~rgb_clk;
@@ -28,8 +29,9 @@ module Color_Batch_Buffer_tb;
         .I_rst_n          (rst_n),
         .I_color        (I_color),
         .I_color_valid  (I_color_valid),
-        .O_batch_ready  (O_batch_ready),
-        .O_batch_color  (O_batch_color)
+        .O_batch_ready  (batch_ready),
+        .O_batch_clk_out (batch_clk_out),
+        .O_batch_color  (batch_color)
     );
 
     int unsigned color_counter = 1;

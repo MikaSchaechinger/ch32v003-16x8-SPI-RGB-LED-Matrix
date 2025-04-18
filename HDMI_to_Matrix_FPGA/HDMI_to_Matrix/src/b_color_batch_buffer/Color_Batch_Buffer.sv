@@ -8,6 +8,7 @@ module Color_Batch_Buffer #(
     input logic I_color_valid,
 
     output logic O_batch_ready,
+    output logic O_batch_clk_out,
     output logic [8*BATCH_SIZE-1:0] O_batch_color
 );
 
@@ -50,6 +51,7 @@ module Color_Batch_Buffer #(
 
     // Output logic
     assign O_batch_ready = output_valid && (write_ptr == 0);
+    assign O_batch_clk_out = ~O_batch_ready; // Invert the batch ready signal for the output clock
 
     always_comb begin
         for (int i = 0; i < BATCH_SIZE; i++) begin
