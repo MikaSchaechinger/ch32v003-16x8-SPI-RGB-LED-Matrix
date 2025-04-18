@@ -23,7 +23,7 @@ module LED_Matrix_top #(
     output wire shift_en,
     output reg [5:0] led
 ); 
-
+    /*
     // =================== Parameters ===================
     localparam SPI_SIZE = 24; // Size of the SPI data
     localparam COLOR_COUNT = 3; // Number of colors (RGB)
@@ -115,7 +115,7 @@ module LED_Matrix_top #(
         .ser_stcp(shift_stcp),
         .ser_n_enable(shift_en)
     );
-
+    */
 endmodule
 
 
