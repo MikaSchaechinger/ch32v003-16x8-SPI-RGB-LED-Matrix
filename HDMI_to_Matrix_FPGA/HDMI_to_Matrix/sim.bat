@@ -15,9 +15,14 @@ for /r %source_folder%\%testbench_folder% %%i in (*_tb.v *_tb.sv) do (
 )
 
 :: Durchsuche das Quellverzeichnis und seine Unterordner nach Verilog-Dateien
-for /r %source_folder% %%i in (*.v *.sv) do (
+::for /r %source_folder% %%i in (*.v *.sv) do (
+::    set "files=!files! "%%i""
+::)
+:: Verwende PowerShell, um alle .v/.sv Dateien zu finden, die **nicht** 'pragma protect' enthalten
+for /f "usebackq delims=" %%i in (`powershell -Command "Get-ChildItem -Recurse -Include *.v,*.sv -Path '%source_folder%' | Where-Object { -not ($_ | Select-String -Pattern 'pragma protect' -quiet) } | ForEach-Object { $_.FullName }"`) do (
     set "files=!files! "%%i""
 )
+
 
 :: Entferne das erste Komma, falls die Liste nicht leer ist
 if not "!testbenches!"=="" set "testbenches=!testbenches:~1!"
@@ -46,6 +51,7 @@ set /a error_counter=0
 
 :: Trenne die Liste der Testbenches in ein Array auf
 for %%b in (%testbenches%) do (
+    echo.
     echo Compiling %%b
     iverilog -g2012 -o %output_folder%\%object_folder%\%%b.o -s %%b %files%
     REM for /f %%A in ('iverilog -g2012 -o %output_folder%\%object_folder%\%%b.o -s %%b %files%') do set temp_output=%%A
