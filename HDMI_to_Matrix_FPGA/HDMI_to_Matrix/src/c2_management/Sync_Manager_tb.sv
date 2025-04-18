@@ -6,7 +6,7 @@ module Sync_Manager_tb;
     localparam H_TOTAL  = 16;
     localparam V_ACTIVE = 4;
     localparam V_TOTAL  = 16;
-    localparam DELAY    = 10;
+    localparam DELAY    = 0;
 
     // Testbench-Signale
     logic rst_n;
@@ -74,7 +74,8 @@ module Sync_Manager_tb;
         .O_width_valid(width_valid),
         .O_height_valid(height_valid),
         .O_new_row(new_row),
-        .O_new_frame(new_frame)
+        .O_new_frame(new_frame),
+        .O_image_valid()
     );
 
     // === Stimulus ===
