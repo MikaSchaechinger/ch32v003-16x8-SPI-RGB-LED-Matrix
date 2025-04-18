@@ -69,7 +69,7 @@ module SDPB_sim_tb;
                 expected = word[15:0];
 
             assert(dout === expected)
-                else $fatal("Mismatch @ adb=%0d: got %h, expected %h", j, dout, expected);
+                else $fatal(1, "Mismatch @ adb=%0d: got %h, expected %h", j, dout, expected);
         end
         ceb = 0;
 
