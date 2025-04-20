@@ -100,7 +100,7 @@ module Double_Buffer_tb;
         $finish;
     end
 
-        initial begin
+    initial begin
         $dumpfile("Double_Buffer_tb.vcd");
         $dumpvars(0, Double_Buffer_tb);
     end

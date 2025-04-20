@@ -6,8 +6,8 @@ module Sync_Manager #(
     input  logic                          I_rst_n,
     input  logic                          I_rgb_clk,
     input  logic                          I_rgb_de,
-    input  logic                          I_rgb_hsync,
-    input  logic                          I_rgb_vsync,
+    input  logic                          I_rgb_hs,
+    input  logic                          I_rgb_vs,
 
     output logic [$clog2(MAX_WIDTH)-1:0]  O_image_width,
     output logic [$clog2(MAX_HEIGHT)-1:0] O_image_height,
@@ -29,15 +29,15 @@ module Sync_Manager #(
             rgb_hsync_d <= 1'b0;
             rgb_vsync_d <= 1'b0;
         end else begin
-            rgb_hsync_d <= I_rgb_hsync;
-            rgb_vsync_d <= I_rgb_vsync;
+            rgb_hsync_d <= I_rgb_hs;
+            rgb_vsync_d <= I_rgb_vs;
         end
     end
 
 
     logic new_row_imm, new_frame_imm, new_row_delay, new_frame_delay;
-    assign new_row_imm   = rgb_hsync_d & ~I_rgb_hsync;  // fallende Flanke
-    assign new_frame_imm = rgb_vsync_d & ~I_rgb_vsync;  // fallende Flanke
+    assign new_row_imm   = rgb_hsync_d & ~I_rgb_hs;  // fallende Flanke
+    assign new_frame_imm = rgb_vsync_d & ~I_rgb_vs;  // fallende Flanke
 
     // === Delay for Pipeline Sync ===
 

@@ -6,9 +6,9 @@ module Bank_Distributor_tb;
     localparam int CHANNEL_NUMBER    = 3;
     localparam int CHANNEL_BANDWIDTH = 8;   // 8 Bytes write at once
     localparam int CHANNEL_DEPTH     = 4;
-    localparam int BANK_DEPTH        = CHANNEL_DEPTH * CHANNEL_NUMBER;  // How many times fit CHANNEL_BANDWIDTH in BANK_DEPTH?
-    localparam int GLOBAL_ADDR_BITS  = $clog2(BANK_DEPTH * CHANNEL_NUMBER);
-    localparam int BANK_ADDR_BITS    = $clog2(BANK_DEPTH);
+    localparam int BLOCK_DEPTH        = CHANNEL_DEPTH * CHANNEL_NUMBER;  // How many times fit CHANNEL_BANDWIDTH in BLOCK_DEPTH?
+    localparam int GLOBAL_ADDR_BITS  = $clog2(BLOCK_DEPTH * CHANNEL_NUMBER);
+    localparam int BANK_ADDR_BITS    = $clog2(BLOCK_DEPTH);
 
     // DUT I/O
     logic I_clk_in;
@@ -22,7 +22,7 @@ module Bank_Distributor_tb;
     Bank_Distributor #(
         .CHANNEL_NUMBER(CHANNEL_NUMBER),
         .CHANNEL_BANDWIDTH(CHANNEL_BANDWIDTH),
-        .BANK_DEPTH(BANK_DEPTH)
+        .BLOCK_DEPTH(BLOCK_DEPTH)
     ) dut (
         .I_clk_in(I_clk_in),
         .I_data_in(I_data_in),
@@ -37,7 +37,7 @@ module Bank_Distributor_tb;
         I_data_in[1] = 8'h55;
         I_data_in[2] = 8'h00;
 
-        for (int i = 0; i < BANK_DEPTH; i++) begin
+        for (int i = 0; i < BLOCK_DEPTH; i++) begin
             I_address_in = i;
             #1;
         end

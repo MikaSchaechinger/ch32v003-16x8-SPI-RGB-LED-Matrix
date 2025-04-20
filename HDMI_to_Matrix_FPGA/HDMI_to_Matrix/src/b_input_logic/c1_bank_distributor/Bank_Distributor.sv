@@ -1,15 +1,16 @@
 module Bank_Distributor #(
     parameter int CHANNEL_NUMBER = 3,
     parameter int CHANNEL_BANDWIDTH = 128,
-    parameter int BANK_DEPTH = 480
+    parameter int BLOCK_DEPTH = 480,
+    parameter int I_ADDRESS_IN_BITS = $clog2(BLOCK_DEPTH*CHANNEL_NUMBER)
 )(
     input logic I_clk_in,   // at rise edge of batch_clk_in, the data is valid
     input logic [CHANNEL_BANDWIDTH-1:0] I_data_in [0:CHANNEL_NUMBER-1], // batch data input
-    input logic [$clog2(BANK_DEPTH*CHANNEL_NUMBER) - 1:0] I_address_in, // batch address input
+    input logic [I_ADDRESS_IN_BITS - 1:0] I_address_in, // batch address input
 
     output logic [CHANNEL_BANDWIDTH-1:0] O_data_out [0:CHANNEL_NUMBER-1], // batch data output
-    output logic [$clog2(BANK_DEPTH)-1:0] O_address_out [0:CHANNEL_NUMBER-1], // batch address output
-    output logic O_clk_out [0:CHANNEL_NUMBER-1] // batch clock output out
+    output logic [$clog2(BLOCK_DEPTH)-1:0] O_address_out [0:CHANNEL_NUMBER-1], // batch address output
+    output logic O_clk_out // batch clock output out
 );
 
     // I_data_in get saved to all banks, depending on the address
@@ -18,10 +19,10 @@ module Bank_Distributor #(
     // I_data_in[2]: 0-159 -> bank 2, 160-319 -> bank 0, 320-479 -> bank 1
 
     // interne Konstanten
-    localparam int GLOBAL_ADDR_BITS = $clog2(BANK_DEPTH * CHANNEL_NUMBER);
-    localparam int BANK_ADDR_BITS   = $clog2(BANK_DEPTH);
+    localparam int GLOBAL_ADDR_BITS = $clog2(BLOCK_DEPTH * CHANNEL_NUMBER);
+    localparam int BANK_ADDR_BITS   = $clog2(BLOCK_DEPTH);
     localparam int BANK_INDEX_BITS  = $clog2(CHANNEL_NUMBER);
-    localparam int DEPTH_OFFSET     = BANK_DEPTH / CHANNEL_NUMBER;
+    localparam int DEPTH_OFFSET     = BLOCK_DEPTH / CHANNEL_NUMBER;
 
     // kombinatorische Hilfssignale
     logic [CHANNEL_BANDWIDTH-1:0] comb_data_out    [0:CHANNEL_NUMBER-1];
@@ -60,12 +61,11 @@ module Bank_Distributor #(
             O_data_out[new_channel[ch]] = I_data_in[ch];
 
             // Address Mapping
-            O_address_out[ch] = (I_address_in + new_channel[ch] * DEPTH_OFFSET) % BANK_DEPTH;
+            O_address_out[ch] = (I_address_in + new_channel[ch] * DEPTH_OFFSET) % BLOCK_DEPTH;
             
-            // Clock Mapping
-            O_clk_out[ch] = I_clk_in;
         end
-  
+        // Clock Mapping
+        O_clk_out = I_clk_in;
     end
 
     `ifndef REAL
