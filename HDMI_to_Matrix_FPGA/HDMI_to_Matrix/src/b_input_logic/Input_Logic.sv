@@ -24,6 +24,11 @@ module Input_Logic #(
     localparam int INTERN_ADDRESS_BITS = $clog2(BATCH_SIZE*CHANNEL_COUNT);
     localparam int OUT_ADDRESS_BITS = $clog2(BATCH_SIZE);
 
+    logic [7:0] rgb_color_0, rgb_color_1, rgb_color_2;
+    assign rgb_color_0 = rgb_color[0];
+    assign rgb_color_1 = rgb_color[1];
+    assign rgb_color_2 = rgb_color[2];
+
     // Internal signals
     logic [CHANNEL_COUNT-1:0] batch_ready;
     logic [CHANNEL_COUNT-1:0] batch_ready_clk;
@@ -78,6 +83,7 @@ module Input_Logic #(
         .ADDRESS_BITS(INTERN_ADDRESS_BITS)
     ) addr_gen_inst (
         .I_rst_n(rst_n),
+        .I_clk(rgb_clk),
         .I_address_up(batch_ready[0]),
         .I_address_reset(new_row),
         .O_address(write_address)
@@ -97,5 +103,10 @@ module Input_Logic #(
         .O_address_out(address_distributed),
         .O_clk_out(clk_distributed)
     );
+
+    logic [8*BATCH_SIZE-1:0]         data_distributed_0;
+    logic [$clog2(BLOCK_DEPTH)-1:0] address_distributed_0;
+    assign data_distributed_0 = data_distributed[0];
+    assign address_distributed_0 = address_distributed[0];
 
 endmodule

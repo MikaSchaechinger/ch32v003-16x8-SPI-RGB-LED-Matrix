@@ -34,7 +34,7 @@ module Color_Batch_Buffer_tb;
         .O_batch_color  (batch_color)
     );
 
-    int unsigned color_counter = 1;
+    int unsigned color_counter = 0;
 
     // Stimulus
     initial begin

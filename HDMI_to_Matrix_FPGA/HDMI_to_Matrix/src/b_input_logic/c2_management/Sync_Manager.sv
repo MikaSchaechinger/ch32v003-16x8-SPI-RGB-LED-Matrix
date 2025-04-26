@@ -41,12 +41,12 @@ module Sync_Manager #(
 
     // === Delay for Pipeline Sync ===
 
-    logic rgb_de;
+    logic rgb_de_delay;
     generate
         if (DELAY == 0) begin
             assign new_row_delay   = new_row_imm;
             assign new_frame_delay = new_frame_imm;
-            assign rgb_de = I_rgb_de;
+            assign rgb_de_delay = I_rgb_de;
         end else if (DELAY == 1) begin
             logic rgb_de_internal_delay;
 
@@ -62,7 +62,7 @@ module Sync_Manager #(
                 end
             end
 
-            assign rgb_de = rgb_de_internal_delay;
+            assign rgb_de_delay = rgb_de_internal_delay;
         end else begin
             logic [DELAY-1:0] new_row_pipeline, new_frame_pipeline, rgb_de_internal_delay;
 
@@ -80,13 +80,12 @@ module Sync_Manager #(
 
             assign new_row_delay   = new_row_pipeline[DELAY-1];
             assign new_frame_delay = new_frame_pipeline[DELAY-1];
-            assign rgb_de = rgb_de_internal_delay[DELAY-1];
+            assign rgb_de_delay = rgb_de_internal_delay[DELAY-1];
         end
     endgenerate
 
     assign O_new_row   = new_row_delay & frame_started;
     assign O_new_frame = new_frame_delay & frame_started;
-    assign O_image_valid = O_new_row | O_new_frame;
     // === Image width and height detection ===
 
 
@@ -112,13 +111,13 @@ module Sync_Manager #(
                         O_height_valid <= 1'b1;
                     end
                 end if (new_row_delay) begin
-                    width_counter <= (I_rgb_de) ? 1 : 0;
+                    width_counter <= 0;//(I_rgb_de) ? 1 : 0;
                     if (width_counter != 0) begin
                         O_width_valid  <= 1'b1;
                         height_counter <= height_counter + 1;
                         O_image_width  <= width_counter;
                     end
-                end else if (rgb_de) begin
+                end else if (rgb_de_delay) begin
                     width_counter <= width_counter + 1;     
                 end
             end else begin
@@ -129,6 +128,7 @@ module Sync_Manager #(
         end
     end
 
+    assign O_image_valid = O_width_valid & O_height_valid;
 
 
 endmodule

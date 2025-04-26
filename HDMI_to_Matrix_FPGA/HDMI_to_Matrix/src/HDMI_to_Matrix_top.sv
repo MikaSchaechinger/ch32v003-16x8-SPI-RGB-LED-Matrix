@@ -1,11 +1,13 @@
-
 // Raspberry Pi custom Resolution: https://stackoverflow.com/questions/52335356/custom-resolution-on-raspberry-pi
-
 
 module LED_Matrix_top #(
     parameter CHANNEL_NUMBER = 3,
+    parameter SPI_CHANNEL_NUMBER = 3,
     parameter BYTES_PER_MATRIX = 8*16*3,
     parameter BATCH_SIZE = 16,
+    parameter BLOCK_DATA_WIDTH = 32,
+    parameter BLOCK_COUNT = 4,
+    parameter BLOCK_DEPTH = 480,
     parameter DIV_FACTOR = 1000 // Slow Clock Divider
 )(
     input wire clk,
@@ -17,7 +19,7 @@ module LED_Matrix_top #(
     input wire [2:0] I_tmds_data_n,
 
     output wire spi_clk,
-    output wire [CHANNEL_NUMBER-1:0] spi_mosi,
+    output wire [SPI_CHANNEL_NUMBER-1:0] spi_mosi,
     output wire shift_clk,
     output wire shift_ser,
     output wire shift_stcp,
@@ -59,7 +61,7 @@ module LED_Matrix_top #(
         .O_rgb_b(rgb_color[2])
     );
 
-    // ========== Input Logic (ehemals mehrere Einzelmodule) ==========
+    // ========== Input Logic ==========
     logic [8*BATCH_SIZE-1:0] data_distributed [CHANNEL_NUMBER-1:0];
     logic [$clog2(BATCH_SIZE)-1:0] address_distributed [CHANNEL_NUMBER-1:0];
     logic clk_distributed;
@@ -91,11 +93,17 @@ module LED_Matrix_top #(
     );
 
     // ========== Double Buffer ==========
+    logic clk_data_out;
+    logic [CHANNEL_NUMBER*BLOCK_DATA_WIDTH*BLOCK_COUNT-1:0] dout_flat;
+    logic [$clog2(BLOCK_DEPTH)-1:0] adb [CHANNEL_NUMBER-1:0];
+    logic data_valid;
+    logic swap_trigger;
+
     Double_Buffer #(
-        .ADDRESS_DEPTH(480),
+        .ADDRESS_DEPTH(BLOCK_DEPTH),
         .BANK_COUNT(CHANNEL_NUMBER),
-        .BLOCK_COUNT(4),
-        .BLOCK_DATA_WIDTH(32)
+        .BLOCK_COUNT(BLOCK_COUNT),
+        .BLOCK_DATA_WIDTH(BLOCK_DATA_WIDTH)
     ) double_buffer_inst (
         .rst_n(btn[0]),
         .clka(rgb_clk),
@@ -104,38 +112,51 @@ module LED_Matrix_top #(
         .din(data_distributed),
 
         .clkb(clk),
-        .clk_data_out(),
-        .adb(),
-        .dout_flat(),
+        .clk_data_out(clk_data_out),
+        .adb(adb),
+        .dout_flat(dout_flat),
 
-        .swap_trigger(),
-        .data_valid()
+        .swap_trigger(swap_trigger),
+        .data_valid(data_valid)
     );
 
-endmodule
+    // ========== Output Logic ==========
+    logic [23:0] data_out [SPI_CHANNEL_NUMBER-1:0];
+    logic new_image, new_column, next_data, tx_finish;
 
+    Output_Logic #(
+        .SPI_CHANNEL_NUMBER(SPI_CHANNEL_NUMBER),
+        .BLOCK_DATA_WIDTH(BLOCK_DATA_WIDTH),
+        .BLOCK_COUNT(BLOCK_COUNT),
+        .BLOCK_DEPTH(BLOCK_DEPTH)
+    ) output_logic_inst (
+        .I_clk(clk),
+        .I_rst_n(btn[0]),
+        .I_clk_data_in(clk_data_out),
+        .I_buffer_data_flat(dout_flat),
+        .I_data_valid(data_valid),
+        .O_buffer_addresses(adb),
+        .I_tx_finish(tx_finish),
+        .O_data_out(data_out),
+        .O_new_image(new_image),
+        .O_new_column(new_column),
+        .O_next_data(next_data)
+    );
 
-
-
-
-
-    /*
-    // Output Module Signals
-    logic [SPI_SIZE-1:0] data_in [CHANNEL_NUMBER-1:0];
-
-    Output_Module out#(
-        .CHANNEL_NUMBER(CHANNEL_NUMBER),
-        .SPI_SIZE(SPI_SIZE),
+    // ========== Output Module ==========
+    Output_Module #(
+        .CHANNEL_NUMBER(SPI_CHANNEL_NUMBER),
+        .SPI_SIZE(24),
         .MSB_FIRST(1)
-    )(
-        .clk(),
+    ) output_module_inst (
+        .clk(clk),
         .rst(~btn[0]),
-        .data_in()
-        .new_image(),
-        .new_column(),
-        .next_data(),
-        .extra_bit(),
-        .tx_finish(),
+        .data_in(data_out),
+        .new_image(new_image),
+        .new_column(new_column),
+        .next_data(next_data),
+        .extra_bit(1'b1),
+        .tx_finish(tx_finish),
         .spi_clk(spi_clk),
         .spi_mosi(spi_mosi),
         .ser_clk(shift_clk),
@@ -143,9 +164,5 @@ endmodule
         .ser_stcp(shift_stcp),
         .ser_n_enable(shift_en)
     );
-    */
-//endmodule
 
-
-
-
+endmodule
