@@ -21,7 +21,7 @@ module Input_Logic #(
     output logic [$clog2(MAX_HEIGHT)-1:0]   image_height,
     output logic                            image_valid
 );
-    localparam int INTERN_ADDRESS_BITS = $clog2(BATCH_SIZE*CHANNEL_COUNT);
+    localparam int INTERN_ADDRESS_BITS = $clog2(BLOCK_DEPTH);
     localparam int OUT_ADDRESS_BITS = $clog2(BATCH_SIZE);
 
     logic [7:0] rgb_color_0, rgb_color_1, rgb_color_2;
@@ -93,8 +93,7 @@ module Input_Logic #(
     Bank_Distributor #(
         .CHANNEL_NUMBER(CHANNEL_COUNT),
         .CHANNEL_BANDWIDTH(8*BATCH_SIZE),
-        .BLOCK_DEPTH(BLOCK_DEPTH), // fix oder parameterisierbar
-        .I_ADDRESS_IN_BITS(INTERN_ADDRESS_BITS)
+        .BLOCK_DEPTH(BLOCK_DEPTH)
     ) bank_dist_inst (
         .I_clk_in(batch_ready_clk[0]),
         .I_data_in(batches),

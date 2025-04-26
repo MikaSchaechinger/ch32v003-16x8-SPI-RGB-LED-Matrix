@@ -7,7 +7,7 @@ module Bank_Distributor_tb;
     localparam int CHANNEL_BANDWIDTH = 8;   // 8 Bytes write at once
     localparam int CHANNEL_DEPTH     = 4;
     localparam int BLOCK_DEPTH        = CHANNEL_DEPTH * CHANNEL_NUMBER;  // How many times fit CHANNEL_BANDWIDTH in BLOCK_DEPTH?
-    localparam int GLOBAL_ADDR_BITS  = $clog2(BLOCK_DEPTH * CHANNEL_NUMBER);
+    localparam int GLOBAL_ADDR_BITS  = $clog2(BLOCK_DEPTH);
     localparam int BANK_ADDR_BITS    = $clog2(BLOCK_DEPTH);
 
     // DUT I/O
