@@ -1,34 +1,42 @@
 module Bank #(
-    parameter int ADDRESS_DEPTH = 512,
-    parameter int BLOCK_DATA_WIDTH = 32,
-    parameter int BLOCK_COUNT = 4,
-    parameter int BANDWIDTH = BLOCK_COUNT * BLOCK_DATA_WIDTH
+    parameter int BYTES_PER_BLOCK = 2250,
+    parameter int BLOCK_COUNT = 2,
+    parameter int BLOCK_DATA_WIDTH_A = 32,  // Write Port
+    parameter int BLOCK_DATA_WIDTH_B = 8,   // Read Port
+    parameter int BANDWIDTH_A = BLOCK_COUNT * BLOCK_DATA_WIDTH_A, // Write Port
+    parameter int BANDWIDTH_B = BLOCK_COUNT * BLOCK_DATA_WIDTH_B, // Read Port
+    parameter int ADDRESS_NUMBER_A = (BYTES_PER_BLOCK * 8) / BLOCK_DATA_WIDTH_A, // Write Port
+    parameter int ADDRESS_NUMBER_B = (BYTES_PER_BLOCK * 8) / BLOCK_DATA_WIDTH_B // Read Port
 )(
-    input  logic                        clka,
-    input  logic                        cea,
-    input  logic                        oce,
-    input  logic                        reseta,
-    input  logic [$clog2(ADDRESS_DEPTH)-1:0] ada,
-    input  logic [BANDWIDTH-1:0]       din,
+    input  logic                        I_clka,
+    input  logic                        I_cea,
+    input  logic                        I_oce,
+    input  logic                        I_reseta,
+    input  logic [BLOCK_COUNT*$clog2(ADDRESS_NUMBER_A)-1:0] I_ada_flat,
+    input  logic [BLOCK_COUNT*BLOCK_DATA_WIDTH_A-1:0] I_din_flat,
 
-    input  logic                        clkb,
-    input  logic                        ceb,
-    input  logic                        resetb,
-    input  logic [$clog2(ADDRESS_DEPTH)-1:0] adb,
-    output logic [BANDWIDTH-1:0]       dout
+    input  logic                        I_clkb,
+    input  logic                        I_ceb,
+    input  logic                        I_resetb,
+    input  logic [BLOCK_COUNT*$clog2(ADDRESS_NUMBER_B)-1:0] I_adb_flat,
+    output logic [BLOCK_COUNT*BLOCK_DATA_WIDTH_B-1:0] O_dout_flat
 );
 
-    // Signals
-    logic [BLOCK_DATA_WIDTH-1:0] block_data_in [BLOCK_COUNT-1:0]; // Data input for each block
-    logic [BLOCK_DATA_WIDTH-1:0] block_data_out [BLOCK_COUNT-1:0]; // Data output for each block
+    logic [$clog2(ADDRESS_NUMBER_A)-1:0] ada [BLOCK_COUNT-1:0];
+    logic [BLOCK_DATA_WIDTH_A-1:0] din [BLOCK_COUNT-1:0];
+    logic [$clog2(ADDRESS_NUMBER_B)-1:0] adb [BLOCK_COUNT-1:0];
+    logic [BLOCK_DATA_WIDTH_B-1:0] dout [BLOCK_COUNT-1:0];
 
+    // Connect Input Ports
 
-    // Distribute the input data to each block
     always_comb begin
         for (int i = 0; i < BLOCK_COUNT; i++) begin
-            block_data_in[i] = din[i*BLOCK_DATA_WIDTH +: BLOCK_DATA_WIDTH];
+            din[i] = I_din_flat[i*BLOCK_DATA_WIDTH_A +: BLOCK_DATA_WIDTH_A];
+            ada[i] = I_ada_flat[i*$clog2(ADDRESS_NUMBER_A) +: $clog2(ADDRESS_NUMBER_A)];
+            adb[i] = I_adb_flat[i*$clog2(ADDRESS_NUMBER_B) +: $clog2(ADDRESS_NUMBER_B)];
         end
     end
+
 
 
 
@@ -36,31 +44,31 @@ module Bank #(
     generate
         for(block = 0; block < BLOCK_COUNT; block++) begin : block_gen
            SDPB_Wrapper #(
-                .ADDRESS_DEPTH_A(ADDRESS_DEPTH),
-                .DATA_WIDTH_A(BLOCK_DATA_WIDTH),
-                .ADDRESS_DEPTH_B(ADDRESS_DEPTH),
-                .DATA_WIDTH_B(BLOCK_DATA_WIDTH)
+                .ADDRESS_DEPTH_A(ADDRESS_NUMBER_A),
+                .DATA_WIDTH_A(BLOCK_DATA_WIDTH_A),
+                .ADDRESS_DEPTH_B(ADDRESS_NUMBER_B),
+                .DATA_WIDTH_B(BLOCK_DATA_WIDTH_B)
             ) sdpb_inst (
-                .clka(clka),
-                .cea(cea),
-                .oce(oce),
-                .reseta(reseta),
-                .ada(ada),
-                .din(block_data_in[block]),
+                .clka(I_clka),
+                .cea(I_cea),
+                .oce(I_oce),
+                .reseta(I_reseta),
+                .ada(ada[block]),
+                .din(din[block]),
 
-                .clkb(clkb),
-                .ceb(ceb),
-                .resetb(resetb),
-                .adb(adb),
-                .dout(block_data_out[block])
+                .clkb(I_clkb),
+                .ceb(I_ceb),
+                .resetb(I_resetb),
+                .adb(adb[block]),
+                .dout(dout[block])
             );
         end
     endgenerate
 
-    // Collects the output data from each block
+    // Connect Output Ports
     always_comb begin
         for (int i = 0; i < BLOCK_COUNT; i++) begin
-            dout[i*BLOCK_DATA_WIDTH +: BLOCK_DATA_WIDTH] = block_data_out[i];
+            O_dout_flat[i*BLOCK_DATA_WIDTH_B +: BLOCK_DATA_WIDTH_B] = dout[i];
         end
     end
 

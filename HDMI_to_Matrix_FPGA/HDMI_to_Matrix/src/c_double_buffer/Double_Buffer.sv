@@ -1,82 +1,78 @@
-// Double_Buffer: Kapselt zwei Single_Buffer-Instanzen mit Umschaltlogik
+// Neue Version des Double_Buffer mit flachen Ein- und Ausgängen
 
 module Double_Buffer #(
-    parameter int ADDRESS_DEPTH = 512,
-    parameter int BANK_COUNT = 3,
-    parameter int BLOCK_COUNT = 4,
-    parameter int BLOCK_DATA_WIDTH = 32,
-    parameter int BANDWIDTH = BLOCK_COUNT * BLOCK_DATA_WIDTH
+    parameter int BYTES_PER_BLOCK = 2250,
+    parameter int BANK_COUNT = 6,
+    parameter int BLOCK_COUNT = 2,
+    parameter int BLOCK_DATA_WIDTH_A = 32, // Write Port
+    parameter int BLOCK_DATA_WIDTH_B = 8,  // Read Port
+    parameter int ADDRESS_NUMBER_A = (BYTES_PER_BLOCK * 8) / BLOCK_DATA_WIDTH_A,
+    parameter int ADDRESS_NUMBER_B = (BYTES_PER_BLOCK * 8) / BLOCK_DATA_WIDTH_B
 )(
-    input  logic                          rst_n,
+    input  logic                          I_rst_n,
 
-    input  logic                          clka,                     // clk_data_in
-    input  logic                          clk_data_in,              // clk_data_in
-    input  logic [$clog2(ADDRESS_DEPTH)-1:0] ada [BANK_COUNT-1:0],  // address
-    input  logic [BANDWIDTH-1:0]          din [BANK_COUNT-1:0],     // data in
+    input  logic                          I_clka,
+    input  logic                          I_clk_data_in,
+    input  logic [BANK_COUNT*BLOCK_COUNT*$clog2(ADDRESS_NUMBER_A)-1:0] I_ada_flat,
+    input  logic [BANK_COUNT*BLOCK_COUNT*BLOCK_DATA_WIDTH_A-1:0]       I_din_flat,
 
-    input  logic                          clkb,                     // clk_data_out
-    input  logic                          clk_data_out,             // clk_data_out
-    input  logic [$clog2(ADDRESS_DEPTH)-1:0] adb [BANK_COUNT-1:0],
-    output logic [BANDWIDTH*BANK_COUNT-1:0]  dout_flat,
+    input  logic                          I_clkb,
+    input  logic                          I_clk_data_out,
+    input  logic [BANK_COUNT*BLOCK_COUNT*$clog2(ADDRESS_NUMBER_B)-1:0] I_adb_flat,
+    output logic [BANK_COUNT*BLOCK_COUNT*BLOCK_DATA_WIDTH_B-1:0]       O_dout_flat,
 
-    input  logic                          swap_trigger,             // z. B. bei frame_complete
-    output logic                          data_valid                // High after first swap_trigger
+    input  logic                          I_swap_trigger,
+    output logic                          O_data_valid
 );
 
-
-    typedef enum logic  { 
-        BUFFER_0,
-        BUFFER_1
-    } buffer_t;
-
+    typedef enum logic { BUFFER_0, BUFFER_1 } buffer_t;
     buffer_t write_buffer;
 
-    always_ff @(posedge swap_trigger or negedge rst_n) begin
-        if (!rst_n) begin
+    always_ff @(posedge I_swap_trigger or negedge I_rst_n) begin
+        if (!I_rst_n) begin
             write_buffer <= BUFFER_0;
-            data_valid   <= 1'b0;
+            O_data_valid <= 1'b0;
         end else begin
             write_buffer <= buffer_t'((write_buffer == BUFFER_0) ? BUFFER_1 : BUFFER_0);
-            data_valid   <= 1'b1;
+            O_data_valid <= 1'b1;
         end
     end
 
-
-    // Create a pulese from clk_data_in and clk_data_out
+    // Clock pulse generation
     logic write_pulse;
+    logic read_pulse;
+`ifdef EDGE_DETECT
     logic [1:0] clk_data_in_d;
-    always_ff @(posedge clka or negedge rst_n) begin
-        if (!rst_n) begin
+    always_ff @(posedge I_clka or negedge I_rst_n) begin
+        if (!I_rst_n) begin
             clk_data_in_d <= 0;
         end else begin
-            clk_data_in_d[0] <= clk_data_in;
+            clk_data_in_d[0] <= I_clk_data_in;
             clk_data_in_d[1] <= clk_data_in_d[0];
         end
     end
-    assign write_pulse = clk_data_in_d[0] & ~clk_data_in_d[1];    // rising edge of clk_data_in
+    assign write_pulse = clk_data_in_d[0] & ~clk_data_in_d[1];
 
-    logic read_pulse;
     logic [1:0] clk_data_out_d;
-    always_ff @(posedge clkb or negedge rst_n) begin
-        if (!rst_n) begin
+    always_ff @(posedge I_clkb or negedge I_rst_n) begin
+        if (!I_rst_n) begin
             clk_data_out_d <= 0;
         end else begin
-            clk_data_out_d[0] <= clk_data_out;
+            clk_data_out_d[0] <= I_clk_data_out;
             clk_data_out_d[1] <= clk_data_out_d[0];
         end
     end
-    assign read_pulse = clk_data_out_d[0] & ~clk_data_out_d[1];  // rising edge of clk_data_out
+    assign read_pulse = clk_data_out_d[0] & ~clk_data_out_d[1];
+`else	
+    assign write_pulse = I_clk_data_in;
+    assign read_pulse = I_clk_data_out;
+`endif
 
-            
+    // Buffer Outputs
+    logic [BANK_COUNT*BLOCK_COUNT*BLOCK_DATA_WIDTH_B-1:0] dout_buffer0;
+    logic [BANK_COUNT*BLOCK_COUNT*BLOCK_DATA_WIDTH_B-1:0] dout_buffer1;
 
-    // Buffer-Outputs
-    logic [BANDWIDTH*BANK_COUNT-1:0] dout_buffer0;
-    logic [BANDWIDTH*BANK_COUNT-1:0] dout_buffer1;
-
-    logic cea0;
-    logic ceb0;
-    logic cea1;
-    logic ceb1;
+    logic cea0, ceb0, cea1, ceb1;
     always_comb begin
         cea0 = (write_buffer == BUFFER_0);
         cea1 = (write_buffer == BUFFER_1);
@@ -86,58 +82,52 @@ module Double_Buffer #(
 
     // Zwei Single_Buffer-Instanzen
     Single_Buffer #(
-        .ADDRESS_DEPTH(ADDRESS_DEPTH),
+        .BYTES_PER_BLOCK(BYTES_PER_BLOCK),
         .BANK_COUNT(BANK_COUNT),
         .BLOCK_COUNT(BLOCK_COUNT),
-        .BLOCK_DATA_WIDTH(BLOCK_DATA_WIDTH)
+        .BLOCK_DATA_WIDTH_A(BLOCK_DATA_WIDTH_A),
+        .BLOCK_DATA_WIDTH_B(BLOCK_DATA_WIDTH_B)
     ) buffer0 (
-        .clka(clka),
-        .cea(cea0 & write_pulse),
-        .oce(1'b1),         // always enabled
-        .reseta(~rst_n),    // must be asynchronous
-        .ada(ada),
-        .din(din),
-
-        .clkb(clkb),
-        .ceb(ceb0 & read_pulse),
-        .resetb(~rst_n),    // must be asynchronous
-        .adb(adb),
-        .dout_flat(dout_buffer0)
+        .I_clka(I_clka),
+        .I_cea(cea0 & write_pulse),
+        .I_oce(1'b1),
+        .I_reseta(~I_rst_n),
+        .I_ada_flat(I_ada_flat),
+        .I_din_flat(I_din_flat),
+        .I_clkb(I_clkb),
+        .I_ceb(ceb0 & read_pulse),
+        .I_resetb(~I_rst_n),
+        .I_adb_flat(I_adb_flat),
+        .O_dout_flat(dout_buffer0)
     );
 
     Single_Buffer #(
-        .ADDRESS_DEPTH(ADDRESS_DEPTH),
+        .BYTES_PER_BLOCK(BYTES_PER_BLOCK),
         .BANK_COUNT(BANK_COUNT),
         .BLOCK_COUNT(BLOCK_COUNT),
-        .BLOCK_DATA_WIDTH(BLOCK_DATA_WIDTH)
+        .BLOCK_DATA_WIDTH_A(BLOCK_DATA_WIDTH_A),
+        .BLOCK_DATA_WIDTH_B(BLOCK_DATA_WIDTH_B)
     ) buffer1 (
-        .clka(clka),
-        .cea(cea1 & write_pulse),
-        .oce(1'b1),         // always enabled
-        .reseta(~rst_n),    // must be asynchronous
-        .ada(ada),
-        .din(din),
-
-        .clkb(clkb),
-        .ceb(ceb1 & read_pulse),
-        .resetb(~rst_n),    // must be asynchronous
-        .adb(adb),
-        .dout_flat(dout_buffer1)
+        .I_clka(I_clka),
+        .I_cea(cea1 & write_pulse),
+        .I_oce(1'b1),
+        .I_reseta(~I_rst_n),
+        .I_ada_flat(I_ada_flat),
+        .I_din_flat(I_din_flat),
+        .I_clkb(I_clkb),
+        .I_ceb(ceb1 & read_pulse),
+        .I_resetb(~I_rst_n),
+        .I_adb_flat(I_adb_flat),
+        .O_dout_flat(dout_buffer1)
     );
 
     // Ausgabe: aktive Leseseite
     always_comb begin
         if (write_buffer == BUFFER_0) begin
-            dout_flat = dout_buffer1;
+            O_dout_flat = dout_buffer1;
         end else begin
-            dout_flat = dout_buffer0;
+            O_dout_flat = dout_buffer0;
         end
     end
-
-
-    // Debugging
-    logic [BANDWIDTH-1:0] din0;
-    assign din0 = din[0];
-
 
 endmodule

@@ -24,6 +24,12 @@ module SDPB_sim #(
     localparam int TOTAL_BITS = ADDRESS_DEPTH_A * DATA_WIDTH_A;
     localparam int MEMORY_SIZE = TOTAL_BITS / 8; // in Bytes
     logic [7:0] memory [0:MEMORY_SIZE-1];
+    // initialice memory with Undefined values
+    initial begin
+        for (int i = 0; i < MEMORY_SIZE; i++) begin
+            memory[i] = 'x;
+        end
+    end
 
     // Internes Register für synchrone Ausgabe
     logic [DATA_WIDTH_B-1:0] dout_next;
@@ -50,10 +56,27 @@ module SDPB_sim #(
         end
     end
 
+`ifdef OUTPUT_REGISTER
     // Optionales Ausgabe-Register (output clock enable)
     always_ff @(posedge clkb) begin
         if (oce)
             dout <= dout_next;
     end
+`else
+    // Direkte Ausgabe ohne Register
+    assign dout = dout_next;
+`endif
+
+
+    localparam int DEBUG_WIDTH = DATA_WIDTH_A * 6 / 8; // In Bytes
+    logic [DEBUG_WIDTH*8-1:0] debug_data;
+
+    // map debug_data to memory for simulation purposes
+    always_comb begin
+        for (int i = 0; i < DEBUG_WIDTH; i++) begin
+            debug_data[i*8 +: 8] = memory[i];
+        end
+    end
+
 
 endmodule
