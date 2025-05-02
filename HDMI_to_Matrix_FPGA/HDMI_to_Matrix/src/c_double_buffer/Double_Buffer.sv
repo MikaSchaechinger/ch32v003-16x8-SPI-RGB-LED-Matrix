@@ -12,12 +12,12 @@ module Double_Buffer #(
     input  logic                          I_rst_n,
 
     input  logic                          I_clka,
-    input  logic                          I_clk_data_in,
+    input  logic                          I_write_enable,
     input  logic [BANK_COUNT*BLOCK_COUNT*$clog2(ADDRESS_NUMBER_A)-1:0] I_ada_flat,
     input  logic [BANK_COUNT*BLOCK_COUNT*BLOCK_DATA_WIDTH_A-1:0]       I_din_flat,
 
     input  logic                          I_clkb,
-    input  logic                          I_clk_data_out,
+    input  logic                          I_read_enable,
     input  logic [BANK_COUNT*BLOCK_COUNT*$clog2(ADDRESS_NUMBER_B)-1:0] I_adb_flat,
     output logic [BANK_COUNT*BLOCK_COUNT*BLOCK_DATA_WIDTH_B-1:0]       O_dout_flat,
 
@@ -47,7 +47,7 @@ module Double_Buffer #(
         if (!I_rst_n) begin
             clk_data_in_d <= 0;
         end else begin
-            clk_data_in_d[0] <= I_clk_data_in;
+            clk_data_in_d[0] <= I_write_enable;
             clk_data_in_d[1] <= clk_data_in_d[0];
         end
     end
@@ -58,14 +58,14 @@ module Double_Buffer #(
         if (!I_rst_n) begin
             clk_data_out_d <= 0;
         end else begin
-            clk_data_out_d[0] <= I_clk_data_out;
+            clk_data_out_d[0] <= I_read_enable;
             clk_data_out_d[1] <= clk_data_out_d[0];
         end
     end
     assign read_pulse = clk_data_out_d[0] & ~clk_data_out_d[1];
 `else	
-    assign write_pulse = I_clk_data_in;
-    assign read_pulse = I_clk_data_out;
+    assign write_pulse = I_write_enable;
+    assign read_pulse = I_read_enable;
 `endif
 
     // Buffer Outputs

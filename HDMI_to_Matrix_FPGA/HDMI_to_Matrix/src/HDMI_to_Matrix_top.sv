@@ -1,16 +1,25 @@
 // Raspberry Pi custom Resolution: https://stackoverflow.com/questions/52335356/custom-resolution-on-raspberry-pi
 
-module LED_Matrix_top #(
-    parameter CHANNEL_NUMBER = 3,
-    parameter SPI_CHANNEL_NUMBER = 3,
-    parameter BYTES_PER_MATRIX = 8*16*3,
-    parameter BATCH_SIZE = 16,
-    parameter BLOCK_DATA_WIDTH = 32,
-    parameter BLOCK_COUNT = 4,
-    parameter BLOCK_DEPTH = 480,
-    parameter DIV_FACTOR = 1000 // Slow Clock Divider
+module LED_Matrix_top #(    
+    // HDMI Configuration
+    parameter HDMI_MAX_WIDTH = 1920,
+    parameter HDMI_MAX_HEIGHT = 1080,
+    parameter COLOR_COUNT = 3,
+
+    // Input Configuration
+    parameter BATCH_SIZE = 4,
+
+    // RAM Configuration
+    parameter BYTES_PER_BLOCK = 2250,
+    parameter BANK_COUNT = 6,
+    parameter BLOCK_COUNT = 2,
+    parameter BLOCK_DATA_WIDTH_A = 32, // Write Port
+    parameter BLOCK_DATA_WIDTH_B = 8,  // Read Port
+
+    // SPI Configuration
+    parameter SPI_CHANNEL_NUMBER = 8
 )(
-    input wire clk,
+    input wire sys_clk_27MHz,
     input wire [1:0] btn,
 
     input wire I_tmds_clk_p,
@@ -34,11 +43,11 @@ module LED_Matrix_top #(
     logic rgb_vs;
     logic rgb_hs;
     logic rgb_de;
-    logic [7:0] rgb_color [CHANNEL_NUMBER-1:0];
+    logic [7:0] rgb_color [COLOR_COUNT-1:0];
 
     DVI_RX_Wrapper #(
-        .SIMULATION(0),
-        .H_ACTIVE(128),
+        .SIMULATION(0), 
+        .H_ACTIVE(128), // Parameters are only for simulation
         .H_TOTAL(144),
         .V_ACTIVE(32),
         .V_TOTAL(40)
@@ -48,7 +57,7 @@ module LED_Matrix_top #(
         .I_tmds_clk_n(I_tmds_clk_n),
         .I_tmds_data_p(I_tmds_data_p),
         .I_tmds_data_n(I_tmds_data_n),
-        .clk(clk),
+        .I_clk(sys_clk_27MHz),
 
         .O_pll_phase(pll_phase),
         .O_pll_phase_lock(pll_phase_lock),
@@ -62,107 +71,122 @@ module LED_Matrix_top #(
     );
 
     // ========== Input Logic ==========
-    logic [8*BATCH_SIZE-1:0] data_distributed [CHANNEL_NUMBER-1:0];
-    logic [$clog2(BATCH_SIZE)-1:0] address_distributed [CHANNEL_NUMBER-1:0];
-    logic clk_distributed;
+    logic [8*BATCH_SIZE*CHANNEL_NUMBER-1:0] batch_data_flat;
+    logic [$clog2(BLOCK_DATA_WIDTH_A)-1:0] write_address;
+    logic write_enable;
 
-    logic [$clog2(1920)-1:0] image_width;
-    logic [$clog2(1080)-1:0] image_height;
+    logic [$clog2(HDMI_MAX_WIDTH)-1:0] image_width;
+    logic [$clog2(HDMI_MAX_HEIGHT)-1:0] image_height;
     logic image_valid;
 
     Input_Logic #(
-        .COLOR_COUNT(CHANNEL_NUMBER),
+        .MAX_WIDTH(HDMI_MAX_WIDTH),
+        .MAX_HEIGHT(HDMI_MAX_HEIGHT),
+        .CHANNEL_COUNT(COLOR_COUNT),
         .BATCH_SIZE(BATCH_SIZE),
-        .MAX_WIDTH(1920),
-        .MAX_HEIGHT(1080)
+        .BYTES_PER_BLOCK(BYTES_PER_BLOCK),
+        .BANK_COUNT(BANK_COUNT),
+        .BLOCK_COUNT(BLOCK_COUNT),
+        .BLOCK_DATA_WIDTH_A(BLOCK_DATA_WIDTH_A)
     ) input_logic_inst (
-        .rst_n(btn[0]),
-        .rgb_clk(rgb_clk),
-        .rgb_de(rgb_de),
-        .rgb_hs(rgb_hs),
-        .rgb_vs(rgb_vs),
-        .rgb_color(rgb_color),
+        .I_rst_n(btn[0]),
+        .I_rgb_clk(rgb_clk),
+        .I_rgb_de(rgb_de),
+        .I_rgb_hs(rgb_hs),
+        .I_rgb_vs(rgb_vs),
+        .I_rgb_color(rgb_color),
 
-        .data_distributed(data_distributed),
-        .address_distributed(address_distributed),
-        .clk_distributed(clk_distributed),
+        .O_data_flat(batch_data_flat),
+        .O_address(write_address),
+        .O_write_enable(write_enable),
 
-        .image_width(image_width),
-        .image_height(image_height),
-        .image_valid(image_valid)
+        .O_image_width(image_width),
+        .O_image_height(image_height),
+        .O_image_valid(image_valid)
     );
 
     // ========== Double Buffer ==========
-    logic clk_data_out;
-    logic [CHANNEL_NUMBER*BLOCK_DATA_WIDTH*BLOCK_COUNT-1:0] dout_flat;
-    logic [$clog2(BLOCK_DEPTH)-1:0] adb [CHANNEL_NUMBER-1:0];
-    logic data_valid;
     logic swap_trigger;
 
-    Double_Buffer #(
-        .ADDRESS_DEPTH(BLOCK_DEPTH),
-        .BANK_COUNT(CHANNEL_NUMBER),
+    logic read_enable;
+    logic [$clog2(BLOCK_DATA_WIDTH_B)-1:0] read_address;
+    logic [CHANNEL_NUMBER*BLOCK_DATA_WIDTH_B*BLOCK_COUNT-1:0] dout_flat;
+    logic data_valid;
+
+    Matrix_Buffer #(
+        .BYTES_PER_BLOCK(BYTES_PER_BLOCK),
+        .BANK_COUNT(BANK_COUNT),
         .BLOCK_COUNT(BLOCK_COUNT),
-        .BLOCK_DATA_WIDTH(BLOCK_DATA_WIDTH)
-    ) double_buffer_inst (
-        .rst_n(btn[0]),
-        .clka(rgb_clk),
-        .clk_data_in(clk_distributed),
-        .ada(address_distributed),
-        .din(data_distributed),
+        .BLOCK_DATA_WIDTH_A(BLOCK_DATA_WIDTH_A),
+        .BLOCK_DATA_WIDTH_B(BLOCK_DATA_WIDTH_B)
+    ) buffer_inst (
+        .I_rst_n(btn[0]),
+        .I_swap_trigger(swap_trigger),
 
-        .clkb(clk),
-        .clk_data_out(clk_data_out),
-        .adb(adb),
-        .dout_flat(dout_flat),
+        .I_clka(rgb_clk),
+        .I_write_enable(write_enable),
+        .I_write_address(write_address),
+        .I_data_flat(batch_data_flat),
 
-        .swap_trigger(swap_trigger),
-        .data_valid(data_valid)
+        .I_clkb(sys_clk_27MHz),
+        .I_read_enable(read_enable),
+        .I_read_address(read_address),
+        .O_data_flat(dout_flat),
+
+        .O_data_valid(data_valid)
     );
 
+
     // ========== Output Logic ==========
-    logic [23:0] data_out [SPI_CHANNEL_NUMBER-1:0];
-    logic new_image, new_column, next_data, tx_finish;
+    logic [BLOCK_DATA_WIDTH_B-1:0] data_out [SPI_CHANNEL_NUMBER-1:0];
+    logic next_image, next_column, next_data, tx_finish;
 
     Output_Logic #(
         .SPI_CHANNEL_NUMBER(SPI_CHANNEL_NUMBER),
-        .BLOCK_DATA_WIDTH(BLOCK_DATA_WIDTH),
-        .BLOCK_COUNT(BLOCK_COUNT),
-        .BLOCK_DEPTH(BLOCK_DEPTH)
+        .MAX_WIDTH(HDMI_MAX_WIDTH),
+        .MAX_HEIGHT(HDMI_MAX_HEIGHT),
+        .BYTES_PER_BLOCK(BYTES_PER_BLOCK),
+        .BLOCK_DATA_WIDTH_B(BLOCK_DATA_WIDTH_B)
     ) output_logic_inst (
-        .I_clk(clk),
+        .I_clk(sys_clk_27MHz),
         .I_rst_n(btn[0]),
-        .I_clk_data_in(clk_data_out),
-        .I_buffer_data_flat(dout_flat),
+        // Communication with Input_Logic
+        .I_image_width(image_width),
+        .I_image_height(image_height),
+        .I_image_valid(image_valid),
+        // Communication with Matrix_Buffer
         .I_data_valid(data_valid),
-        .O_buffer_addresses(adb),
+        .O_read_enable(read_enable),
+        .O_read_address(read_address),
+        .I_data_flat(dout_flat),
+        // Communication with Output_Module
         .I_tx_finish(tx_finish),
-        .O_data_out(data_out),
-        .O_new_image(new_image),
-        .O_new_column(new_column),
-        .O_next_data(next_data)
+        .O_next_data(next_data),
+        .O_next_column(next_column),
+        .O_next_image(next_image),
+        .O_data_out(data_out)
     );
 
     // ========== Output Module ==========
     Output_Module #(
         .CHANNEL_NUMBER(SPI_CHANNEL_NUMBER),
-        .SPI_SIZE(24),
+        .SPI_SIZE(BLOCK_DATA_WIDTH_B),
         .MSB_FIRST(1)
     ) output_module_inst (
-        .clk(clk),
-        .rst(~btn[0]),
-        .data_in(data_out),
-        .new_image(new_image),
-        .new_column(new_column),
-        .next_data(next_data),
-        .extra_bit(1'b1),
-        .tx_finish(tx_finish),
-        .spi_clk(spi_clk),
-        .spi_mosi(spi_mosi),
-        .ser_clk(shift_clk),
-        .ser_data(shift_ser),
-        .ser_stcp(shift_stcp),
-        .ser_n_enable(shift_en)
+        .I_clk(sys_clk_27MHz),
+        .I_rst_n(btn[0]),
+        .I_data_in(data_out),
+        .I_next_image(next_image),
+        .I_next_column(next_column),
+        .I_next_data(next_data),
+        .I_extra_bit(1'b1),
+        .O_tx_finish(tx_finish),
+        .O_spi_clk(spi_clk),
+        .O_spi_mosi(spi_mosi),
+        .O_ser_clk(shift_clk),
+        .O_ser_data(shift_ser),
+        .O_ser_stcp(shift_stcp),
+        .O_ser_n_enable(shift_en)
     );
 
 endmodule

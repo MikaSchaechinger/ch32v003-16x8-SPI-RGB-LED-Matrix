@@ -3,24 +3,24 @@ module Output_Module #(
     parameter SPI_SIZE = 8,
     parameter MSB_FIRST = 1
 )(
-    input wire clk,
-    input wire rst,
+    input wire I_clk,
+    input wire I_rst_n,
 
-    input wire [SPI_SIZE-1:0] data_in [CHANNEL_NUMBER-1:0],
-    input wire new_image,
-    input wire new_column,
-    input wire next_data,
-    input wire extra_bit,
+    input wire [SPI_SIZE-1:0] I_data_in [CHANNEL_NUMBER-1:0],
+    input wire I_next_image,
+    input wire I_next_column,
+    input wire I_next_data,
+    input wire I_extra_bit,
 
-    output reg tx_finish,
+    output reg O_tx_finish,
 
-    output wire spi_clk,
-    output wire [CHANNEL_NUMBER-1:0] spi_mosi,
+    output wire O_spi_clk,
+    output wire [CHANNEL_NUMBER-1:0] O_spi_mosi,
 
-    output wire ser_clk,
-    output wire ser_data,
-    output wire ser_stcp,
-    output wire ser_n_enable
+    output wire O_ser_clk,
+    output wire O_ser_data,
+    output wire O_ser_stcp,
+    output wire O_ser_n_enable
 );
 
 
@@ -48,8 +48,8 @@ module Output_Module #(
 
     //=============== Code Logic ===============
 
-    always_ff @(posedge clk or posedge rst) begin
-        if (rst) begin
+    always_ff @(posedge I_clk or posedge I_rst_n) begin
+        if (I_rst_n) begin
             state <= S0_RST;
         end else begin
             state <= next_state;
@@ -64,22 +64,22 @@ module Output_Module #(
                 end else begin
                     next_state = S0_RST;
                 end
-                tx_finish = 0;
+                O_tx_finish = 0;
                 select_first = 0;
                 select_next = 0;
                 spi_start_tx = 0;
             end
             S1_IDLE: begin  // 0
-                if (new_image) begin
+                if (I_next_image) begin
                     next_state = S20_SEL_FIRST;
-                end else if (new_column) begin
+                end else if (I_next_column) begin
                     next_state = S21_SEL_NEXT;
-                end else if (next_data) begin
+                end else if (I_next_data) begin
                     next_state = S4_START_SPI_TX;
                 end else begin
                     next_state = S1_IDLE;
                 end
-                tx_finish = 1;
+                O_tx_finish = 1;
                 select_first = 0;
                 select_next = 0;
                 spi_start_tx = 0;
@@ -90,7 +90,7 @@ module Output_Module #(
                 end else begin
                     next_state = S20_SEL_FIRST;
                 end
-                tx_finish = 0;
+                O_tx_finish = 0;
                 select_first = 1;
                 select_next = 0;
                 spi_start_tx = 0;
@@ -101,7 +101,7 @@ module Output_Module #(
                 end else begin
                     next_state = S21_SEL_NEXT;
                 end
-                tx_finish = 0;
+                O_tx_finish = 0;
                 select_first = 0;
                 select_next = 1;
                 spi_start_tx = 0;
@@ -112,7 +112,7 @@ module Output_Module #(
                 end else begin
                     next_state = S3_WAIT_FOR_READY;
                 end
-                tx_finish = 0;
+                O_tx_finish = 0;
                 select_first = 0;
                 select_next = 0;
                 spi_start_tx = 0;
@@ -123,7 +123,7 @@ module Output_Module #(
                 end else begin
                     next_state = S4_START_SPI_TX;
                 end
-                tx_finish = 0;
+                O_tx_finish = 0;
                 select_first = 0;
                 select_next = 0;
                 spi_start_tx = 1;
@@ -134,14 +134,14 @@ module Output_Module #(
                 end else begin
                     next_state = S5_WAIT_FOR_SPI_TX_FINISH;
                 end
-                tx_finish = 0;
+                O_tx_finish = 0;
                 select_first = 0;
                 select_next = 0;
                 spi_start_tx = 0;
             end
             default: begin
                 next_state = S1_IDLE;
-                tx_finish = 0;
+                O_tx_finish = 0;
                 select_first = 0;
                 select_next = 0;
                 spi_start_tx = 0;
@@ -155,27 +155,27 @@ module Output_Module #(
         .SPI_SIZE(SPI_SIZE),
         .MSB_FIRST(MSB_FIRST)
     ) spi_tx (
-        .clk(clk),
-        .rst(rst),
+        .clk(I_clk),
+        .rst(I_rst_n),
         .start_tx(spi_start_tx),
         .tx_finish(spi_tx_finish),
-        .data_in(data_in),
-        .spi_clk(spi_clk),
-        .spi_mosi(spi_mosi)
+        .data_in(I_data_in),
+        .spi_clk(O_spi_clk),
+        .spi_mosi(O_spi_mosi)
     );
 
 
     column_select cs (
-        .clk(clk),
-        .rst(rst),
+        .clk(I_clk),
+        .rst(I_rst_n),
         .select_first(select_first),
         .select_next(select_next),
-        .extra_bit(extra_bit),
+        .extra_bit(I_extra_bit),
         .ready(column_select_ready),
-        .ser_clk(ser_clk),
-        .ser_data(ser_data),
-        .ser_stcp(ser_stcp),
-        .ser_n_enable(ser_n_enable)
+        .ser_clk(O_ser_clk),
+        .ser_data(O_ser_data),
+        .ser_stcp(O_ser_stcp),
+        .ser_n_enable(O_ser_n_enable)
     );
 
 endmodule

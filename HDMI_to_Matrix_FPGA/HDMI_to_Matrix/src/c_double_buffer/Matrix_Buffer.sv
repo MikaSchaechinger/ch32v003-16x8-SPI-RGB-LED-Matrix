@@ -12,13 +12,13 @@ module Matrix_Buffer #(
     input  logic                         I_swap_trigger,             // z. B. bei frame_complete
     // Input Side
     input  logic                         I_clka,
-    input  logic                         I_clk_data_in,
+    input  logic                         I_write_enable,
     input  logic [$clog2(ADDRESS_NUMBER_A)-1:0] I_write_address,
     input  logic [(BANK_COUNT*BLOCK_COUNT)*BLOCK_DATA_WIDTH_A-1:0] I_data_flat,
 
     // Output Side
     input  logic                         I_clkb,
-    input  logic                         I_clk_data_out,
+    input  logic                         I_read_enable,
     input  logic [$clog2(ADDRESS_NUMBER_B)-1:0] I_read_address,
     output logic [(BANK_COUNT*BLOCK_COUNT)*BLOCK_DATA_WIDTH_B-1:0] O_data_flat,
     
@@ -55,12 +55,12 @@ module Matrix_Buffer #(
     ) buffer_inst (
         .I_rst_n(I_rst_n),
         .I_clka(I_clka),
-        .I_clk_data_in(I_clk_data_in),
+        .I_write_enable(I_write_enable),
         .I_ada_flat(write_addresses_flat),
         .I_din_flat(write_data_flat),
 
         .I_clkb(I_clkb),
-        .I_clk_data_out(I_clk_data_out),
+        .I_read_enable(I_read_enable),
         .I_adb_flat(read_addresses_flat),
         .O_dout_flat(read_data_flat),
 

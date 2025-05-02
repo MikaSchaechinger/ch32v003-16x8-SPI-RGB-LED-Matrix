@@ -11,7 +11,7 @@
         input  logic        I_tmds_clk_n,
         input  logic [2:0]  I_tmds_data_p,
         input  logic [2:0]  I_tmds_data_n,
-        input  logic        clk,       // Nur für SIM-Modell erforderlich
+        input  logic        I_clk,       // Nur für SIM-Modell erforderlich
 
         output logic [3:0]  O_pll_phase,
         output logic        O_pll_phase_lock,
@@ -36,7 +36,7 @@
             .V_ACTIVE(V_ACTIVE),
             .V_TOTAL(V_TOTAL)
         ) dvi_sim_inst (
-            .clk(clk),
+            .clk(I_clk),
             .rst_n(I_rst_n),
             .O_pll_phase(O_pll_phase),
             .O_pll_phase_lock(O_pll_phase_lock),

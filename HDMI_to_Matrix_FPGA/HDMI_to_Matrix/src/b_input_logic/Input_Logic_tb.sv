@@ -40,25 +40,27 @@ module Input_Logic_tb;
 
     // === DUT Instanz ===
     Input_Logic #(
+        .MAX_WIDTH(MAX_WIDTH),
+        .MAX_HEIGHT(MAX_HEIGHT),
         .CHANNEL_COUNT(COLOR_COUNT),
         .BATCH_SIZE(BATCH_SIZE),
-        .BLOCK_WIDTH(BLOCK_WIDTH),
-        .BLOCK_DEPTH(BLOCK_DEPTH),
-        .MAX_WIDTH(MAX_WIDTH),
-        .MAX_HEIGHT(MAX_HEIGHT)
+        .BYTES_PER_BLOCK(2250),
+        .BANK_COUNT(6),
+        .BLOCK_COUNT(2),
+        .BLOCK_DATA_WIDTH_A(32)
     ) dut (
-        .rst_n(rst_n),
-        .rgb_clk(rgb_clk),
-        .rgb_de(rgb_de),
-        .rgb_hs(rgb_hs),
-        .rgb_vs(rgb_vs),
-        .rgb_color(rgb_color),
-        .data_distributed(data_distributed),
-        .address_distributed(address_distributed),
-        .clk_distributed(clk_distributed),
-        .image_width(image_width),
-        .image_height(image_height),
-        .image_valid(image_valid)
+        .I_rst_n(rst_n),
+        .I_rgb_clk(rgb_clk),
+        .I_rgb_de(rgb_de),
+        .I_rgb_hs(rgb_hs),
+        .I_rgb_vs(rgb_vs),
+        .I_rgb_color(rgb_color),
+        .O_data_distributed(data_distributed),
+        .O_address_distributed(address_distributed),
+        .O_clk_distributed(clk_distributed),
+        .O_image_width(image_width),
+        .O_image_height(image_height),
+        .O_image_valid(image_valid)
     );
 
     // === Teststimulus ===

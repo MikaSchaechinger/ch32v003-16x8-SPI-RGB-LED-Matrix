@@ -1,33 +1,39 @@
 module Input_Logic #(
-    parameter CHANNEL_COUNT = 3,
-    parameter BATCH_SIZE = 16,
-    parameter BLOCK_WIDTH = 32,
-    parameter BLOCK_DEPTH = 480,
-    parameter MAX_WIDTH = 1920,
-    parameter MAX_HEIGHT = 1080
+    // Configuration Parameters
+    parameter int MAX_WIDTH = 1920,
+    parameter int MAX_HEIGHT = 1080,
+    // Input Parameters
+    parameter int CHANNEL_COUNT = 3,
+    parameter int BATCH_SIZE = 4,
+
+    // Buffer Parameters
+    parameter int BYTES_PER_BLOCK = 2250,
+    parameter int BANK_COUNT = 6,
+    parameter int BLOCK_COUNT = 2,
+    parameter int BLOCK_DATA_WIDTH_A = 32,  // Write Port
+    parameter int BANDWIDTH_A = BANK_COUNT * BLOCK_DATA_WIDTH_A, // Write Port
+    parameter int ADDRESS_NUMBER_A = (BYTES_PER_BLOCK * 8) / BLOCK_DATA_WIDTH_A // Write Port
 )(
-    input  logic                            rst_n,
-    input  logic                            rgb_clk,
-    input  logic                            rgb_de,
-    input  logic                            rgb_hs,
-    input  logic                            rgb_vs,
-    input  logic [7:0]                      rgb_color [0:CHANNEL_COUNT-1],
+    input  logic                            I_rst_n,
+    input  logic                            I_rgb_clk,
+    input  logic                            I_rgb_de,
+    input  logic                            I_rgb_hs,
+    input  logic                            I_rgb_vs,
+    input  logic [7:0]                      I_rgb_color [CHANNEL_COUNT-1:0],
 
-    output logic [8*BATCH_SIZE-1:0]         data_distributed [0:CHANNEL_COUNT-1],
-    output logic [$clog2(BLOCK_DEPTH)-1:0]   address_distributed [0:CHANNEL_COUNT-1],
-    output logic                            clk_distributed,
+    output logic [8*BATCH_SIZE*CHANNEL_COUNT-1:0]   O_data_flat,
+    output logic [$clog2(ADDRESS_NUMBER_A)-1:0]     O_address,
+    output logic                            O_write_enable,
 
-    output logic [$clog2(MAX_WIDTH)-1:0]    image_width,
-    output logic [$clog2(MAX_HEIGHT)-1:0]   image_height,
-    output logic                            image_valid
+    output logic [$clog2(MAX_WIDTH)-1:0]    O_image_width,
+    output logic [$clog2(MAX_HEIGHT)-1:0]   O_image_height,
+    output logic                            O_image_valid
 );
-    localparam int INTERN_ADDRESS_BITS = $clog2(BLOCK_DEPTH);
-    localparam int OUT_ADDRESS_BITS = $clog2(BATCH_SIZE);
 
     logic [7:0] rgb_color_0, rgb_color_1, rgb_color_2;
-    assign rgb_color_0 = rgb_color[0];
-    assign rgb_color_1 = rgb_color[1];
-    assign rgb_color_2 = rgb_color[2];
+    assign rgb_color_0 = I_rgb_color[0];
+    assign rgb_color_1 = I_rgb_color[1];
+    assign rgb_color_2 = I_rgb_color[2];
 
     // Internal signals
     logic [CHANNEL_COUNT-1:0] batch_ready;
@@ -41,16 +47,24 @@ module Input_Logic #(
             Color_Batch_Buffer #(
                 .BATCH_SIZE(BATCH_SIZE)
             ) color_buffer_inst (
-                .I_rgb_clk(rgb_clk),
-                .I_rst_n(rst_n),
-                .I_color(rgb_color[color]),
-                .I_color_valid(rgb_de),
+                .I_rgb_clk(I_rgb_clk),
+                .I_rst_n(I_rst_n),
+                .I_color(I_rgb_color[color]),
+                .I_color_valid(I_rgb_de),
                 .O_batch_ready(batch_ready[color]),
                 .O_batch_clk_out(batch_ready_clk[color]),
                 .O_batch_color(batches[color])
             );
         end
     endgenerate
+
+    // Batches get combined and written to the output
+    always_comb begin
+        O_data_flat = {batches[2], batches[1], batches[0]};
+    end
+
+    assign O_clk_distributed = batch_ready_clk[0];
+
 
     // Sync Manager
     logic image_width_valid, image_height_valid;
@@ -61,51 +75,37 @@ module Input_Logic #(
         .MAX_HEIGHT(MAX_HEIGHT),
         .DELAY(BATCH_SIZE)
     ) sync_manager_inst (
-        .I_rst_n(rst_n),
-        .I_rgb_clk(rgb_clk),
-        .I_rgb_de(rgb_de),
-        .I_rgb_vs(rgb_vs),
-        .I_rgb_hs(rgb_hs),
-        .O_image_width(image_width),
-        .O_image_height(image_height),
+        .I_rst_n(I_rst_n),
+        .I_rgb_clk(I_rgb_clk),
+        .I_rgb_de(I_rgb_de),
+        .I_rgb_vs(I_rgb_vs),
+        .I_rgb_hs(I_rgb_hs),
+        .O_image_width(O_image_width),
+        .O_image_height(O_image_height),
         .O_width_valid(image_width_valid),
         .O_height_valid(image_height_valid),
         .O_new_row(new_row),
         .O_new_frame(new_frame)
     );
 
-    assign image_valid = image_width_valid & image_height_valid;
+    assign O_image_valid = image_width_valid & image_height_valid;
+
+    localparam ADDRESS_BITS = $clog2(ADDRESS_NUMBER_A);
 
     // Address Generator
-    logic [INTERN_ADDRESS_BITS-1:0] write_address;
+    logic [ADDRESS_BITS-1:0] write_address;
 
     Address_Generator #(
-        .ADDRESS_BITS(INTERN_ADDRESS_BITS)
+        .ADDRESS_BITS(ADDRESS_BITS)
     ) addr_gen_inst (
-        .I_rst_n(rst_n),
-        .I_clk(rgb_clk),
+        .I_rst_n(I_rst_n),
+        .I_clk(I_rgb_clk),
         .I_address_up(batch_ready[0]),
         .I_address_reset(new_row),
-        .O_address(write_address)
+        .O_address(O_address)
     );
 
-    // Bank Distributor
-    Bank_Distributor #(
-        .CHANNEL_NUMBER(CHANNEL_COUNT),
-        .CHANNEL_BANDWIDTH(8*BATCH_SIZE),
-        .BLOCK_DEPTH(BLOCK_DEPTH)
-    ) bank_dist_inst (
-        .I_clk_in(batch_ready_clk[0]),
-        .I_data_in(batches),
-        .I_address_in(write_address),
-        .O_data_out(data_distributed),
-        .O_address_out(address_distributed),
-        .O_clk_out(clk_distributed)
-    );
+    
 
-    logic [8*BATCH_SIZE-1:0]         data_distributed_0;
-    logic [$clog2(BLOCK_DEPTH)-1:0] address_distributed_0;
-    assign data_distributed_0 = data_distributed[0];
-    assign address_distributed_0 = address_distributed[0];
 
 endmodule

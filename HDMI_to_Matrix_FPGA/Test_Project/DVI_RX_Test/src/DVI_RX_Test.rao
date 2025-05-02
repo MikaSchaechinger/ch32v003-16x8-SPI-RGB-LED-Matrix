@@ -14,13 +14,13 @@
                 <Signal>spi_mosi[0]</Signal>
             </Bus>
             <Signal capture_enable="true">spi_clk</Signal>
-            <Signal capture_enable="true">new_image</Signal>
+            <Signal capture_enable="true">next_image</Signal>
             <Signal capture_enable="true">next_data</Signal>
         </SignalList>
         <Triggers>
             <Trigger index="0">
                 <SignalList>
-                    <Signal>new_image</Signal>
+                    <Signal>next_image</Signal>
                 </SignalList>
             </Trigger>
             <Trigger index="1"/>
