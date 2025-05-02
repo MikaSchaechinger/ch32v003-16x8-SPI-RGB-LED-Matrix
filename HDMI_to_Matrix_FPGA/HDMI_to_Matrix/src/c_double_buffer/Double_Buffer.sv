@@ -28,11 +28,11 @@ module Double_Buffer #(
     typedef enum logic { BUFFER_0, BUFFER_1 } buffer_t;
     buffer_t write_buffer;
 
-    always_ff @(posedge I_swap_trigger or negedge I_rst_n) begin
+    always_ff @(posedge I_clka or negedge I_rst_n) begin
         if (!I_rst_n) begin
             write_buffer <= BUFFER_0;
             O_data_valid <= 1'b0;
-        end else begin
+        end else if (I_swap_trigger) begin
             write_buffer <= buffer_t'((write_buffer == BUFFER_0) ? BUFFER_1 : BUFFER_0);
             O_data_valid <= 1'b1;
         end
