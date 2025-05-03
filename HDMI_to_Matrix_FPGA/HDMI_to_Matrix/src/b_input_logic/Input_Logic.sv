@@ -27,7 +27,11 @@ module Input_Logic #(
 
     output logic [$clog2(MAX_WIDTH)-1:0]    O_image_width,
     output logic [$clog2(MAX_HEIGHT)-1:0]   O_image_height,
-    output logic                            O_image_valid
+    output logic                            O_image_valid,
+
+    output logic                            O_batch_ready,
+
+    output logic                            O_swap_trigger
 );
 
     logic [7:0] rgb_color_0, rgb_color_1, rgb_color_2;
@@ -49,6 +53,8 @@ module Input_Logic #(
             ) color_buffer_inst (
                 .I_rgb_clk(I_rgb_clk),
                 .I_rst_n(I_rst_n),
+                .I_flush(~I_rgb_hs),
+
                 .I_color(I_rgb_color[color]),
                 .I_color_valid(I_rgb_de),
                 .O_batch_ready(batch_ready[color]),
@@ -63,12 +69,13 @@ module Input_Logic #(
         O_data_flat = {batches[2], batches[1], batches[0]};
     end
 
-    assign O_clk_distributed = batch_ready_clk[0];
+    assign O_batch_ready = batch_ready_clk[0];
+    assign O_write_enable = ~O_batch_ready;
 
 
     // Sync Manager
     logic image_width_valid, image_height_valid;
-    logic new_row, new_frame;
+    logic new_row, new_frame, new_row_delay, new_frame_delay;
 
     Sync_Manager #(
         .MAX_WIDTH(MAX_WIDTH),
@@ -85,7 +92,9 @@ module Input_Logic #(
         .O_width_valid(image_width_valid),
         .O_height_valid(image_height_valid),
         .O_new_row(new_row),
-        .O_new_frame(new_frame)
+        .O_new_frame(new_frame),
+        .O_new_row_delay(new_row_delay),
+        .O_new_frame_delay(new_frame_delay)
     );
 
     assign O_image_valid = image_width_valid & image_height_valid;
@@ -105,7 +114,28 @@ module Input_Logic #(
         .O_address(O_address)
     );
 
+
+    // Generate a Flag which is set when a batch is ready and reset when the O_swap_trigger is set
+    // Only when the Flag is active, O_swap_trigger can be high, so it can't be set in a v blank
+    logic has_data_flag, swap_trigger_pulse;
+
+    always_ff @(posedge I_rgb_clk or negedge I_rst_n) begin
+        if (!I_rst_n) begin
+            has_data_flag <= 1'b0;
+        end else begin
+            // Flag setzen, wenn ein Batch geschrieben wurde
+            if (O_write_enable)
+                has_data_flag <= 1'b1;
+            // Flag zurücksetzen, wenn eine neue Zeile beginnt
+            else if (new_row) begin
+                if (has_data_flag) begin
+                    has_data_flag <= 1'b0;
+                    O_swap_trigger <= 1'b1; 
+                end 
+            end else begin
+                O_swap_trigger <= 1'b0; // Reset the trigger if not in a new row
+            end   
+        end
+    end
     
-
-
 endmodule

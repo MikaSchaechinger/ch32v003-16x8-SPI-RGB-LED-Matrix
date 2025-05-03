@@ -10,10 +10,12 @@ module Output_Logic #(
     input  logic                         I_clk,
     input  logic                         I_rst_n,
     // Communication with Input_Logic
+    input  logic                         I_start_line_out,     
+    // Communication with Matrix_Buffer
     input  logic [$clog2(MAX_WIDTH)-1:0]    I_image_width,
     input  logic [$clog2(MAX_HEIGHT)-1:0]   I_image_height,
     input  logic                         I_image_valid,
-    // Communication with Matrix_Buffer
+    
     input  logic                         I_data_valid,
     output logic                         O_read_enable,
     output logic [$clog2(ADDRESS_NUMBER_B)-1:0] O_read_address,
@@ -25,6 +27,8 @@ module Output_Logic #(
     output logic                         O_next_image,
     output logic [BLOCK_DATA_WIDTH_B-1:0] O_data_out [SPI_CHANNEL_NUMBER-1:0]
 );
+
+
 
 
 

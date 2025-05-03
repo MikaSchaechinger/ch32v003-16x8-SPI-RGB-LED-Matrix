@@ -1,6 +1,6 @@
 module Info_Buffer #(
     parameter int MAX_WIDTH = 1920,
-    parameter int MAX_HEIGHT = 1080,
+    parameter int MAX_HEIGHT = 1080
 )(
     input  logic                        I_rst_n,
     input  logic                        I_clk,

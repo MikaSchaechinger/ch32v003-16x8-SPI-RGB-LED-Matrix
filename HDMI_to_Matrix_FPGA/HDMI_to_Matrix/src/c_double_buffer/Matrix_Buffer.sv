@@ -1,5 +1,7 @@
 module Matrix_Buffer #(
     parameter int BYTES_PER_BLOCK = 2250,
+    parameter int MAX_WIDTH = 1920,
+    parameter int MAX_HEIGHT = 1080,
     parameter int BANK_COUNT = 6,
     parameter int BLOCK_COUNT = 2,
     parameter int BLOCK_DATA_WIDTH_A = 32,  // Write Port
@@ -16,14 +18,79 @@ module Matrix_Buffer #(
     input  logic [$clog2(ADDRESS_NUMBER_A)-1:0] I_write_address,
     input  logic [(BANK_COUNT*BLOCK_COUNT)*BLOCK_DATA_WIDTH_A-1:0] I_data_flat,
 
+    input  logic [$clog2(MAX_WIDTH)-1:0] I_image_width,
+    input  logic [$clog2(MAX_HEIGHT)-1:0] I_image_height,
+    input  logic                        I_image_valid,
+    input  logic                        I_next_column,
+    input  logic                        I_next_image,
+
     // Output Side
     input  logic                         I_clkb,
     input  logic                         I_read_enable,
     input  logic [$clog2(ADDRESS_NUMBER_B)-1:0] I_read_address,
     output logic [(BANK_COUNT*BLOCK_COUNT)*BLOCK_DATA_WIDTH_B-1:0] O_data_flat,
+
+    output logic [$clog2(MAX_WIDTH)-1:0] O_image_width,
+    output logic [$clog2(MAX_HEIGHT)-1:0] O_image_height,
+    output logic                        O_image_valid,
+    output logic                        O_next_column,
+    output logic                        O_next_image,
     
-    output logic                         O_data_valid                // High after first swap_trigger
+    output logic                        O_data_valid,     
+    
+    output logic                        O_buffer_updated           // High for one clkb after swap_trigger
 );
+
+    // Synchronisation und Puls-Erzeugung für O_buffer_updated
+    logic swap_trigger_sync_0, swap_trigger_sync_1, swap_trigger_sync_2;
+
+    always_ff @(posedge I_clkb or negedge I_rst_n) begin
+        if (!I_rst_n) begin
+            swap_trigger_sync_0 <= 0;   // For synchronisation
+            swap_trigger_sync_1 <= 0;   // For synchronisation
+            swap_trigger_sync_2 <= 0;   // For edge detection
+        end else begin
+            swap_trigger_sync_0 <= I_swap_trigger;
+            swap_trigger_sync_1 <= swap_trigger_sync_0;
+            swap_trigger_sync_2 <= swap_trigger_sync_1;
+        end
+    end
+
+    wire rising_edge_swap_trigger = swap_trigger_sync_1 & ~swap_trigger_sync_2;
+
+    always_ff @(posedge I_clkb or negedge I_rst_n) begin
+        if (!I_rst_n)
+            O_buffer_updated <= 1'b0;
+        else
+            O_buffer_updated <= rising_edge_swap_trigger;
+    end
+
+
+
+    // Info Buffer buffers extra information from the image to the output side
+    Info_Buffer #(
+        .MAX_WIDTH(MAX_WIDTH),
+        .MAX_HEIGHT(MAX_HEIGHT)
+    ) info_buffer_inst (
+        .I_rst_n(I_rst_n),
+        .I_clk(I_clka),
+        .I_swap_trigger(I_swap_trigger),
+
+        .I_image_width(I_image_width),
+        .I_image_height(I_image_height),
+        .I_image_valid(I_image_valid),
+        .I_next_column(I_next_column),
+        .I_next_image(I_next_image),
+
+        .O_image_width(O_image_width),
+        .O_image_height(O_image_height),
+        .O_image_valid(O_image_valid),
+        .O_next_column(O_next_column),
+        .O_next_image(O_next_image)
+    );
+        
+
+
 
     logic [BANK_COUNT*BLOCK_COUNT*$clog2(ADDRESS_NUMBER_A)-1:0] write_addresses_flat;
     logic [BANK_COUNT*BLOCK_COUNT*BLOCK_DATA_WIDTH_A-1:0] write_data_flat;

@@ -2,9 +2,9 @@
 
     module DVI_RX_Wrapper #(
         parameter int H_ACTIVE = 128,
-        parameter int H_TOTAL  = 144,
+        parameter int H_BLANK  = 16, // min 16
         parameter int V_ACTIVE = 32,
-        parameter int V_TOTAL  = 40
+        parameter int V_BLANK  = 4   // min 4
     )(
         input  logic        I_rst_n,
         input  logic        I_tmds_clk_p,
@@ -32,9 +32,9 @@
         
         DVI_RX_SIM #(
             .H_ACTIVE(H_ACTIVE),
-            .H_TOTAL(H_TOTAL),
+            .H_BLANK(H_BLANK),
             .V_ACTIVE(V_ACTIVE),
-            .V_TOTAL(V_TOTAL)
+            .V_BLANK(V_BLANK)
         ) dvi_sim_inst (
             .clk(I_clk),
             .rst_n(I_rst_n),
