@@ -17,7 +17,7 @@ module HDMI_to_Matrix_top #(
     parameter ADDRESS_NUMBER_B = (BYTES_PER_BLOCK * 8) / BLOCK_DATA_WIDTH_B, // Read Port
 
     // SPI Configuration
-    parameter SPI_CHANNEL_NUMBER = 8
+    parameter SPI_CHANNEL_NUMBER = 24
 )(
     input wire sys_clk_27MHz,
     input wire [1:0] btn,
@@ -79,9 +79,9 @@ module HDMI_to_Matrix_top #(
     logic [7:0] rgb_color [COLOR_COUNT-1:0];
 
     DVI_RX_Wrapper #(
-        .H_ACTIVE(32),  // Parameters are only for simulation
+        .H_ACTIVE(640),  // Parameters are only for simulation
         .H_BLANK(16),   // min 16
-        .V_ACTIVE(8),
+        .V_ACTIVE(6),
         .V_BLANK(4)     // min 4
     ) DVI_RX_inst (
         .I_rst_n(btn[0]),
@@ -111,6 +111,8 @@ module HDMI_to_Matrix_top #(
     logic [$clog2(HDMI_MAX_HEIGHT)-1:0] image_height_in_side;
     logic image_valid_in_side;
     logic swap_trigger;
+    logic hs_detected_in_side, vs_detected_in_side;
+    logic hs_detected_out_side, vs_detected_out_side;
 
     Input_Logic #(
         .MAX_WIDTH(HDMI_MAX_WIDTH),
@@ -139,7 +141,9 @@ module HDMI_to_Matrix_top #(
 
         .O_batch_ready(),
 
-        .O_swap_trigger(swap_trigger)
+        .O_swap_trigger(swap_trigger),
+        .O_hs_detected(hs_detected_in_side),
+        .O_vs_detected(vs_detected_in_side)
     );
 
     // ========== Double Buffer ==========
@@ -175,8 +179,8 @@ module HDMI_to_Matrix_top #(
         .I_image_width(image_width_in_side),
         .I_image_height(image_height_in_side),
         .I_image_valid(image_valid_in_side),
-        .I_next_column(),
-        .I_next_image(),
+        .I_hs_detected(hs_detected_in_side),
+        .I_vs_detected(vs_detected_in_side),
         // Output Side
         .I_clkb(sys_clk_27MHz),
         .I_read_enable(read_enable),
@@ -186,8 +190,8 @@ module HDMI_to_Matrix_top #(
         .O_image_width(image_width_out_side),
         .O_image_height(image_height_out_side),
         .O_image_valid(image_valid_out_side),
-        .O_next_column(),
-        .O_next_image(),
+        .O_hs_detected(hs_detected_out_side),
+        .O_vs_detected(vs_detected_out_side),
 
         .O_data_valid(buffer_data_valid),
 
@@ -198,20 +202,24 @@ module HDMI_to_Matrix_top #(
     // ========== Output Logic ==========
     logic [BLOCK_DATA_WIDTH_B-1:0] data_out [SPI_CHANNEL_NUMBER-1:0];
     logic next_image, next_column, next_data, tx_finish;
+    logic [SPI_CHANNEL_NUMBER*BLOCK_DATA_WIDTH_B-1:0] spi_data_flat;
 
     Output_Logic #(
         .SPI_CHANNEL_NUMBER(SPI_CHANNEL_NUMBER),
         .MAX_WIDTH(HDMI_MAX_WIDTH),
         .MAX_HEIGHT(HDMI_MAX_HEIGHT),
+        .BANK_COUNT(BANK_COUNT),
+        .BLOCK_COUNT(BLOCK_COUNT),
         .BYTES_PER_BLOCK(BYTES_PER_BLOCK),
         .BLOCK_DATA_WIDTH_B(BLOCK_DATA_WIDTH_B)
     ) output_logic_inst (
         .I_clk(sys_clk_27MHz),
         .I_rst_n(btn[0]),
-        // Communication with Input_Logic
-        .I_start_line_out(start_line_out),
         // Communication with Matrix_Buffer
         .I_image_width(image_width_in_side),
+        .I_start_line_out(start_line_out),
+        .I_hs_detected(hs_detected_out_side),
+        .I_vs_detected(vs_detected_out_side),
         .I_image_height(image_height_in_side),
         .I_image_valid(image_valid_in_side),
 
@@ -224,7 +232,7 @@ module HDMI_to_Matrix_top #(
         .O_next_data(next_data),
         .O_next_column(next_column),
         .O_next_image(next_image),
-        .O_data_out(data_out)
+        .O_data_flat(spi_data_flat)
     );
 
     // ========== Output Module ==========
@@ -235,7 +243,7 @@ module HDMI_to_Matrix_top #(
     ) output_module_inst (
         .I_clk(sys_clk_27MHz),
         .I_rst_n(btn[0]),
-        .I_data_in(data_out),
+        .I_data_flat(spi_data_flat),
         .I_next_image(next_image),
         .I_next_column(next_column),
         .I_next_data(next_data),

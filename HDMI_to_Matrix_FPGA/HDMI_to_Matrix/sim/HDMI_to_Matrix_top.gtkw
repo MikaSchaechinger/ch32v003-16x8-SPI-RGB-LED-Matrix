@@ -1,0 +1,193 @@
+[*]
+[*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
+[*] Mon May 05 23:21:41 2025
+[*]
+[dumpfile] "C:\Users\Mika\Programmieren\Projects\ch32v003-16x8-SPI-RGB-LED-Matrix\HDMI_to_Matrix_FPGA\HDMI_to_Matrix\sim\sim\HDMI_to_Matrix_top_tb.fst"
+[savefile] "C:\Users\Mika\Programmieren\Projects\ch32v003-16x8-SPI-RGB-LED-Matrix\HDMI_to_Matrix_FPGA\HDMI_to_Matrix\sim\HDMI_to_Matrix_top.gtkw"
+[timestart] 1042198
+[size] 5113 1345
+[pos] -2925 -362
+*-8.900000 1048927 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] HDMI_to_Matrix_top_tb.
+[treeopen] HDMI_to_Matrix_top_tb.dut.
+[treeopen] HDMI_to_Matrix_top_tb.dut.buffer_inst.
+[treeopen] HDMI_to_Matrix_top_tb.dut.output_module_inst.
+[treeopen] HDMI_to_Matrix_top_tb.dut.output_module_inst.spi_tx.
+[sst_width] 246
+[signals_width] 222
+[sst_expanded] 1
+[sst_vpaned_height] 912
+@200
+-DVI_RX
+@28
+HDMI_to_Matrix_top_tb.dut.DVI_RX_inst.O_rgb_de
+@22
+[color] 1
+HDMI_to_Matrix_top_tb.dut.DVI_RX_inst.O_rgb_r[7:0]
+HDMI_to_Matrix_top_tb.dut.DVI_RX_inst.O_rgb_g[7:0]
+[color] 5
+HDMI_to_Matrix_top_tb.dut.DVI_RX_inst.O_rgb_b[7:0]
+@28
+[color] 7
+HDMI_to_Matrix_top_tb.dut.DVI_RX_inst.O_rgb_hs
+[color] 7
+HDMI_to_Matrix_top_tb.dut.DVI_RX_inst.O_rgb_vs
+@200
+-
+-Output Side
+@28
+[color] 3
+HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_image_valid
+HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_start_line_out
+@24
+[color] 2
+HDMI_to_Matrix_top_tb.dut.output_logic_inst.state[2:0]
+HDMI_to_Matrix_top_tb.dut.output_logic_inst.base_address[4:0]
+@28
+HDMI_to_Matrix_top_tb.dut.output_logic_inst.O_read_enable
+@24
+HDMI_to_Matrix_top_tb.dut.output_logic_inst.O_read_address[11:0]
+@c00022
+HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+@28
+(0)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(1)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(2)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(3)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(4)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(5)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(6)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(7)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(8)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(9)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(10)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(11)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(12)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(13)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(14)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(15)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(16)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(17)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(18)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(19)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(20)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(21)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(22)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(23)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(24)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(25)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(26)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(27)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(28)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(29)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(30)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(31)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(32)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(33)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(34)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(35)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(36)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(37)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(38)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(39)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(40)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(41)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(42)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(43)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(44)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(45)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(46)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(47)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(48)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(49)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(50)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(51)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(52)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(53)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(54)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(55)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(56)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(57)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(58)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(59)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(60)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(61)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(62)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(63)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(64)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(65)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(66)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(67)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(68)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(69)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(70)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(71)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(72)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(73)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(74)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(75)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(76)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(77)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(78)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(79)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(80)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(81)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(82)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(83)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(84)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(85)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(86)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(87)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(88)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(89)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(90)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(91)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(92)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(93)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(94)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+(95)HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_data_flat[95:0]
+@1401200
+-group_end
+@22
+HDMI_to_Matrix_top_tb.dut.output_logic_inst.cycles_done[4:0]
+HDMI_to_Matrix_top_tb.dut.output_logic_inst.data_out_flat[191:0]
+@200
+-SPI_TX
+@28
+[color] 3
+HDMI_to_Matrix_top_tb.dut.output_logic_inst.I_tx_finish
+HDMI_to_Matrix_top_tb.dut.output_logic_inst.O_next_data
+HDMI_to_Matrix_top_tb.dut.output_logic_inst.O_next_column
+HDMI_to_Matrix_top_tb.dut.output_logic_inst.O_next_image
+HDMI_to_Matrix_top_tb.dut.output_module_inst.spi_tx.spi_clk
+@c00022
+HDMI_to_Matrix_top_tb.dut.output_module_inst.O_spi_mosi[23:0]
+@28
+(0)HDMI_to_Matrix_top_tb.dut.output_module_inst.O_spi_mosi[23:0]
+(1)HDMI_to_Matrix_top_tb.dut.output_module_inst.O_spi_mosi[23:0]
+(2)HDMI_to_Matrix_top_tb.dut.output_module_inst.O_spi_mosi[23:0]
+(3)HDMI_to_Matrix_top_tb.dut.output_module_inst.O_spi_mosi[23:0]
+(4)HDMI_to_Matrix_top_tb.dut.output_module_inst.O_spi_mosi[23:0]
+(5)HDMI_to_Matrix_top_tb.dut.output_module_inst.O_spi_mosi[23:0]
+(6)HDMI_to_Matrix_top_tb.dut.output_module_inst.O_spi_mosi[23:0]
+(7)HDMI_to_Matrix_top_tb.dut.output_module_inst.O_spi_mosi[23:0]
+(8)HDMI_to_Matrix_top_tb.dut.output_module_inst.O_spi_mosi[23:0]
+(9)HDMI_to_Matrix_top_tb.dut.output_module_inst.O_spi_mosi[23:0]
+(10)HDMI_to_Matrix_top_tb.dut.output_module_inst.O_spi_mosi[23:0]
+(11)HDMI_to_Matrix_top_tb.dut.output_module_inst.O_spi_mosi[23:0]
+(12)HDMI_to_Matrix_top_tb.dut.output_module_inst.O_spi_mosi[23:0]
+(13)HDMI_to_Matrix_top_tb.dut.output_module_inst.O_spi_mosi[23:0]
+(14)HDMI_to_Matrix_top_tb.dut.output_module_inst.O_spi_mosi[23:0]
+(15)HDMI_to_Matrix_top_tb.dut.output_module_inst.O_spi_mosi[23:0]
+(16)HDMI_to_Matrix_top_tb.dut.output_module_inst.O_spi_mosi[23:0]
+(17)HDMI_to_Matrix_top_tb.dut.output_module_inst.O_spi_mosi[23:0]
+(18)HDMI_to_Matrix_top_tb.dut.output_module_inst.O_spi_mosi[23:0]
+(19)HDMI_to_Matrix_top_tb.dut.output_module_inst.O_spi_mosi[23:0]
+(20)HDMI_to_Matrix_top_tb.dut.output_module_inst.O_spi_mosi[23:0]
+(21)HDMI_to_Matrix_top_tb.dut.output_module_inst.O_spi_mosi[23:0]
+(22)HDMI_to_Matrix_top_tb.dut.output_module_inst.O_spi_mosi[23:0]
+(23)HDMI_to_Matrix_top_tb.dut.output_module_inst.O_spi_mosi[23:0]
+@1401200
+-group_end
+[pattern_trace] 1
+[pattern_trace] 0

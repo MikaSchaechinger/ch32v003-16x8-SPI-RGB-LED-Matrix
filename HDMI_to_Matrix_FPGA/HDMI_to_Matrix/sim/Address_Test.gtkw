@@ -1,0 +1,166 @@
+[*]
+[*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
+[*] Mon May 05 23:02:19 2025
+[*]
+[dumpfile] "C:\Users\Mika\Programmieren\Projects\ch32v003-16x8-SPI-RGB-LED-Matrix\HDMI_to_Matrix_FPGA\HDMI_to_Matrix\sim\sim\HDMI_to_Matrix_top_tb.fst"
+[savefile] "C:\Users\Mika\Programmieren\Projects\ch32v003-16x8-SPI-RGB-LED-Matrix\HDMI_to_Matrix_FPGA\HDMI_to_Matrix\sim\Address_Test.gtkw"
+[timestart] 1033991
+[size] 5089 1393
+[pos] -2860 -284
+*-10.200000 1693 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] HDMI_to_Matrix_top_tb.
+[treeopen] HDMI_to_Matrix_top_tb.dut.
+[treeopen] HDMI_to_Matrix_top_tb.dut.buffer_inst.
+[treeopen] HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.
+[treeopen] HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.
+[treeopen] HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[0].bank_inst.
+[treeopen] HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[0].bank_inst.block_gen[0].
+[treeopen] HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[0].bank_inst.block_gen[0].sdpb_inst.
+[treeopen] HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[0].bank_inst.block_gen[0].sdpb_inst.sim_inst.
+[treeopen] HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[0].bank_inst.block_gen[1].
+[treeopen] HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[0].bank_inst.block_gen[1].sdpb_inst.
+[treeopen] HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[0].bank_inst.block_gen[1].sdpb_inst.sim_inst.
+[treeopen] HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[1].bank_inst.
+[treeopen] HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[1].bank_inst.block_gen[0].
+[treeopen] HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[1].bank_inst.block_gen[0].sdpb_inst.
+[treeopen] HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[1].bank_inst.block_gen[1].
+[treeopen] HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[2].bank_inst.
+[treeopen] HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[2].bank_inst.block_gen[0].sdpb_inst.
+[treeopen] HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[2].bank_inst.block_gen[1].
+[treeopen] HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[3].bank_inst.
+[treeopen] HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[3].bank_inst.block_gen[1].
+[treeopen] HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[4].bank_inst.
+[treeopen] HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[4].bank_inst.block_gen[1].
+[treeopen] HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[5].
+[treeopen] HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[5].bank_inst.
+[treeopen] HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[5].bank_inst.block_gen[1].
+[treeopen] HDMI_to_Matrix_top_tb.dut.buffer_inst.output_port_inst.
+[sst_width] 404
+[signals_width] 283
+[sst_expanded] 1
+[sst_vpaned_height] 633
+@28
+HDMI_to_Matrix_top_tb.dut.DVI_RX_inst.O_rgb_clk
+HDMI_to_Matrix_top_tb.dut.DVI_RX_inst.O_rgb_de
+@22
+[color] 1
+HDMI_to_Matrix_top_tb.dut.DVI_RX_inst.O_rgb_r[7:0]
+HDMI_to_Matrix_top_tb.dut.DVI_RX_inst.O_rgb_g[7:0]
+[color] 5
+HDMI_to_Matrix_top_tb.dut.DVI_RX_inst.O_rgb_b[7:0]
+@28
+HDMI_to_Matrix_top_tb.dut.DVI_RX_inst.O_rgb_hs
+HDMI_to_Matrix_top_tb.dut.DVI_RX_inst.O_rgb_vs
+@200
+-Batch
+@28
+HDMI_to_Matrix_top_tb.dut.input_logic_inst.O_batch_ready
+@22
+[color] 1
+HDMI_to_Matrix_top_tb.dut.input_logic_inst.color_batch[0].color_buffer_inst.O_batch_color[127:0]
+HDMI_to_Matrix_top_tb.dut.input_logic_inst.color_batch[1].color_buffer_inst.O_batch_color[127:0]
+[color] 5
+HDMI_to_Matrix_top_tb.dut.input_logic_inst.color_batch[2].color_buffer_inst.O_batch_color[127:0]
+[color] 2
+HDMI_to_Matrix_top_tb.dut.input_logic_inst.O_data_flat[383:0]
+@200
+-
+-Write
+@24
+[color] 3
+HDMI_to_Matrix_top_tb.dut.input_logic_inst.addr_gen_inst.O_address[9:0]
+@22
+HDMI_to_Matrix_top_tb.dut.buffer_inst.I_data_flat[383:0]
+@28
+HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.I_write_enable
+@200
+-Bank0
+@24
+[color] 3
+HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[0].bank_inst.block_gen[0].sdpb_inst.sim_inst.ada[9:0]
+@22
+[color] 6
+HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[0].bank_inst.block_gen[0].sdpb_inst.sim_inst.din[31:0]
+@24
+[color] 3
+HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[0].bank_inst.block_gen[1].sdpb_inst.sim_inst.ada[9:0]
+@22
+[color] 6
+HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[0].bank_inst.block_gen[1].sdpb_inst.sim_inst.din[31:0]
+@200
+-Bank1
+@24
+[color] 3
+HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[1].bank_inst.block_gen[0].sdpb_inst.ada[9:0]
+@22
+[color] 6
+HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[1].bank_inst.block_gen[0].sdpb_inst.din[31:0]
+@24
+[color] 3
+HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[1].bank_inst.block_gen[1].sdpb_inst.ada[9:0]
+@22
+[color] 6
+HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[1].bank_inst.block_gen[1].sdpb_inst.din[31:0]
+@200
+-Bank2
+@24
+[color] 3
+HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[2].bank_inst.block_gen[0].sdpb_inst.ada[9:0]
+@22
+[color] 6
+HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[2].bank_inst.block_gen[0].sdpb_inst.din[31:0]
+@24
+[color] 3
+HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[2].bank_inst.block_gen[1].sdpb_inst.ada[9:0]
+@22
+[color] 6
+HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[2].bank_inst.block_gen[1].sdpb_inst.din[31:0]
+@200
+-Bank3
+@24
+[color] 3
+HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[3].bank_inst.block_gen[0].sdpb_inst.ada[9:0]
+@22
+[color] 6
+HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[3].bank_inst.block_gen[0].sdpb_inst.din[31:0]
+@24
+[color] 3
+HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[3].bank_inst.block_gen[1].sdpb_inst.ada[9:0]
+@22
+[color] 6
+HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[3].bank_inst.block_gen[1].sdpb_inst.din[31:0]
+@200
+-Bank4
+@24
+[color] 3
+HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[4].bank_inst.block_gen[0].sdpb_inst.ada[9:0]
+@22
+[color] 6
+HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[4].bank_inst.block_gen[0].sdpb_inst.din[31:0]
+@24
+[color] 3
+HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[4].bank_inst.block_gen[1].sdpb_inst.ada[9:0]
+@22
+[color] 6
+HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[4].bank_inst.block_gen[1].sdpb_inst.din[31:0]
+@200
+-Bank5
+@24
+[color] 3
+HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[5].bank_inst.block_gen[0].sdpb_inst.ada[9:0]
+@22
+[color] 6
+HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[5].bank_inst.block_gen[0].sdpb_inst.din[31:0]
+@24
+[color] 3
+HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[5].bank_inst.block_gen[1].sdpb_inst.ada[9:0]
+@22
+[color] 6
+HDMI_to_Matrix_top_tb.dut.buffer_inst.buffer_inst.buffer0.bank_gen[5].bank_inst.block_gen[1].sdpb_inst.din[31:0]
+@200
+-
+-Read
+@24
+HDMI_to_Matrix_top_tb.dut.buffer_inst.output_port_inst.O_addresses_common[11:0]
+[pattern_trace] 1
+[pattern_trace] 0

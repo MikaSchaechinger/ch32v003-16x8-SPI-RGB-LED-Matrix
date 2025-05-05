@@ -57,7 +57,7 @@ module HDMI_to_Matrix_top_tb;
         btn[0] = 1;  // Deassert reset
 
         // Run simulation
-        #100000;
+        #2000000;
 
         $display("Simulation finished.");
         $finish;
@@ -65,7 +65,7 @@ module HDMI_to_Matrix_top_tb;
 
 
     initial begin
-        $dumpfile("HDMI_to_Matrix_top_tb.vcd");
+        $dumpfile("HDMI_to_Matrix_top_tb.fst");
         $dumpvars(0, HDMI_to_Matrix_top_tb);
     end
 

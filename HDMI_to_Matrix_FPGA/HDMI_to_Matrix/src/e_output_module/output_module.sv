@@ -6,7 +6,7 @@ module Output_Module #(
     input wire I_clk,
     input wire I_rst_n,
 
-    input wire [SPI_SIZE-1:0] I_data_in [CHANNEL_NUMBER-1:0],
+    input logic [SPI_SIZE*CHANNEL_NUMBER-1:0] I_data_flat,
     input wire I_next_image,
     input wire I_next_column,
     input wire I_next_data,
@@ -49,7 +49,7 @@ module Output_Module #(
     //=============== Code Logic ===============
 
     always_ff @(posedge I_clk or posedge I_rst_n) begin
-        if (I_rst_n) begin
+        if (!I_rst_n) begin
             state <= S0_RST;
         end else begin
             state <= next_state;
@@ -156,10 +156,10 @@ module Output_Module #(
         .MSB_FIRST(MSB_FIRST)
     ) spi_tx (
         .clk(I_clk),
-        .rst(I_rst_n),
+        .rst(~I_rst_n),
         .start_tx(spi_start_tx),
         .tx_finish(spi_tx_finish),
-        .data_in(I_data_in),
+        .I_data_flat(I_data_flat),
         .spi_clk(O_spi_clk),
         .spi_mosi(O_spi_mosi)
     );
@@ -167,7 +167,7 @@ module Output_Module #(
 
     column_select cs (
         .clk(I_clk),
-        .rst(I_rst_n),
+        .rst(~I_rst_n),
         .select_first(select_first),
         .select_next(select_next),
         .extra_bit(I_extra_bit),

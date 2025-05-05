@@ -3,14 +3,14 @@ module nspi_tx #(
     parameter SPI_SIZE = 8,  // 8 or 16
     parameter MSB_FIRST = 1 // 1 for MSB first, 0 for LSB first
 )(
-    input wire clk,
-    input wire rst,
-    input wire start_tx, // Start transmission at rising edge
-    output reg tx_finish, // Low during transmission
+    input logic clk,
+    input logic rst,
+    input logic start_tx, // Start transmission at rising edge
+    output logic tx_finish, // Low during transmission
 
-    input wire [SPI_SIZE-1:0] data_in [CHANNEL_NUMBER-1:0],
-    output reg spi_clk,
-    output reg [CHANNEL_NUMBER-1:0] spi_mosi
+    input logic [SPI_SIZE*CHANNEL_NUMBER-1:0] I_data_flat,
+    output logic spi_clk,
+    output logic [CHANNEL_NUMBER-1:0] spi_mosi
 );
 
     //============== Type Definitions ===============
@@ -20,18 +20,26 @@ module nspi_tx #(
 
     //============== Internal Signals ===============
 
-    reg start_tx_internal = 0;
-    reg [SPI_SIZE-1:0] data_in_reg [CHANNEL_NUMBER-1:0];
+    logic start_tx_internal = 0;
+    logic [SPI_SIZE-1:0] data_in [CHANNEL_NUMBER-1:0]; 
+    logic [SPI_SIZE-1:0] data_in_reg [CHANNEL_NUMBER-1:0];
     state_t state = IDLE;
     state_t next_state = IDLE;
     localparam int COUNTER_WIDTH = $clog2(SPI_SIZE+1);
-    reg [COUNTER_WIDTH-1:0] counter = 0;
+    logic [COUNTER_WIDTH-1:0] counter = 0;
 
-    reg counter_overflow_flag = 0;
+    logic counter_overflow_flag = 0;
 
     next_t next = MOSI_NEXT;
 
     //=============== Code Logic ===============
+
+    // Distribute I_data_flat to data_in
+    always_comb begin
+        for (int i = 0; i < CHANNEL_NUMBER; i++) begin
+            data_in[i] = I_data_flat[i*SPI_SIZE +: SPI_SIZE];
+        end
+    end
 
 
     always @(posedge rst or posedge clk) begin

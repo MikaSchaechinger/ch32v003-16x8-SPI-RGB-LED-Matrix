@@ -33,21 +33,24 @@ module Sync_Manager #(
         end else begin
             rgb_hsync_d <= I_rgb_hs;
             rgb_vsync_d <= I_rgb_vs;
+            
+            O_new_row <= rgb_hsync_d & ~I_rgb_hs;  // fallende Flanke
+            O_new_frame <= rgb_vsync_d & ~I_rgb_vs;  // fallende Flanke
         end
     end
 
-
+    logic new_row, new_frame;
     logic new_row_delay, new_frame_delay;
-    assign O_new_row   = rgb_hsync_d & ~I_rgb_hs;  // fallende Flanke
-    assign O_new_frame = rgb_vsync_d & ~I_rgb_vs;  // fallende Flanke
+    assign new_row   = rgb_hsync_d & ~I_rgb_hs;  // fallende Flanke
+    assign new_frame = rgb_vsync_d & ~I_rgb_vs;  // fallende Flanke
 
     // === Delay for Pipeline Sync ===
 
     logic rgb_de_delay;
     generate
         if (DELAY == 0) begin
-            assign new_row_delay   = O_new_row;
-            assign new_frame_delay = O_new_frame;
+            assign new_row_delay   = new_row;
+            assign new_frame_delay = new_frame;
             assign rgb_de_delay = I_rgb_de;
         end else if (DELAY == 1) begin
             logic rgb_de_internal_delay;
@@ -58,8 +61,8 @@ module Sync_Manager #(
                     new_frame_delay <= 1'b0;
                     rgb_de_internal_delay <= 1'b0;
                 end else begin
-                    new_row_delay   <= O_new_row;
-                    new_frame_delay <= O_new_frame;
+                    new_row_delay   <= new_row;
+                    new_frame_delay <= new_frame;
                     rgb_de_internal_delay <= I_rgb_de;
                 end
             end
@@ -74,8 +77,8 @@ module Sync_Manager #(
                     new_frame_pipeline <= '0;
                     rgb_de_internal_delay <= '0;
                 end else begin
-                    new_row_pipeline   <= {new_row_pipeline[DELAY-2:0], O_new_row};
-                    new_frame_pipeline <= {new_frame_pipeline[DELAY-2:0], O_new_frame};
+                    new_row_pipeline   <= {new_row_pipeline[DELAY-2:0], new_row};
+                    new_frame_pipeline <= {new_frame_pipeline[DELAY-2:0], new_frame};
                     rgb_de_internal_delay <= {rgb_de_internal_delay[DELAY-2:0], I_rgb_de};
                 end
             end

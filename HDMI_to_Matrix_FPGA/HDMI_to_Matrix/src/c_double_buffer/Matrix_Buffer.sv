@@ -21,8 +21,8 @@ module Matrix_Buffer #(
     input  logic [$clog2(MAX_WIDTH)-1:0] I_image_width,
     input  logic [$clog2(MAX_HEIGHT)-1:0] I_image_height,
     input  logic                        I_image_valid,
-    input  logic                        I_next_column,
-    input  logic                        I_next_image,
+    input  logic                        I_hs_detected,
+    input  logic                        I_vs_detected,
 
     // Output Side
     input  logic                         I_clkb,
@@ -33,8 +33,8 @@ module Matrix_Buffer #(
     output logic [$clog2(MAX_WIDTH)-1:0] O_image_width,
     output logic [$clog2(MAX_HEIGHT)-1:0] O_image_height,
     output logic                        O_image_valid,
-    output logic                        O_next_column,
-    output logic                        O_next_image,
+    output logic                        O_hs_detected,
+    output logic                        O_vs_detected,
     
     output logic                        O_data_valid,     
     
@@ -79,14 +79,14 @@ module Matrix_Buffer #(
         .I_image_width(I_image_width),
         .I_image_height(I_image_height),
         .I_image_valid(I_image_valid),
-        .I_next_column(I_next_column),
-        .I_next_image(I_next_image),
+        .I_hs_detected(I_hs_detected),
+        .I_vs_detected(I_vs_detected),
 
         .O_image_width(O_image_width),
         .O_image_height(O_image_height),
         .O_image_valid(O_image_valid),
-        .O_next_column(O_next_column),
-        .O_next_image(O_next_image)
+        .O_hs_detected(O_hs_detected),
+        .O_vs_detected(O_vs_detected)
     );
         
 

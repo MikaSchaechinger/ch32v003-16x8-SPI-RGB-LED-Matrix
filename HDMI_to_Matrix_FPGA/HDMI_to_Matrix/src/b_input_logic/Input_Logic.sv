@@ -31,7 +31,10 @@ module Input_Logic #(
 
     output logic                            O_batch_ready,
 
-    output logic                            O_swap_trigger
+    output logic                            O_swap_trigger,
+
+    output logic                            O_hs_detected,
+    output logic                            O_vs_detected
 );
 
     logic [7:0] rgb_color_0, rgb_color_1, rgb_color_2;
@@ -121,8 +124,22 @@ module Input_Logic #(
 
     always_ff @(posedge I_rgb_clk or negedge I_rst_n) begin
         if (!I_rst_n) begin
+            O_hs_detected <= 1'b0;
+            O_vs_detected <= 1'b0;
             has_data_flag <= 1'b0;
         end else begin
+            if (new_row) begin
+                O_hs_detected <= 1'b1;
+            end else if (O_swap_trigger) begin
+                O_hs_detected <= 1'b0;
+            end
+
+            if (new_frame) begin
+                O_vs_detected <= 1'b1;
+            end else if (O_swap_trigger) begin
+                O_vs_detected <= 1'b0;
+            end
+
             // Flag setzen, wenn ein Batch geschrieben wurde
             if (O_write_enable)
                 has_data_flag <= 1'b1;

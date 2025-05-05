@@ -31,7 +31,7 @@ module column_select (
     state_t state = S0_STARTUP;
     state_t next_state = S0_STARTUP;
     reg [7:0] column_data = 8'h00;          // Data to be sent to the column.
-    reg [7:0] spi_data_in [0:0];            // Data to be sent to the SPI
+    reg [7:0] spi_data_in;            // Data to be sent to the SPI
     reg [1:0] counter = 0;          // Counts the number of select_first, to enable the matrix after 2 iterations
 
     reg start_tx = 0;
@@ -40,7 +40,7 @@ module column_select (
     //=============== Code Logic ===============
 
 
-    assign spi_data_in[0] = column_data;
+    assign spi_data_in = column_data;
 
 
 
@@ -162,7 +162,7 @@ module column_select (
         .rst(rst),
         .start_tx(start_tx),
         .tx_finish(tx_finish),
-        .data_in(spi_data_in),  // column_data
+        .I_data_flat(spi_data_in),  // column_data
         .spi_clk(ser_clk),
         .spi_mosi(ser_data)
     );

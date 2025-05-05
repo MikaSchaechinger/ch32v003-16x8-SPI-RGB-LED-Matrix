@@ -50,11 +50,11 @@ def compile_and_run(testbench_name, testbench_path, sources):
 
     if os.path.exists(obj_file):
         print(f"Running {testbench_name}...")
-        subprocess.run(["vvp", obj_file])
+        subprocess.run(["vvp", obj_file, "-fst"])
 
         # Move VCD files if they exist
         for file in os.listdir('.'):
-            if file.endswith('.vcd'):
+            if file.endswith('.vcd') or file.endswith('.fst') or file.endswith('.lxt'):
                 target_path = os.path.join(output_folder, file)
                 if os.path.exists(target_path):
                     os.remove(target_path)

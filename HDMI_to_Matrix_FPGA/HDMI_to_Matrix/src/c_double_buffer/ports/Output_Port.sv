@@ -160,6 +160,10 @@ module Output_Port #(
 
  
     // ========== Address Calculation ==========
+
+    // Address must have following pattern:
+    // 0, 1,  2, 3, 4,  5, 6,  7,  8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,  24, ...
+    // 0, 8, 16, 1, 9, 17, 2, 10, 18, 3, 11, 19,  4, 12, 20,  5, 13, 21,  6, 14, 22,  7, 15, 23,  24, ...
     
     logic [$clog2(24)-1:0] addr_mod24;
     logic [$clog2(3)-1:0] addr_mod3;
